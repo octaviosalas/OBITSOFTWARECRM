@@ -1,0 +1,27 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+    font-family:  sans-serif;
+    height: 100%;
+    margin: 0;
+  }
+  
+  html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Evitar desbordamiento horizontal */
+  }
+  
+  #root {
+    height: 100%;
+  }
+  
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ocupar toda la altura de la pantalla */
+  }
