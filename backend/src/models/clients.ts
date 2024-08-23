@@ -1,4 +1,6 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default} from "sequelize-typescript"
+import FollowUpModel from "./followUps"
+import ProjectModel from "./projects"
 
 @Table({ 
     tableName: "clients",
@@ -32,9 +34,19 @@ class ClientModel extends Model {
     })
     declare dischargeDate: Date
 
-        
-    /*@HasMany(() => ComplexModel, { foreignKey: 'adminId' }) 
-    complexData: ComplexModel[]; */
+    @Column({
+        type: DataType.JSON,
+    })
+    declare socialNetworks: {
+        instagram?: string | null;
+        facebook?: string | null;
+    };
+
+    @HasMany(() => ProjectModel, { foreignKey: 'client' }) 
+    projects: ProjectModel[]; 
+
+    @HasMany(() => FollowUpModel, { foreignKey: 'client' }) 
+    followUpsData: FollowUpModel[]; 
 }
 
 export default ClientModel

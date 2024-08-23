@@ -1,5 +1,6 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey, Default, HasMany, ForeignKey, BelongsTo} from "sequelize-typescript"
 import ClientModel from "./clients"
+import ProjectServiceModel from "./projectServices"
 
 @Table({ 
     tableName: "projects",
@@ -23,6 +24,11 @@ class ProjectModel extends Model {
     declare name: string
 
     @Column ({ 
+        type: DataType.STRING
+    })
+    declare projectType: string
+
+    @Column ({ 
         type: DataType.DATE
     })
     declare startDate: Date
@@ -36,8 +42,9 @@ class ProjectModel extends Model {
     @BelongsTo(() => ClientModel)
     clientData: ClientModel;
 
-    /*@HasMany(() => ComplexModel, { foreignKey: 'adminId' }) 
-    complexData: ComplexModel[]; */
+    @HasMany(() => ProjectServiceModel, { foreignKey: 'projectId' }) 
+    projects: ProjectServiceModel[]; 
+
 }
 
 export default ProjectModel
