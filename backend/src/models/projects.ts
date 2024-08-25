@@ -10,6 +10,8 @@ import ProjectServiceModel from "./projectServices"
 })
 
 
+
+
 class ProjectModel extends Model { 
     @PrimaryKey
     @AutoIncrement
@@ -44,6 +46,7 @@ class ProjectModel extends Model {
 
     @HasMany(() => ProjectServiceModel, { foreignKey: 'projectId' }) 
     projects: ProjectServiceModel[]; 
+
 
 }
 
