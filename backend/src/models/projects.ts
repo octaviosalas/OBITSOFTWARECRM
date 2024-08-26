@@ -10,8 +10,6 @@ import ProjectServiceModel from "./projectServices"
 })
 
 
-
-
 class ProjectModel extends Model { 
     @PrimaryKey
     @AutoIncrement
