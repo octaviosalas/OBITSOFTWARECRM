@@ -6,6 +6,7 @@ import connectDatabase from "./database/db"
 import UserRoutes from "./routes/userRoutes"
 import ClientRoutes from "./routes/clientsRoutes"
 import ServicesRoutes from "./routes/servicesRoutes"
+import ProjectRoutes from "./routes/projectRoutes"
 
 const port = process.env.PORT || 4000
 
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/user", UserRoutes);
 app.use("/api/client", ClientRoutes);
 app.use("/api/service", ServicesRoutes);
+app.use("/api/project", ProjectRoutes);
 
 app.listen(port, () => { 
      console.log(`REST API CRM OBIT SOFTWARE RUNNING ON PORT ${port}`)

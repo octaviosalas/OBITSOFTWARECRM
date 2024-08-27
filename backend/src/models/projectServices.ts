@@ -26,18 +26,18 @@ class ProjectServiceModel extends Model {
     @Column({
         type: DataType.DATE,
     })
-    declare startDate: Date;
+    declare startDate?: Date | null;
 
     @Column({
         type: DataType.DATE,
     })
-    declare endDate: Date;
+    declare endDate?: Date | null;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    declare amount: number;
+    declare amount?: number | null;
 }
 
 export default ProjectServiceModel;

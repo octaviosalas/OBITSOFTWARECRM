@@ -24,14 +24,14 @@ class ProjectModel extends Model {
     declare name: string
 
     @Column ({ 
-        type: DataType.STRING
-    })
-    declare projectType: string
-
-    @Column ({ 
         type: DataType.DATE
     })
     declare startDate: Date
+
+    @Column ({ 
+        type: DataType.INTEGER
+    })
+    declare amount: number
 
     @ForeignKey(() => ClientModel)
     @Column({
