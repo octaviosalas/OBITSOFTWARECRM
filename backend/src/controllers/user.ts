@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import UserModel from "../models/user";
+import UserRemindersModel from "../models/userReminders";
+import { formateDate } from "../utils/transformDate";
 
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
 
@@ -82,3 +84,36 @@ export const deleteUserAccount = async (req: Request, res: Response) => {
     }
 }
 
+export const createMyReminder = async (req: Request, res: Response) => { 
+    const {userId} = req.params
+    const {date, reminderData} = req.body
+    const dateOfReminder = formateDate(date)
+
+    try {
+        const reminder = new UserRemindersModel({ 
+            userId,
+            date,
+            reminderData
+        })
+        await reminder.save()
+        res.status(200).send(`Se almaceno correctamente el recodatorio para el dia ${dateOfReminder}`)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+export const getMyReminders = async (req: Request, res: Response) => { 
+    const {userId} = req.params
+ 
+    try {
+        const remindersData = await UserRemindersModel.findAll({
+            where: { 
+                userId: userId
+            }
+        })
+        res.status(200).send(remindersData)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}

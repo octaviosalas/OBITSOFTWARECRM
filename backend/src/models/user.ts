@@ -1,4 +1,7 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default, ForeignKey, BelongsTo} from "sequelize-typescript"
+import UserRemindersModel from "./userReminders"
+import FollowUpModel from "./followUps"
+import UserAccesModel from "./userAcces"
 
 
 @Table({ 
@@ -28,16 +31,15 @@ class UserModel extends Model {
     })
     declare password: string
 
+    @HasMany(() => UserRemindersModel, {foreignKey: 'userId' })
+    reminders: UserRemindersModel[]
+
+    @HasMany(() => UserAccesModel, {foreignKey: 'userId' })
+    userAcces: UserAccesModel[]
+
+    @HasMany(() => FollowUpModel, {foreignKey: 'userId' })
+    user: FollowUpModel[]
 }
 
 export default UserModel
 
-/*User tendra un modelo mas llamada userAcces, que contendra: 
-
-userId,
-projectd
-
-userId hara referencia al usuario que tiene acceso a projectId, que logicamenete sera  el ID del proyecto.
-osea  que userId hara BelongsTo to User y porjectId to project. Entonces, cuando traiga data del usuario tmb pimero consumiero
-el modelo userAcces, y hare hare la relacion al proyecto.
-*/

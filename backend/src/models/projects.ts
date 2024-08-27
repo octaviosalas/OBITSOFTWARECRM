@@ -2,6 +2,7 @@ import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey, Default, HasM
 import ClientModel from "./clients"
 import ProjectServiceModel from "./projectServices"
 import FollowUpModel from "./followUps"
+import ProjectRemindersModels from "./projectReminders"
 
 @Table({ 
     tableName: "projects",
@@ -49,7 +50,9 @@ class ProjectModel extends Model {
     @HasMany(() => FollowUpModel, { foreignKey: 'projectId' }) 
     follows: FollowUpModel[]; 
 
-
+    @HasMany(() => ProjectRemindersModels, { foreignKey: 'projectId' }) 
+    reminders: ProjectRemindersModels[]; 
+    
 }
 
 export default ProjectModel
