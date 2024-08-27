@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import ServicesModel from "../models/services";
 import ProjectModel from "../models/projects";
+import UserAccesModel from "../models/userAcces";
 
 export const validateServicesExistenceInProjectCreation = async (req: Request, res: Response, next: NextFunction) => {
     const { services } = req.body;
@@ -49,4 +50,25 @@ export const validateProjectExistenceWithId = async (req: Request, res: Response
     } catch (error) {
         res.status(500).json("Hubo un error en el midddleware")
     }
+} 
+
+export const validateUserHasAccesToProjectData = async (req: Request, res: Response, next: NextFunction) => { 
+    
+  const {projectId, userId} = req.params
+  
+  try {
+      const project = await UserAccesModel.findOne({
+        where: { 
+          userId: userId,
+          projectId: projectId
+        }
+      })
+      if(!project) { 
+          res.status(404).send("No tenes permiso para ver informacion en relacion a este proyecto")
+      } else { 
+          next()
+      }
+  } catch (error) {
+      res.status(500).json("Hubo un error en el midddleware")
+  }
 } 

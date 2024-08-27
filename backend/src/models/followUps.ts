@@ -1,5 +1,7 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default, ForeignKey, BelongsTo} from "sequelize-typescript"
 import ClientModel from "./clients";
+import ProjectModel from "./projects";
+import UserModel from "./user";
 
 @Table({ 
     tableName: "followUp",
@@ -18,9 +20,27 @@ class FollowUpModel extends Model {
       type: DataType.INTEGER,
       allowNull: false,
     })
-    declare client: number; 
+    declare clientId: number; 
     @BelongsTo(() => ClientModel)
     clientData: ClientModel;
+
+    @ForeignKey(() => ProjectModel)
+    @Column({
+      type: DataType.INTEGER,
+      allowNull: false,
+    })
+    declare projectId: number; 
+    @BelongsTo(() => ProjectModel)
+    projectData: ProjectModel;
+
+    @ForeignKey(() => UserModel)
+    @Column({
+      type: DataType.INTEGER,
+      allowNull: false,
+    })
+    declare userId: number; 
+    @BelongsTo(() => UserModel)
+    userData: UserModel;
 
     @Column ({ 
         type: DataType.DATE

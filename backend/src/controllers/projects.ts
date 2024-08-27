@@ -4,6 +4,7 @@ import UserAccesModel from "../models/userAcces";
 import ProjectServiceModel from "../models/projectServices";
 import ClientModel from "../models/clients";
 import ServicesModel from "../models/services";
+import FollowUpModel from "../models/followUps";
 
 export const createNewProject = async (req: Request, res: Response) => { 
     
@@ -76,4 +77,44 @@ export const projectData = async (req: Request, res: Response) => {
    } catch (error) {
      res.status(500).send(error)
    }
+}
+
+export const establishNewFollowUp = async (req: Request, res: Response) => { 
+    
+    const {projectId, clientId, userId} = req.params
+    const {date, note} = req.body
+
+    console.log("projectId", projectId)
+    console.log("clientId", clientId)
+    console.log("userId", userId)
+
+    try {
+        const newFollowUp = new FollowUpModel({ 
+           clientId: clientId,
+           projectId: projectId,
+           userId: userId,
+           date: date,
+           note: note
+        })
+        await newFollowUp.save()
+        res.status(200).send("Se ha creado correctamente la nota hacia el proyecto")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const projectTracking = async (req: Request, res: Response) => { 
+   
+    const {projectId} = req.params
+
+    try {
+        const trackingsData = await FollowUpModel.findAll({ 
+            where: { 
+                projectId: projectId
+            }
+        })
+        res.status(200).send(trackingsData)
+    } catch (error) {
+        res.status(500).send(error)
+    }
 }
