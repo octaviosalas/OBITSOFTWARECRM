@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import UserModel from "../models/user";
 import UserRemindersModel from "../models/userReminders";
 import { formateDate } from "../utils/transformDate";
+import { Op } from 'sequelize';
+
 
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
 
@@ -113,6 +115,70 @@ export const getMyReminders = async (req: Request, res: Response) => {
             }
         })
         res.status(200).send(remindersData)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const getOneReminderData = async (req: Request, res: Response) => { 
+
+    const {userId, reminderId} = req.params
+ 
+    try {
+        const reminderData = await UserRemindersModel.findByPk(reminderId)
+        res.status(200).send(reminderData)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const userNextReminders = async (req: Request, res: Response) => { 
+
+    const {userId} = req.params
+ 
+    try {
+        const reminderData = await UserRemindersModel.findAll({
+            where: { 
+                userId: userId,
+                date: {
+                    [Op.gt]: new Date()
+                }
+            }
+        })
+        res.status(200).send(reminderData)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+export const updateReminderData = async (req: Request, res: Response) => { 
+
+    const {reminderId} = req.params
+    const {date, reminderData} = req.body
+
+
+    try {
+        const reminderSelected = await UserRemindersModel.findByPk(reminderId)
+        reminderSelected.date = date
+        reminderSelected.reminderData = reminderData
+
+        await reminderSelected.save()
+        res.status(200).send("Se actualizaron correctamente los datos de tu recordatorio")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const deleteUserReminder = async (req: Request, res: Response) => { 
+
+    const {reminderId} = req.params
+
+    try {
+        const reminderSelected = await UserRemindersModel.findByPk(reminderId)
+        reminderSelected.destroy()
+
+        res.status(200).send("Se elimino correctamente el recordatorio")
     } catch (error) {
         res.status(500).send(error)
     }

@@ -5,7 +5,13 @@ import ProjectServiceModel from "../models/projectServices";
 import ClientModel from "../models/clients";
 import ServicesModel from "../models/services";
 import FollowUpModel from "../models/followUps";
+import ProjectRemindersModels from "../models/projectReminders";
+import { formateDate } from "../utils/transformDate";
+import UserModel from "../models/user";
+import { Op } from 'sequelize';
 
+
+//proyecto base
 export const createNewProject = async (req: Request, res: Response) => { 
     
     const {clientId, userId} = req.params
@@ -79,14 +85,32 @@ export const projectData = async (req: Request, res: Response) => {
    }
 }
 
+export const projectsUserWithAcces = async (req: Request, res: Response) => { 
+    const {projectId} = req.params
+
+    try {
+      const users = await UserAccesModel.findAll({ 
+        where: { 
+            projectId: projectId
+        },
+        include: [{ 
+            model: UserModel,
+            as: "userData"
+        }]
+      })
+      res.status(200).send(users)
+   } catch (error) {
+     res.status(500).send(error)
+   }
+}
+
+
+//seguimientos
 export const establishNewFollowUp = async (req: Request, res: Response) => { 
     
     const {projectId, clientId, userId} = req.params
     const {date, note} = req.body
 
-    console.log("projectId", projectId)
-    console.log("clientId", clientId)
-    console.log("userId", userId)
 
     try {
         const newFollowUp = new FollowUpModel({ 
@@ -119,3 +143,146 @@ export const projectTracking = async (req: Request, res: Response) => {
     }
 }
 
+export const updateTrackingData = async (req: Request, res: Response) => { 
+   
+    const {followUpId} = req.params
+    const {date, note} = req.body
+
+    try {
+        const followUpSelectedToBeUpdated = await FollowUpModel.findByPk(followUpId)
+        followUpSelectedToBeUpdated.date = date
+        followUpSelectedToBeUpdated.note = note
+        await followUpSelectedToBeUpdated.save()
+
+        res.status(200).send(`Se actualizo correctamente los datos del seguimiento`)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const deleteTrackingData = async (req: Request, res: Response) => { 
+   
+    const {followUpId} = req.params
+
+    try {
+        const followUpSelectedToBeUpdated = await FollowUpModel.findByPk(followUpId)
+        followUpSelectedToBeUpdated.destroy()
+        res.status(200).send(`Se elimino correctamente el seguimiento`)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+
+//recordatorios
+export const createProjectReminder = async (req: Request, res: Response) => { 
+    
+     const {userId, projectId} = req.params
+     const {date, reminderData} = req.body
+
+     const reminderDate = formateDate(date)
+
+    try {
+         const reminderDataToBeSaved = new ProjectRemindersModels({ 
+            userId,
+            projectId,
+            date,
+            reminderData
+         })
+         await reminderDataToBeSaved.save()
+         res.status(200).send(`Se almaceno correctamente el recordatorio para el dia ${reminderDate}`)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const getProjectReminder = async (req: Request, res: Response) => { 
+    
+    const {userId, projectId} = req.params
+
+   try {
+        const projectReminders = await ProjectRemindersModels.findAll({ 
+            where: { 
+                projectId: projectId
+            },
+            include: [{ 
+                model: UserModel,
+                as: "userData"
+            }]
+        }) 
+        res.status(200).send(projectReminders)
+   } catch (error) {
+       res.status(500).send(error)
+   }
+}
+
+export const getOneProjectReminderData = async (req: Request, res: Response) => { 
+    
+    const {reminderId, projectId} = req.params
+
+   try {
+        const reminderData = await ProjectRemindersModels.findOne({ 
+            where: { 
+                projectId: projectId,
+                id: reminderId
+            }
+        }) 
+        res.status(200).send(reminderData)
+   } catch (error) {
+       res.status(500).send(error)
+   }
+}
+
+export const projectNextReminders = async (req: Request, res: Response) => { 
+
+    const {projectId} = req.params
+ 
+    try {
+        const nextProjectsRemindersSinceToday = await ProjectRemindersModels.findAll({
+            where: { 
+                projectId: projectId,
+                date: {
+                    [Op.gt]: new Date()
+                }
+            }
+        })
+        res.status(200).send(nextProjectsRemindersSinceToday)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const updateProjectReminderData = async (req: Request, res: Response) => { 
+
+    const {reminderId} = req.params
+    const {date, reminderData} = req.body
+
+
+    try {
+        const reminderSelected = await ProjectRemindersModels.findByPk(reminderId)
+        reminderSelected.date = date
+        reminderSelected.reminderData = reminderData
+
+        await reminderSelected.save()
+        res.status(200).send("Se actualizaron correctamente los datos del recordatorio")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const deleteProjectReminderData = async (req: Request, res: Response) => { 
+
+    const {reminderId} = req.params
+    const {date, reminderData} = req.body
+
+
+    try {
+        const reminderSelected = await ProjectRemindersModels.findByPk(reminderId)
+        reminderSelected.destroy()
+
+        res.status(200).send("Se elimino el recordatorio que habias asentado al proyecto")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}

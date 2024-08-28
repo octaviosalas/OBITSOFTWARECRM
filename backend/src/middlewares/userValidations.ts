@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import UserModel from "../models/user";
+import UserRemindersModel from "../models/userReminders";
 
 export const validateUserNotExist = async (req: Request, res: Response, next: NextFunction) => { 
     
@@ -57,3 +58,23 @@ export const validateUserExistWithId = async (req: Request, res: Response, next:
     }
 } 
 
+export const validateReminderExistenceAndIfIsUserReminder = async (req: Request, res: Response, next: NextFunction) => { 
+    
+    const {reminderId, userId} = req.params
+
+    try {
+        const checkReminderCreator = await UserRemindersModel.findByPk(reminderId)
+        if(!checkReminderCreator) { 
+            return res.status(404).send("El recordatorio no fue encontrado")
+        }
+
+        if(checkReminderCreator && checkReminderCreator.userId !== Number(userId)) { 
+            console.log("middlewareError")
+            return res.status(404).send("Estas intentando acceder a un recordatorio que no te pertenece")
+        } else { 
+            next()
+        }
+    } catch (error) {
+        res.status(500).send(error)
+    }
+} 

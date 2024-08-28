@@ -1,8 +1,11 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
-import { createUser, userData, everyUsers, updateUserData, deleteUserAccount, createMyReminder, getMyReminders } from "../controllers/user"
-import { validateUserExist, validateUserExistWithId, validateUserNotExist } from "../middlewares/userValidations"
+import { createUser, userData, everyUsers, 
+         updateUserData, deleteUserAccount, createMyReminder, 
+         getMyReminders, getOneReminderData, updateReminderData, 
+         deleteUserReminder, userNextReminders } from "../controllers/user"
+import { validateUserExist, validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder } from "../middlewares/userValidations"
 
 const router = Router()
 
@@ -64,6 +67,44 @@ router.get("/myReminders/:userId",
     validateUserExistWithId,
     getMyReminders
 )
+
+router.get("/reminderData/:reminderId/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    validateReminderExistenceAndIfIsUserReminder,
+    getOneReminderData
+)
+
+
+router.get("/userNextReminders/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    userNextReminders
+)
+
+
+router.put("/updateReminder/:reminderId/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    param("reminderId").notEmpty().withMessage("Es obligatorio indicar el recordatorio que deseas actualizar"),
+    body("date").notEmpty().withMessage("Es obligatorio indicar la fecha del recordatorio para actualizarlo"),
+    body("reminderData").notEmpty().withMessage("Es obligatorio indicar el mensaje del recordatorio para poder actualizarlo"),
+    errorsHanlder,
+    validateUserExistWithId,
+    validateReminderExistenceAndIfIsUserReminder,
+    updateReminderData
+)
+
+router.delete("/deleteUserReminder/:reminderId/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    param("reminderId").notEmpty().withMessage("Es obligatorio indicar el recordatorio que deseas actualizar"),
+    errorsHanlder,
+    validateUserExistWithId,
+    validateReminderExistenceAndIfIsUserReminder,
+    deleteUserReminder
+)
+
 
 
 export default router

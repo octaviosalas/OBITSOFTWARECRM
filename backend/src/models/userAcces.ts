@@ -17,7 +17,6 @@ class UserAccesModel extends Model {
     @BelongsTo(() => UserModel)
     userData: UserModel;
 
-
     @ForeignKey(() => ProjectModel)
     @Column({
       type: DataType.INTEGER,

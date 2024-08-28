@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import ServicesModel from "../models/services";
 import ProjectModel from "../models/projects";
 import UserAccesModel from "../models/userAcces";
+import ProjectRemindersModels from "../models/projectReminders";
+import FollowUpModel from "../models/followUps";
 
 export const validateServicesExistenceInProjectCreation = async (req: Request, res: Response, next: NextFunction) => {
     const { services } = req.body;
@@ -68,6 +70,78 @@ export const validateUserHasAccesToProjectData = async (req: Request, res: Respo
       } else { 
           next()
       }
+  } catch (error) {
+      res.status(500).json("Hubo un error en el midddleware")
+  }
+} 
+
+export const validateReminderExistenceAndIfIsOfTheProject = async (req: Request, res: Response, next: NextFunction) => { 
+    
+  const {projectId, reminderId} = req.params
+  
+  try {
+      const reminderSearched = await ProjectRemindersModels.findByPk(reminderId)
+
+      if(!reminderSearched) { 
+        return res.status(404).send("No encontramos el recordatorio que estas buscando")
+      }
+      
+      if(reminderSearched && reminderSearched.projectId !== Number(projectId)) { 
+        return res.status(404).send("El recordatorio seleccionado no corresponde a este proyecto")
+      } else { 
+        next()
+      }
+
+    
+
+  } catch (error) {
+      res.status(500).json("Hubo un error en el midddleware")
+  }
+} 
+
+export const validateIfReminderWasCreatedByUser = async (req: Request, res: Response, next: NextFunction) => { 
+    
+  const {userId, reminderId} = req.params
+  
+  try {
+      const reminderSearched = await ProjectRemindersModels.findByPk(reminderId)
+
+      if(!reminderSearched) { 
+        return res.status(404).send("No encontramos el recordatorio que estas buscando")
+      }
+      
+      if(reminderSearched && reminderSearched.userId !== Number(userId)) { 
+        return res.status(404).send("El recordatorio que estas intentando manipular no fue creado por vos, para eliminarlo debera hacerse desde la cuenta de quien lo genero")
+      } else { 
+        next()
+      }
+
+    
+
+  } catch (error) {
+      res.status(500).json("Hubo un error en el midddleware")
+  }
+} 
+
+export const validateIfFollowUpWasCreatedByUser = async (req: Request, res: Response, next: NextFunction) => { 
+    
+  const {userId, followUpId} = req.params
+  
+  try {
+      const followUpSearched = await FollowUpModel.findByPk(followUpId)
+
+      if(!followUpSearched) { 
+        return res.status(404).send("No encontramos el recordatorio que estas buscando")
+      }
+      
+      if(followUpSearched && followUpSearched.userId !== Number(userId)) { 
+        return res.status(404).send("El seguimiento que estas intentando manipular no fue creado por vo")
+      } else { 
+        next()
+      }
+
+    
+
   } catch (error) {
       res.status(500).json("Hubo un error en el midddleware")
   }
