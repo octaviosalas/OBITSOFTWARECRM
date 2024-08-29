@@ -34,6 +34,11 @@ class ClientModel extends Model {
     })
     declare dischargeDate: Date
 
+    @Column ({ 
+        type: DataType.BOOLEAN
+    })
+    declare active: Boolean
+
     @Column({
         type: DataType.JSON,
     })

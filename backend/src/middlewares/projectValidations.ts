@@ -50,7 +50,7 @@ export const validateProjectExistenceWithId = async (req: Request, res: Response
             next()
         }
     } catch (error) {
-        res.status(500).json("Hubo un error en el midddleware")
+        res.status(500).json("Hubo un error en el midddleware validateProjectExistenceWithId")
     }
 } 
 
@@ -71,7 +71,7 @@ export const validateUserHasAccesToProjectData = async (req: Request, res: Respo
           next()
       }
   } catch (error) {
-      res.status(500).json("Hubo un error en el midddleware")
+      res.status(500).json("Hubo un error en el midddleware validateUserHasAccesToProjectData")
   }
 } 
 

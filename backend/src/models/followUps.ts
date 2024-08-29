@@ -4,7 +4,7 @@ import ProjectModel from "./projects";
 import UserModel from "./user";
 
 @Table({ 
-    tableName: "followUp",
+    tableName: "followUpProject",
 })
 
 class FollowUpModel extends Model { 
@@ -45,7 +45,12 @@ class FollowUpModel extends Model {
     @Column ({ 
         type: DataType.DATE
     })
-    declare date: Date
+    declare contactDate: Date
+    
+    @Column ({ 
+      type: DataType.DATE
+   })
+   declare nextDate: Date
 
     @Column ({ 
         type: DataType.STRING

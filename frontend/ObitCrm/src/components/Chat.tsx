@@ -26,7 +26,7 @@ const ChatComponent = () => {
     return () => {
       socketIo.disconnect();
     };
-  }, []);
+  }, [socket]);
 
   const handleChangeMessageData = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -34,12 +34,14 @@ const ChatComponent = () => {
 
   const sendMessage = () => {
     if (socket && message.trim().length > 0) {
-      console.log("Enviando mensaje:", message);
       socket.emit("chat message", message);
-      setEveryMessages((prevMessages) => [...prevMessages, message]);
       setMessage("");
     }
   };
+
+  useEffect(() => { 
+     console.log(everyMessages)
+  }, [everyMessages])
 
   return (
     <div className="container mx-auto p-4">

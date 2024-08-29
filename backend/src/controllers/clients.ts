@@ -3,7 +3,7 @@ import ClientModel from "../models/clients";
 
 export const createClient = async (req: Request, res: Response): Promise <void> => { 
 
-    const {email, phone, name, disrchageDate, socialNetworks} = req.body
+    const {email, phone, name, disrchageDate, socialNetworks, active} = req.body
 
    try {
        const newClientToBeSaved = new ClientModel({ 
@@ -11,7 +11,8 @@ export const createClient = async (req: Request, res: Response): Promise <void> 
            phone,
            name,
            disrchageDate,
-           socialNetworks
+           socialNetworks,
+           active
         })
        await newClientToBeSaved.save()
        res.status(200).send("Cliente creado exitosamente")
@@ -44,13 +45,14 @@ export const everyClients = async (req: Request, res: Response): Promise <void> 
 
 export const updateClientData = async (req: Request, res: Response): Promise <void> => { 
     const {clientId} = req.params
-    const {email, phone, name, socialNetworks} = req.body
+    const {email, phone, name, socialNetworks, active} = req.body
     try {
         const clientSelected = await ClientModel.findByPk(clientId)
         clientSelected.name = name
         clientSelected.phone = phone
         clientSelected.email = email
         clientSelected.socialNetworks = socialNetworks
+        clientSelected.active = active
         await clientSelected.save()
 
         res.status(200).send("Datos actualizados correctamente")

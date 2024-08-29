@@ -1,13 +1,14 @@
-import { useState } from 'react'
+
 import './App.css'
-import ChatComponent from './components/chat'
+
+import ClientsModule from './components/Main'
 
 function App() {
 
   return (
     
       <div>
-          <ChatComponent/>
+          <ClientsModule/>
       </div>
     
   )
