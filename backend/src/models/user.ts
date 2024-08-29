@@ -1,7 +1,8 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default, ForeignKey, BelongsTo} from "sequelize-typescript"
 import UserRemindersModel from "./userReminders"
-import FollowUpModel from "./followUps"
+import FollowUpModel from "./projectPlanification"
 import UserAccesModel from "./userAcces"
+import UserNotificationModel from "./userNotifications"
 
 
 @Table({ 
@@ -39,6 +40,9 @@ class UserModel extends Model {
 
     @HasMany(() => FollowUpModel, {foreignKey: 'userId' })
     user: FollowUpModel[]
+
+    @HasMany(() => UserNotificationModel, {foreignKey: 'userId' })
+    userNotifications: UserNotificationModel[]
 }
 
 export default UserModel

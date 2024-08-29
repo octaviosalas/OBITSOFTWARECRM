@@ -43,7 +43,10 @@ router.get("/userWithAccesData/:projectId",
     projectsUserWithAcces
 )
 
-router.post("/establishNewFollowUp/:projectId/:clientId/:userId",
+
+
+
+router.post("/establishNewProjectPlanification/:projectId/:clientId/:userId",
     param("projectId").notEmpty().withMessage("Debes indicar a que proyecto deseas asentarle el seguimiento"),
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
     param("clientId").notEmpty().withMessage("Debes iniciar a que cliente le pertenece el proyecto"),
@@ -55,7 +58,7 @@ router.post("/establishNewFollowUp/:projectId/:clientId/:userId",
     establishNewFollowUp
 )
 
-router.get("/getProjectTracking/:projectId/:userId",
+router.get("/getProjectPlanification/:projectId/:userId",
     param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
     errorsHanlder,
@@ -65,7 +68,7 @@ router.get("/getProjectTracking/:projectId/:userId",
     projectTracking
 )
 
-router.put("/updateFollowUp/:followUpId/:projectId/:userId",
+router.put("/updatePlanification/:followUpId/:projectId/:userId",
     param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
     param("followUpId").notEmpty().withMessage("Debes indicar que seguimiento deseas editar"),
@@ -79,7 +82,7 @@ router.put("/updateFollowUp/:followUpId/:projectId/:userId",
     updateTrackingData
 )
 
-router.delete("/deleteFollowUp/:followUpId/:projectId/:userId",
+router.delete("/deletePlanification/:followUpId/:projectId/:userId",
     param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
     param("followUpId").notEmpty().withMessage("Debes indicar que seguimiento deseas editar"),
@@ -90,6 +93,8 @@ router.delete("/deleteFollowUp/:followUpId/:projectId/:userId",
     validateIfFollowUpWasCreatedByUser,
     deleteTrackingData
 )
+
+
 
 
 router.post("/createProjectReminder/:projectId/:userId",
@@ -160,6 +165,7 @@ router.delete("/deleteProjectReminder/:reminderId/:projectId/:userId",
     validateIfReminderWasCreatedByUser,
     deleteProjectReminderData
 )
+
 
 
 export default router

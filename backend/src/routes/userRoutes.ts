@@ -3,22 +3,25 @@ import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { createUser, userData, everyUsers, 
          updateUserData, deleteUserAccount, createMyReminder, 
-         getMyReminders, getOneReminderData, updateReminderData, 
-         deleteUserReminder, userNextReminders } from "../controllers/user"
+         getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday,
+         deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp } from "../controllers/user"
 import { validateUserExist, validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder } from "../middlewares/userValidations"
 
 const router = Router()
 
+//Obtener datos de un solo usuario
 router.get("/userData/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
     userData
 )
 
+//Obtener a todos los usuarios del sistema
 router.get("/everyUsersData", 
     everyUsers
 )
 
+//Crear un nuevo usuario 
 router.post("/createUser", 
     body("name").notEmpty().withMessage("Es obligatorio indicar el nombre"),
     body("email").notEmpty().withMessage("Es obligatorio indicar el nombre"),
@@ -36,6 +39,7 @@ router.post("/createUser",
     createUser
 )
 
+//Actualizar datos de la cuenta del usuario 
 router.put("/updateUsertData/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     body("name").notEmpty().withMessage("Es obligatorio indicar el nombre"),
@@ -45,6 +49,7 @@ router.put("/updateUsertData/:userId",
     updateUserData,
 )
 
+//Eliminar cuenta del usuario 
 router.delete("/deleteUserAccount/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -52,6 +57,7 @@ router.delete("/deleteUserAccount/:userId",
     deleteUserAccount
 )
 
+//crear nuevo recordatorio
 router.post("/createReminder/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     body("reminderData").notEmpty().withMessage("Debes indicar un mensaje para el recordatorio"),
@@ -61,6 +67,7 @@ router.post("/createReminder/:userId",
     createMyReminder
 )
 
+//Obtener todos mis recordatorios
 router.get("/myReminders/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -68,6 +75,7 @@ router.get("/myReminders/:userId",
     getMyReminders
 )
 
+//Obtener recordatorio del usuario en detalle
 router.get("/reminderData/:reminderId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -76,7 +84,7 @@ router.get("/reminderData/:reminderId/:userId",
     getOneReminderData
 )
 
-
+//Obtener futuros recordatorios hechos del usuario
 router.get("/userNextReminders/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -84,7 +92,7 @@ router.get("/userNextReminders/:userId",
     userNextReminders
 )
 
-
+//Actualizar recordatorio hecho del usuario
 router.put("/updateReminder/:reminderId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     param("reminderId").notEmpty().withMessage("Es obligatorio indicar el recordatorio que deseas actualizar"),
@@ -96,6 +104,7 @@ router.put("/updateReminder/:reminderId/:userId",
     updateReminderData
 )
 
+//Eliminar recordatorio hecho del usuario
 router.delete("/deleteUserReminder/:reminderId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     param("reminderId").notEmpty().withMessage("Es obligatorio indicar el recordatorio que deseas actualizar"),
@@ -103,6 +112,22 @@ router.delete("/deleteUserReminder/:reminderId/:userId",
     validateUserExistWithId,
     validateReminderExistenceAndIfIsUserReminder,
     deleteUserReminder
+)
+
+//Obtener futuras comunicaciones por hacer del usuario
+router.get("/nextCommunicationsToClientsOnFollowUp/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    nextCommunicationsToClientsOnFollowUp
+)
+
+//Obtener comunicaciones para hacer hoy del usuario
+router.get("/userComunicationsForToday/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    userCommunicationsForToday
 )
 
 

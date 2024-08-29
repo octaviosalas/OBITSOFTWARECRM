@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import ClientModel from "../models/clients";
+import FollowUpClientsModel from "../models/followUpClients";
 
 export const validateIfClientEmailNotExist = async (req: Request, res: Response, next: NextFunction) => { 
 
@@ -32,6 +33,38 @@ export const validateClientExistense = async (req: Request, res: Response, next:
         } else { 
             res.status(404).send("El cliente no existe almacenado en la base de datos")
         }
+    } catch (error) {
+        
+    }
+}
+
+export const validateTrackingToClientExist = async (req: Request, res: Response, next: NextFunction) => { 
+
+    const {trackingId} = req.params
+
+    try {
+        const trackingSearched = await FollowUpClientsModel.findByPk(trackingId)
+        if(trackingSearched) { 
+            next()
+        } else { 
+            res.status(404).send("El seguimiento que estas intentando manipular no ha sido encontrado")
+        }
+    } catch (error) {
+        
+    }
+}
+
+export const validateTrackingToClientWasCreatedByUser = async (req: Request, res: Response, next: NextFunction) => { 
+
+    const {trackingId, userId} = req.params
+
+    try {
+        const trackingSearched = await FollowUpClientsModel.findByPk(trackingId)
+         if(trackingSearched.userId !== Number(userId)) { 
+            res.status(404).send("La anotacion que estas intentando manipular no fue creada por vos")
+         } else { 
+            next()
+         }
     } catch (error) {
         
     }

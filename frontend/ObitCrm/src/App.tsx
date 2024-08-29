@@ -1,14 +1,14 @@
 
 import './App.css'
+import MainClient from './components/ClientsModule/MainClient'
 
-import ClientsModule from './components/Main'
 
 function App() {
 
   return (
     
       <div>
-          <ClientsModule/>
+          <MainClient/>
       </div>
     
   )

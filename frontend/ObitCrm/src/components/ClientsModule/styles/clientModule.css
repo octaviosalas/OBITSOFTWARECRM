@@ -1,0 +1,212 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff;
+}
+
+.top-bar, .bottom-bar {
+    width: 100%;
+    padding: 10px;
+    background-color: #87CEFA;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.top-bar {
+    justify-content: flex-start;
+}
+
+.bottom-bar {
+    justify-content: flex-start;
+}
+
+.top-bar button {
+    background-color: #4682b4;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.top-bar button:hover {
+    background-color: #4169e1;
+}
+
+.bottom-bar input {
+    width: 300px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #4682b4;
+}
+
+#clientes-view {
+    padding: 20px;
+}
+
+#clientes-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+#clientes-table th, #clientes-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+#clientes-table th {
+    background-color: #4682b4;
+    color: white;
+    text-align: left;
+}
+
+#clientes-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#clientes-table tr:hover {
+    background-color: #e0f0ff;
+}
+
+.btn-btn {
+    background-color: #4682b4;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #4169e1;
+}
+
+/* Modal Styles */
+.modal-div-gral {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal h2 {
+    color: #4682b4;
+}
+
+/* Form Styles */
+#client-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#client-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#client-form input, #client-form select {
+    padding: 10px;
+    border: 1px solid #4682b4;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+#client-form button {
+    background-color: #4682b4;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+}
+
+#client-form button:hover {
+    background-color: #4169e1;
+}
+
+/* Table Icon Styles */
+.table-icon {
+    cursor: pointer;
+    font-size: 20px;
+    color: #4682b4;
+}
+
+.table-icon:hover {
+    color: #4169e1;
+}
+
+/* Edit Icon */
+.edit-icon {
+    cursor: pointer;
+    font-size: 24px;
+    color: #4682b4;
+    position: absolute;
+    right: 0;
+}
+
+.edit-icon:hover {
+    color: #4169e1;
+}
+
+/* Delete Icon */
+.delete-icon {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+}
+
+.delete-icon:hover {
+    color: #d32f2f;
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.notification.success {
+    background-color: #4682b4;
+}
+
+.notification.error {
+      background-color: #f44336;
+}

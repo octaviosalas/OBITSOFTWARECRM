@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ClientModel from "../models/clients";
+import FollowUpClientsModel from "../models/followUpClients";
 
 export const createClient = async (req: Request, res: Response): Promise <void> => { 
 
@@ -59,4 +60,78 @@ export const updateClientData = async (req: Request, res: Response): Promise <vo
     } catch (error) {
        res.status(500).send(error)
     }
- }
+}
+
+export const createNewClientFlowUp = async (req: Request, res: Response): Promise <void> => { 
+   
+   const {userId, clientId} = req.params
+   const {contactDate, nextContactDate, note} = req.body
+
+   try {
+       const trackingData = new FollowUpClientsModel({ 
+          clientId,
+          userId,
+          contactDate,
+          nextContactDate,
+          note
+       })
+       await trackingData.save()
+       const clientData = await ClientModel.findByPk(clientId)
+       const clientName = clientData.name
+       res.status(200).send(`El seguimiento fue asentado correctamente hacia ${clientName}`)
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}
+
+export const getMyCustomerClientHistoricTracking = async (req: Request, res: Response): Promise <void> => { 
+   
+   const {userId, clientId} = req.params
+
+   try {
+       const trackingData = await FollowUpClientsModel.findAll({ 
+         where: { 
+            userId: userId,
+            clientId: clientId
+         }
+       })
+       res.status(200).send(trackingData)
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}
+
+export const updateMyCustomerClientTracking = async (req: Request, res: Response): Promise <void> => { 
+   
+   const {userId, clientId, trackingId} = req.params
+   const {contactDate, nextContactDate, note} = req.body
+
+   try {
+       const dataTracking = await FollowUpClientsModel.findByPk(trackingId)
+       dataTracking.userId = Number(userId)
+       dataTracking.clientId = Number(clientId)
+       dataTracking.contactDate = contactDate
+       dataTracking.nextContactDate = nextContactDate
+       dataTracking.note = note
+       await dataTracking.save()
+       res.status(200).send("Los datos fueron correctamente actualizados")
+
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}
+
+
+export const deleteMyCustomerClientTracking = async (req: Request, res: Response): Promise <void> => { 
+   
+   const {trackingId} = req.params
+
+   try {
+       const dataTracking = await FollowUpClientsModel.findByPk(trackingId)
+       dataTracking.destroy()
+       res.status(200).send("Se elimino correctamente el seguimiento")
+
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}

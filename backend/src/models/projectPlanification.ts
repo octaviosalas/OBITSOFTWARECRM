@@ -4,10 +4,10 @@ import ProjectModel from "./projects";
 import UserModel from "./user";
 
 @Table({ 
-    tableName: "followUpProject",
+    tableName: "projectPlanification",
 })
 
-class FollowUpModel extends Model { 
+class ProjectPlanificationModel extends Model { 
     @PrimaryKey
     @AutoIncrement
     @Column({ 
@@ -45,12 +45,7 @@ class FollowUpModel extends Model {
     @Column ({ 
         type: DataType.DATE
     })
-    declare contactDate: Date
-    
-    @Column ({ 
-      type: DataType.DATE
-   })
-   declare nextDate: Date
+    declare date: Date
 
     @Column ({ 
         type: DataType.STRING
@@ -59,4 +54,4 @@ class FollowUpModel extends Model {
 
 }
 
-export default FollowUpModel
+export default ProjectPlanificationModel

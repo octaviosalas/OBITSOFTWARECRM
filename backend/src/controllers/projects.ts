@@ -4,7 +4,7 @@ import UserAccesModel from "../models/userAcces";
 import ProjectServiceModel from "../models/projectServices";
 import ClientModel from "../models/clients";
 import ServicesModel from "../models/services";
-import FollowUpModel from "../models/followUps";
+import ProjectPlanificationModel from "../models/projectPlanification";
 import ProjectRemindersModels from "../models/projectReminders";
 import { formateDate } from "../utils/transformDate";
 import UserModel from "../models/user";
@@ -113,7 +113,7 @@ export const establishNewFollowUp = async (req: Request, res: Response) => {
 
 
     try {
-        const newFollowUp = new FollowUpModel({ 
+        const newFollowUp = new ProjectPlanificationModel({ 
            clientId: clientId,
            projectId: projectId,
            userId: userId,
@@ -132,7 +132,7 @@ export const projectTracking = async (req: Request, res: Response) => {
     const {projectId} = req.params
 
     try {
-        const trackingsData = await FollowUpModel.findAll({ 
+        const trackingsData = await ProjectPlanificationModel.findAll({ 
             where: { 
                 projectId: projectId
             }
@@ -149,7 +149,7 @@ export const updateTrackingData = async (req: Request, res: Response) => {
     const {date, note} = req.body
 
     try {
-        const followUpSelectedToBeUpdated = await FollowUpModel.findByPk(followUpId)
+        const followUpSelectedToBeUpdated = await ProjectPlanificationModel.findByPk(followUpId)
         followUpSelectedToBeUpdated.date = date
         followUpSelectedToBeUpdated.note = note
         await followUpSelectedToBeUpdated.save()
@@ -165,7 +165,7 @@ export const deleteTrackingData = async (req: Request, res: Response) => {
     const {followUpId} = req.params
 
     try {
-        const followUpSelectedToBeUpdated = await FollowUpModel.findByPk(followUpId)
+        const followUpSelectedToBeUpdated = await ProjectPlanificationModel.findByPk(followUpId)
         followUpSelectedToBeUpdated.destroy()
         res.status(200).send(`Se elimino correctamente el seguimiento`)
     } catch (error) {

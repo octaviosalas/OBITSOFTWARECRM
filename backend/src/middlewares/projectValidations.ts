@@ -3,7 +3,7 @@ import ServicesModel from "../models/services";
 import ProjectModel from "../models/projects";
 import UserAccesModel from "../models/userAcces";
 import ProjectRemindersModels from "../models/projectReminders";
-import FollowUpModel from "../models/followUps";
+import ProjectPlanificationModel from "../models/projectPlanification";
 
 export const validateServicesExistenceInProjectCreation = async (req: Request, res: Response, next: NextFunction) => {
     const { services } = req.body;
@@ -128,7 +128,7 @@ export const validateIfFollowUpWasCreatedByUser = async (req: Request, res: Resp
   const {userId, followUpId} = req.params
   
   try {
-      const followUpSearched = await FollowUpModel.findByPk(followUpId)
+      const followUpSearched = await ProjectPlanificationModel.findByPk(followUpId)
 
       if(!followUpSearched) { 
         return res.status(404).send("No encontramos el recordatorio que estas buscando")

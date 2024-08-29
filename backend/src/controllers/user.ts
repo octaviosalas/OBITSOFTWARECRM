@@ -3,6 +3,7 @@ import UserModel from "../models/user";
 import UserRemindersModel from "../models/userReminders";
 import { formateDate } from "../utils/transformDate";
 import { Op } from 'sequelize';
+import FollowUpClientsModel from "../models/followUpClients";
 
 
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
@@ -132,6 +133,7 @@ export const getOneReminderData = async (req: Request, res: Response) => {
     }
 }
 
+
 export const userNextReminders = async (req: Request, res: Response) => { 
 
     const {userId} = req.params
@@ -150,7 +152,6 @@ export const userNextReminders = async (req: Request, res: Response) => {
         res.status(500).send(error)
     }
 }
-
 
 export const updateReminderData = async (req: Request, res: Response) => { 
 
@@ -179,6 +180,50 @@ export const deleteUserReminder = async (req: Request, res: Response) => {
         reminderSelected.destroy()
 
         res.status(200).send("Se elimino correctamente el recordatorio")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const userCommunicationsForToday = async (req: Request, res: Response) => { 
+      
+    const {userId} = req.params
+    const actualDate = new Date()
+    console.log("actualDate", actualDate)
+
+    const startOfDay = new Date(actualDate.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(actualDate.setHours(23, 59, 59, 999));
+
+    try {
+     const comunications = await FollowUpClientsModel.findAll({ 
+        where: { 
+            userId: userId,
+            nextContactDate: {
+                [Op.between]: [startOfDay, endOfDay]
+            }
+        }
+     })
+     res.status(200).send(comunications)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+export const nextCommunicationsToClientsOnFollowUp = async (req: Request, res: Response) => { 
+
+    const {userId} = req.params
+ 
+    try {
+        const nextCalls = await FollowUpClientsModel.findAll({
+           where: { 
+              userId: userId,
+              nextContactDate: {
+                [Op.gt]: new Date()
+             }
+           } 
+        })
+        res.status(200).send(nextCalls)
     } catch (error) {
         res.status(500).send(error)
     }

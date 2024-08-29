@@ -1,5 +1,5 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default} from "sequelize-typescript"
-import FollowUpModel from "./followUps"
+import FollowUpModel from "./projectPlanification"
 import ProjectModel from "./projects"
 
 @Table({ 

@@ -36,17 +36,18 @@ class FollowUpClientsModel extends Model {
     @Column ({ 
         type: DataType.DATE
     })
-    declare date: Date
+    declare contactDate: Date
+
+    @Column ({ 
+        type: DataType.DATE
+    })
+    declare nextContactDate: Date
 
     @Column ({ 
         type: DataType.STRING
     })
     declare note: string
 
-    @Column ({ 
-        type: DataType.STRING
-    })
-    declare project: string
 
 }
 

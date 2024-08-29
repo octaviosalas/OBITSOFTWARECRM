@@ -1,8 +1,13 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
-import { createClient, clientData, everyClients, updateClientData } from "../controllers/clients"
-import { validateIfClientEmailNotExist, validateClientExistense } from "../middlewares/clientsValidations"
+import { createClient, clientData, everyClients, updateMyCustomerClientTracking,
+         updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking,
+         deleteMyCustomerClientTracking } from "../controllers/clients"
+import { 
+    validateIfClientEmailNotExist, validateClientExistense, 
+    validateTrackingToClientExist, validateTrackingToClientWasCreatedByUser } from "../middlewares/clientsValidations"
+import { validateUserExistWithId } from "../middlewares/userValidations"
 
 const router = Router()
 
@@ -42,9 +47,59 @@ router.put("/updateClientData/:clientId",
     updateClientData
 )
 
-router.delete("/deleteClient/:clientId", )
+
+router.delete("/deleteClient/:clientId", 
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    errorsHanlder,
+    validateClientExistense,
+
+)
 
 
+router.post("/createClientFollowUp/:clientId/:userId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    body("contactDate").notEmpty().withMessage("Debes indicar en que fecha asentar este contacto"),
+    body("nextContactDate").notEmpty().withMessage("Debes indicar una fecha de proximo contacto "),
+    body("note").notEmpty().withMessage("Debes dejar una breve reseña del contacto que estas queriendo asignarle al cliente"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    createNewClientFlowUp
+)
+
+router.get("/myCustomerClientTracking/:clientId/:userId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    getMyCustomerClientHistoricTracking
+)
+
+router.put("/updateMyTrackingData/:trackingId/:clientId/:userId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    param("trackingId").notEmpty().withMessage("Debes indicar cual de tus anotaciones deseas modificar"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    validateTrackingToClientExist,
+    validateTrackingToClientWasCreatedByUser,
+    updateMyCustomerClientTracking
+)
+
+router.delete("/deleteMyTrackingData/:trackingId/:clientId/:userId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    param("trackingId").notEmpty().withMessage("Debes indicar cual de tus anotaciones deseas modificar"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    validateTrackingToClientExist,
+    validateTrackingToClientWasCreatedByUser,
+    deleteMyCustomerClientTracking
+)
 
 
 export default router
