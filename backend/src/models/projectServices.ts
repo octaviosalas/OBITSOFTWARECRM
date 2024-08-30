@@ -3,6 +3,7 @@ import ProjectModel from "./projects";
 import ServicesModel from "./services";
 
 @Table({ tableName: "project_services" })
+
 class ProjectServiceModel extends Model {
 
     @ForeignKey(() => ProjectModel)

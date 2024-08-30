@@ -33,9 +33,9 @@ class UserNotificationModel extends Model {
     projectData?: ProjectModel;
 
     @Column({
-        type: DataType.ENUM('PROJECT_REMINDER', 'PROJECT_MESSAGE', 'PERSONAL_MESSAGE')
+        type: DataType.ENUM('PROJECT_REMINDER', 'PROJECT_MESSAGE', 'PERSONAL_MESSAGE', "PROJECT_PLANIFICATION")
     })
-    declare notificationType: 'PROJECT_REMINDER' | 'PROJECT_MESSAGE' | 'PERSONAL_MESSAGE';
+    declare notificationType: 'PROJECT_REMINDER' | 'PROJECT_MESSAGE' | 'PERSONAL_MESSAGE' | "PROJECT_PLANIFICATION";
 
     @Column(DataType.STRING)
     declare message: string;

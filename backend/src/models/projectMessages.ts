@@ -1,16 +1,15 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default, ForeignKey, BelongsTo} from "sequelize-typescript"
-import ClientModel from "./clients";
 import ProjectModel from "./projects";
 import UserModel from "./user";
 
 @Table({ 
-    tableName: "followUpClients",
+    tableName: "projectMessages",
     indexes: [{ 
-        fields: ["clientId", "userId"]
+        fields: ["projectId", "userId"]
     }]
 })
 
-class FollowUpClientsModel extends Model { 
+class ProjectMessagesModel extends Model { 
     @PrimaryKey
     @AutoIncrement
     @Column({ 
@@ -18,14 +17,14 @@ class FollowUpClientsModel extends Model {
     })
     declare id: number
 
-    @ForeignKey(() => ClientModel)
+    @ForeignKey(() => ProjectModel)
     @Column({
       type: DataType.INTEGER,
       allowNull: false,
     })
-    declare clientId: number; 
-    @BelongsTo(() => ClientModel)
-    clientData: ClientModel;
+    declare projectId: number; 
+    @BelongsTo(() => ProjectModel)
+    projectData: ProjectModel;
 
     @ForeignKey(() => UserModel)
     @Column({
@@ -39,19 +38,13 @@ class FollowUpClientsModel extends Model {
     @Column ({ 
         type: DataType.DATE
     })
-    declare contactDate: Date
+    declare date: Date
 
-    @Column ({ 
-        type: DataType.DATE
+    @Column({ 
+        type: DataType.TEXT 
     })
-    declare nextContactDate: Date
-
-    @Column ({ 
-        type: DataType.STRING
-    })
-    declare note: string
-
+    declare message: string | Buffer;
 
 }
 
-export default FollowUpClientsModel;
+export default ProjectMessagesModel

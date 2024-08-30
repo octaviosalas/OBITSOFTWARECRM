@@ -4,8 +4,9 @@ import UserRemindersModel from "../models/userReminders";
 import { formateDate } from "../utils/transformDate";
 import { Op } from 'sequelize';
 import FollowUpClientsModel from "../models/followUpClients";
+import UserNotificationModel from "../models/userNotifications";
 
-
+//CREAR UN NUEVO USUARIO
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
 
     const {name, email, password} = req.body
@@ -23,6 +24,8 @@ export const createUser = async (req: Request, res: Response): Promise <void> =>
    }
 }
 
+
+//OBTENER DATOS DE UN SOLO USUARIO
 export const userData = async (req: Request, res: Response) => { 
     const {userId} = req.params
 
@@ -38,6 +41,8 @@ export const userData = async (req: Request, res: Response) => {
     }
 }
 
+
+//OBTENER A TODOS LOS USUARIOS DEL SISTEMA
 export const everyUsers = async (req: Request, res: Response) => { 
     try {
         const userSelected = await UserModel.findAll()
@@ -51,6 +56,8 @@ export const everyUsers = async (req: Request, res: Response) => {
     }
 }
 
+
+//ACTUALIZAR DATOS DE MI CUENTA DE USUARIO
 export const updateUserData = async (req: Request, res: Response) => { 
 
     const {userId} = req.params
@@ -71,6 +78,8 @@ export const updateUserData = async (req: Request, res: Response) => {
     }
 }
 
+
+//ELIMINAR MI CUENTA DE USUARIO
 export const deleteUserAccount = async (req: Request, res: Response) => { 
     const {userId} = req.params
 
@@ -87,6 +96,8 @@ export const deleteUserAccount = async (req: Request, res: Response) => {
     }
 }
 
+
+//CREAR UN NUEVO RECORDATORIO PARA MI MISMO, COMO USUARIO
 export const createMyReminder = async (req: Request, res: Response) => { 
     const {userId} = req.params
     const {date, reminderData} = req.body
@@ -106,6 +117,7 @@ export const createMyReminder = async (req: Request, res: Response) => {
 }
 
 
+//OBTENER TODOS MIS RECORDATORIOS PERSONALES
 export const getMyReminders = async (req: Request, res: Response) => { 
     const {userId} = req.params
  
@@ -121,6 +133,8 @@ export const getMyReminders = async (req: Request, res: Response) => {
     }
 }
 
+
+//OBTENER UN RECORDATORIO MIO PERSONAL EN CONCRETO
 export const getOneReminderData = async (req: Request, res: Response) => { 
 
     const {userId, reminderId} = req.params
@@ -133,7 +147,7 @@ export const getOneReminderData = async (req: Request, res: Response) => {
     }
 }
 
-
+//OBTENER FUTUROS RECORDATORIOS PROPIOS COMO USUARIO
 export const userNextReminders = async (req: Request, res: Response) => { 
 
     const {userId} = req.params
@@ -153,6 +167,7 @@ export const userNextReminders = async (req: Request, res: Response) => {
     }
 }
 
+//ACTUALIZAR UN RECORDATORIO PERSONAL
 export const updateReminderData = async (req: Request, res: Response) => { 
 
     const {reminderId} = req.params
@@ -171,6 +186,7 @@ export const updateReminderData = async (req: Request, res: Response) => {
     }
 }
 
+//EIMINAR UN RECORDATORIO PERSONAL
 export const deleteUserReminder = async (req: Request, res: Response) => { 
 
     const {reminderId} = req.params
@@ -185,6 +201,8 @@ export const deleteUserReminder = async (req: Request, res: Response) => {
     }
 }
 
+
+//OBTENER LAS COMUNICACIONES QUE ASENTE EN SEGUIMIENTOS A CLIENTES POTENCIALES PARA LA FECHA ACTUAL
 export const userCommunicationsForToday = async (req: Request, res: Response) => { 
       
     const {userId} = req.params
@@ -210,6 +228,7 @@ export const userCommunicationsForToday = async (req: Request, res: Response) =>
 }
 
 
+//OBTENER LAS PROXIMAS COMUNICACIONES QUE ASENTE EN SEGUIMIENTOS A CLIENTES POTENCIALES
 export const nextCommunicationsToClientsOnFollowUp = async (req: Request, res: Response) => { 
 
     const {userId} = req.params
@@ -227,4 +246,57 @@ export const nextCommunicationsToClientsOnFollowUp = async (req: Request, res: R
     } catch (error) {
         res.status(500).send(error)
     }
+}
+
+
+//OBTENER NOTIFICACIONES DEL USUARIO SIN LEER
+export const unreadUserNotification = async (req: Request, res: Response) => { 
+    
+    const {userId} = req.params
+
+    try {
+        const everyNotifications = await UserNotificationModel.findAll({ 
+            where: { 
+                userId: userId
+            }
+         })
+
+         const unreadNotifications = everyNotifications.filter((notifications) => notifications.read === false)
+         res.status(200).send(unreadNotifications)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+//OBTENER HISTORICO DE NOTIFICACIONES DEL USUARIO
+export const userHistoricNotifications = async (req: Request, res: Response) => { 
+
+    const {userId} = req.params
+
+    try {
+         const everyNotifications = await UserNotificationModel.findAll({ 
+            where: { 
+                userId: userId
+            }
+         })
+         res.status(200).send(everyNotifications)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+//MARCAR UNA NOTIFICACION COMO LEIDA
+export const updateNotificationAsRead = async (req: Request, res: Response) => { 
+    
+    const {notificationId} = req.params
+    
+    try {
+          const notification = await UserNotificationModel.findByPk(notificationId)
+          notification.read = true
+          await notification.save()
+          res.status(200).send("Notificacion marcada como leida")
+     } catch (error) {
+         res.status(500).send(error)
+     }
 }

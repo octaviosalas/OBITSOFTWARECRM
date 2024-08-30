@@ -15,15 +15,6 @@ class ProjectPlanificationModel extends Model {
     })
     declare id: number
 
-    @ForeignKey(() => ClientModel)
-    @Column({
-      type: DataType.INTEGER,
-      allowNull: false,
-    })
-    declare clientId: number; 
-    @BelongsTo(() => ClientModel)
-    clientData: ClientModel;
-
     @ForeignKey(() => ProjectModel)
     @Column({
       type: DataType.INTEGER,

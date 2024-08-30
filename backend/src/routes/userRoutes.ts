@@ -4,24 +4,27 @@ import { errorsHanlder } from "../utils/errorsHanlder"
 import { createUser, userData, everyUsers, 
          updateUserData, deleteUserAccount, createMyReminder, 
          getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday,
-         deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp } from "../controllers/user"
-import { validateUserExist, validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder } from "../middlewares/userValidations"
+         deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp,
+         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications } from "../controllers/user"
+import { validateUserExist, validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
 
 const router = Router()
 
-//Obtener datos de un solo usuario
+//OBTENER DATOS DE UN SOLO USUARIO
 router.get("/userData/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
     userData
 )
 
-//Obtener a todos los usuarios del sistema
+
+//OBTENER A TODOS LOS USUARIOS DEL SISTEMA
 router.get("/everyUsersData", 
     everyUsers
 )
 
-//Crear un nuevo usuario 
+
+//CREAR UN NUEVO USUARIO
 router.post("/createUser", 
     body("name").notEmpty().withMessage("Es obligatorio indicar el nombre"),
     body("email").notEmpty().withMessage("Es obligatorio indicar el nombre"),
@@ -39,7 +42,8 @@ router.post("/createUser",
     createUser
 )
 
-//Actualizar datos de la cuenta del usuario 
+
+//ACTUALIZAR DATOS DE MI CUENTA DE USUARIO
 router.put("/updateUsertData/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     body("name").notEmpty().withMessage("Es obligatorio indicar el nombre"),
@@ -49,7 +53,8 @@ router.put("/updateUsertData/:userId",
     updateUserData,
 )
 
-//Eliminar cuenta del usuario 
+
+//ELIMINAR MI CUENTA DE USUARIO
 router.delete("/deleteUserAccount/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -57,7 +62,8 @@ router.delete("/deleteUserAccount/:userId",
     deleteUserAccount
 )
 
-//crear nuevo recordatorio
+
+//CREAR UN NUEVO RECORDATORIO PARA MI MISMO, COMO USUARIO
 router.post("/createReminder/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     body("reminderData").notEmpty().withMessage("Debes indicar un mensaje para el recordatorio"),
@@ -67,7 +73,8 @@ router.post("/createReminder/:userId",
     createMyReminder
 )
 
-//Obtener todos mis recordatorios
+
+//OBTENER TODOS MIS RECORDATORIOS PERSONALES
 router.get("/myReminders/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -75,7 +82,7 @@ router.get("/myReminders/:userId",
     getMyReminders
 )
 
-//Obtener recordatorio del usuario en detalle
+//OBTENER UN RECORDATORIO MIO PERSONAL EN CONCRETO
 router.get("/reminderData/:reminderId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -84,7 +91,8 @@ router.get("/reminderData/:reminderId/:userId",
     getOneReminderData
 )
 
-//Obtener futuros recordatorios hechos del usuario
+
+//OBTENER FUTUROS RECORDATORIOS PROPIOS COMO USUARIO
 router.get("/userNextReminders/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -92,7 +100,8 @@ router.get("/userNextReminders/:userId",
     userNextReminders
 )
 
-//Actualizar recordatorio hecho del usuario
+
+//ACTUALIZAR UN RECORDATORIO PERSONAL
 router.put("/updateReminder/:reminderId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     param("reminderId").notEmpty().withMessage("Es obligatorio indicar el recordatorio que deseas actualizar"),
@@ -104,7 +113,8 @@ router.put("/updateReminder/:reminderId/:userId",
     updateReminderData
 )
 
-//Eliminar recordatorio hecho del usuario
+
+//EIMINAR UN RECORDATORIO PERSONAL
 router.delete("/deleteUserReminder/:reminderId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     param("reminderId").notEmpty().withMessage("Es obligatorio indicar el recordatorio que deseas actualizar"),
@@ -114,7 +124,8 @@ router.delete("/deleteUserReminder/:reminderId/:userId",
     deleteUserReminder
 )
 
-//Obtener futuras comunicaciones por hacer del usuario
+
+//OBTENER LAS PROXIMAS COMUNICACIONES QUE ASENTE EN SEGUIMIENTOS A CLIENTES POTENCIALES
 router.get("/nextCommunicationsToClientsOnFollowUp/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -122,7 +133,8 @@ router.get("/nextCommunicationsToClientsOnFollowUp/:userId",
     nextCommunicationsToClientsOnFollowUp
 )
 
-//Obtener comunicaciones para hacer hoy del usuario
+
+//OBTENER LAS COMUNICACIONES QUE ASENTE EN SEGUIMIENTOS A CLIENTES POTENCIALES PARA LA FECHA ACTUAL
 router.get("/userComunicationsForToday/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
@@ -130,6 +142,32 @@ router.get("/userComunicationsForToday/:userId",
     userCommunicationsForToday
 )
 
+
+//OBTENER NOTIFICACIONES SIN LEER DEL USUARIO
+router.get("/userUnreadNotifications/:userId",
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    unreadUserNotification
+)
+
+
+//OBTENER HISTORICO DE NOTIFICACIONES DEL USUARIO
+router.get("/useEveryNotifications/:userId",
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    userHistoricNotifications
+)
+
+
+//MARCAR UNA NOTIFICACION COMO LEIDA
+router.put("/updateNotificationAsRead/:notificationId",
+    param("notificationId").notEmpty().withMessage("Debes indicar a que notificacion deseas marcar como leida"),
+    errorsHanlder,
+    validateUserNotificationExist,
+    updateNotificationAsRead
+)
 
 
 export default router

@@ -107,6 +107,8 @@ button:hover {
     position: relative;
 }
 
+
+
 .close-button {
     position: absolute;
     top: 10px;
@@ -115,8 +117,9 @@ button:hover {
     cursor: pointer;
 }
 
-.modal h2 {
+.modal-content h2 {
     color: #4682b4;
+    font-size: 25px;
 }
 
 /* Form Styles */
@@ -145,6 +148,11 @@ button:hover {
     cursor: pointer;
     border-radius: 5px;
     width: 100%;
+}
+
+#client-form strong {
+    color: #4682b4;
+    font-weight: bold();  
 }
 
 #client-form button:hover {

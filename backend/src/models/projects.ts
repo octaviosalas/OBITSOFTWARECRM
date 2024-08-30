@@ -3,6 +3,7 @@ import ClientModel from "./clients"
 import ProjectServiceModel from "./projectServices"
 import ProjectPlanificationModel from "./projectPlanification"
 import ProjectRemindersModels from "./projectReminders"
+import ProjectMessagesModel from "./projectMessages"
 
 @Table({ 
     tableName: "projects",
@@ -52,6 +53,9 @@ class ProjectModel extends Model {
 
     @HasMany(() => ProjectRemindersModels, { foreignKey: 'projectId' }) 
     reminders: ProjectRemindersModels[]; 
+
+    @HasMany(() => ProjectMessagesModel, {foreignKey: 'projectId' })
+    projectMessages: ProjectMessagesModel[]
     
 }
 

@@ -1,4 +1,5 @@
 import ClientDetailModal from "./ClientDetailModal";
+import ClientProjectsModal from "./ClientProjectsModal";
 import CreateNewClientModal from "./CreateNewClientModal";
 import "./styles/clientModule.css"
 import { useState } from 'react';
@@ -96,9 +97,9 @@ const MainClient = () => {
                                 <td>{client.telefono}</td>
                                 <td>{client.email}</td>
                                 <td>{client.estado}</td>
-                                <td>
+                                <td className="flex">
                                     <ClientDetailModal/>
-                                    <button className="btn-btn" onClick={() => openModal('projects')}>Proyectos</button>
+                                    <ClientProjectsModal/>
                                     <button className="btn-btn" onClick={() => openModal('followUps')}>Seguimientos</button>
                                     <button className="delete-icon" onClick={() => deleteClient(client.id)}>Eliminar</button>
                                 </td>
@@ -107,37 +108,6 @@ const MainClient = () => {
                     </tbody>
                 </table>
             </div>
-
-       
-           
-
-            {/* Modal de Proyectos */}
-            {modals.projects && (
-                <div id="projects-modal" className="modal">
-                    <div className="modal-content">
-                        <span className="close-button" onClick={() => closeModal('projects')}>&times;</span>
-                        <h2>Proyectos del Cliente</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre del Proyecto</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {projectsData.map(project => (
-                                    <tr key={project.id}>
-                                        <td>{project.id}</td>
-                                        <td>{project.nombre}</td>
-                                        <td><span className="table-icon" onClick={() => viewProject(project.id)}>Ir</span></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            )}
 
             {/* Modal de Seguimientos */}
             {modals.followUps && (

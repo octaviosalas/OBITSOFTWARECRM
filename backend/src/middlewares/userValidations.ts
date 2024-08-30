@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import UserModel from "../models/user";
 import UserRemindersModel from "../models/userReminders";
+import UserNotificationModel from "../models/userNotifications";
 
 export const validateUserNotExist = async (req: Request, res: Response, next: NextFunction) => { 
     
@@ -74,6 +75,23 @@ export const validateReminderExistenceAndIfIsUserReminder = async (req: Request,
         } else { 
             next()
         }
+    } catch (error) {
+        res.status(500).send(error)
+    }
+} 
+
+export const validateUserNotificationExist= async (req: Request, res: Response, next: NextFunction) => { 
+    
+    const {notificationId} = req.params
+
+    try {
+        const checkReminderCreator = await UserNotificationModel.findByPk(notificationId)
+        if(!checkReminderCreator) { 
+            return res.status(404).send("La notificacion no ha sido encontrada")
+        }
+        next()
+
+     
     } catch (error) {
         res.status(500).send(error)
     }

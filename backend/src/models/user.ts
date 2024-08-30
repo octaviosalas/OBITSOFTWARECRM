@@ -3,6 +3,7 @@ import UserRemindersModel from "./userReminders"
 import FollowUpModel from "./projectPlanification"
 import UserAccesModel from "./userAcces"
 import UserNotificationModel from "./userNotifications"
+import ProjectMessagesModel from "./projectMessages"
 
 
 @Table({ 
@@ -43,6 +44,9 @@ class UserModel extends Model {
 
     @HasMany(() => UserNotificationModel, {foreignKey: 'userId' })
     userNotifications: UserNotificationModel[]
+
+    @HasMany(() => ProjectMessagesModel, {foreignKey: 'userId' })
+    projectMessages: ProjectMessagesModel[]
 }
 
 export default UserModel

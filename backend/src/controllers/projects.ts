@@ -9,9 +9,10 @@ import ProjectRemindersModels from "../models/projectReminders";
 import { formateDate } from "../utils/transformDate";
 import UserModel from "../models/user";
 import { Op } from 'sequelize';
+import UserNotificationModel from "../models/userNotifications";
 
 
-//proyecto base
+//CREAR UN PROYECTO NUEVO
 export const createNewProject = async (req: Request, res: Response) => { 
     
     const {clientId, userId} = req.params
@@ -51,6 +52,8 @@ export const createNewProject = async (req: Request, res: Response) => {
     }
 }
 
+
+//OBTENER DATOS DE UN PROYECTO
 export const projectData = async (req: Request, res: Response) => { 
     const {projectId} = req.params
 
@@ -85,6 +88,8 @@ export const projectData = async (req: Request, res: Response) => {
    }
 }
 
+
+//OBTENER TODOS LOS USUARIOS QUE TIENEN ACCESO A UN PROYECTO
 export const projectsUserWithAcces = async (req: Request, res: Response) => { 
     const {projectId} = req.params
 
@@ -105,29 +110,49 @@ export const projectsUserWithAcces = async (req: Request, res: Response) => {
 }
 
 
-//seguimientos
-export const establishNewFollowUp = async (req: Request, res: Response) => { 
-    
-    const {projectId, clientId, userId} = req.params
-    const {date, note} = req.body
-
+//CREAR NUEVA PLANIFICACION HACIA EL PROYECTO Y ENVIAR NOTIFICACION A LOS USUARIOS CON ACCESO
+export const establishNewProjectPlanification = async (req: Request, res: Response) => { 
+    const { projectId, userId } = req.params;
+    const { date, note } = req.body;
 
     try {
-        const newFollowUp = new ProjectPlanificationModel({ 
-           clientId: clientId,
-           projectId: projectId,
-           userId: userId,
-           date: date,
-           note: note
-        })
-        await newFollowUp.save()
-        res.status(200).send("Se ha creado correctamente la nota hacia el proyecto")
+
+        const projectData = await ProjectModel.findByPk(projectId);
+        const projectName = projectData.name;
+
+        const userData = await UserModel.findByPk(userId);
+        const userName = userData.name;
+
+        await ProjectPlanificationModel.create({ 
+            projectId: projectId,
+            userId: userId,
+            date: date,
+            note: note
+        });
+
+        const projectUsers = await UserAccesModel.findAll({ 
+            where: { projectId: projectId }
+        });
+
+        const notifications = projectUsers.map((userData) => ({
+            userId: userData.userId,
+            projectId: projectId,
+            notificationType: "PROJECT_PLANIFICATION",
+            message: `${userName} ha creado un nueva planificacion en el proyecto ${projectName}`,
+            read: false
+        }));
+
+        await UserNotificationModel.bulkCreate(notifications);
+
+        res.status(200).send("Se ha creado correctamente un nueva planificacion en el proyecto");
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error);
     }
 }
 
-export const projectTracking = async (req: Request, res: Response) => { 
+
+//OBTENER TODAS LAS PLANIFICACIONES DE UN PROYECTO
+export const getProjectAllPlanifications = async (req: Request, res: Response) => { 
    
     const {projectId} = req.params
 
@@ -143,6 +168,8 @@ export const projectTracking = async (req: Request, res: Response) => {
     }
 }
 
+
+//ACTUALIZAR FECHA O MENSAJE DE LA PLANIFICACION CREADA EN UN PROYECTO
 export const updateTrackingData = async (req: Request, res: Response) => { 
    
     const {followUpId} = req.params
@@ -154,13 +181,15 @@ export const updateTrackingData = async (req: Request, res: Response) => {
         followUpSelectedToBeUpdated.note = note
         await followUpSelectedToBeUpdated.save()
 
-        res.status(200).send(`Se actualizo correctamente los datos del seguimiento`)
+        res.status(200).send(`Se actualizo correctamente la planificacion`)
     } catch (error) {
         res.status(500).send(error)
     }
 }
 
-export const deleteTrackingData = async (req: Request, res: Response) => { 
+
+//ELIMINAR PLANIFICACION CREADA DE UN PROYECTO
+export const deleteProjectPlanification = async (req: Request, res: Response) => { 
    
     const {followUpId} = req.params
 
@@ -174,8 +203,7 @@ export const deleteTrackingData = async (req: Request, res: Response) => {
 }
 
 
-
-//recordatorios
+//CREAR UN NUEVO RECORDATORIO EN EL PROYECTO Y ENVIAR NOTIFICACIONES A LOS USUARIOS CON ACCESO
 export const createProjectReminder = async (req: Request, res: Response) => { 
     
      const {userId, projectId} = req.params
@@ -183,20 +211,42 @@ export const createProjectReminder = async (req: Request, res: Response) => {
 
      const reminderDate = formateDate(date)
 
+     const projectData = await ProjectModel.findByPk(projectId);
+     const projectName = projectData.name;
+
+     const userData = await UserModel.findByPk(userId);
+     const userName = userData.name;
+
     try {
-         const reminderDataToBeSaved = new ProjectRemindersModels({ 
+         await ProjectRemindersModels.create({ 
             userId,
             projectId,
             date,
             reminderData
          })
-         await reminderDataToBeSaved.save()
+         
+
+        const projectUsers = await UserAccesModel.findAll({ 
+            where: { projectId: projectId }
+        });
+
+        const notifications = projectUsers.map((userData) => ({
+            userId: userData.userId,
+            projectId: projectId,
+            notificationType: "PROJECT_REMINDER",
+            message: `${userName} ha creado un nuevo recordatorio en el proyecto ${projectName}`,
+            read: false
+        }));
+
+         await UserNotificationModel.bulkCreate(notifications);
          res.status(200).send(`Se almaceno correctamente el recordatorio para el dia ${reminderDate}`)
     } catch (error) {
         res.status(500).send(error)
     }
 }
 
+
+//OBTENER TODOS LOS RECORDATORIOS DE UN PROYECTO
 export const getProjectReminder = async (req: Request, res: Response) => { 
     
     const {userId, projectId} = req.params
@@ -217,6 +267,8 @@ export const getProjectReminder = async (req: Request, res: Response) => {
    }
 }
 
+
+//OBTENER EL DETALLE, DE UN RECORDATORIO DE UN PROYECTO
 export const getOneProjectReminderData = async (req: Request, res: Response) => { 
     
     const {reminderId, projectId} = req.params
@@ -234,6 +286,8 @@ export const getOneProjectReminderData = async (req: Request, res: Response) => 
    }
 }
 
+
+//OBTENER LOS FUTUROS RECORDATORIOS DE UN PROYECTO
 export const projectNextReminders = async (req: Request, res: Response) => { 
 
     const {projectId} = req.params
@@ -253,6 +307,8 @@ export const projectNextReminders = async (req: Request, res: Response) => {
     }
 }
 
+
+//ACTUALIZAR DATOS DE UN RECORDATORIO DE UN PROYECTO
 export const updateProjectReminderData = async (req: Request, res: Response) => { 
 
     const {reminderId} = req.params
@@ -271,6 +327,8 @@ export const updateProjectReminderData = async (req: Request, res: Response) => 
     }
 }
 
+
+//ELIMINAR EL RECORDATORIO CREADO EN UN PROYECTO 
 export const deleteProjectReminderData = async (req: Request, res: Response) => { 
 
     const {reminderId} = req.params
