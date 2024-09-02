@@ -109,6 +109,8 @@ router.delete("/deletePlanification/:followUpId/:projectId/:userId",
 router.post("/createProjectReminder/:projectId/:userId",
     param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    body("date").notEmpty().withMessage("Debes indicar en que fecha avisar del recordatorio"),
+    body("reminderData").notEmpty().withMessage("Debes adjuntar algo como recordatorio"),
     errorsHanlder,
     validateUserExistWithId,
     validateProjectExistenceWithId,
@@ -153,6 +155,7 @@ router.get("/projectNextReminders/:projectId/:userId",
     projectNextReminders
 )
 
+
 //ACTUALIZAR DATOS DE UN RECORDATORIO DE UN PROYECTO
 router.put("/updateProjectReminder/:reminderId/:projectId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
@@ -167,6 +170,7 @@ router.put("/updateProjectReminder/:reminderId/:projectId/:userId",
     validateIfReminderWasCreatedByUser,
     updateProjectReminderData
 )
+
 
 //ELIMINAR EL RECORDATORIO CREADO EN UN PROYECTO 
 router.delete("/deleteProjectReminder/:reminderId/:projectId/:userId", 

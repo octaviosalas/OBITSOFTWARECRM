@@ -7,6 +7,7 @@ import UserRoutes from "./routes/userRoutes"
 import ClientRoutes from "./routes/clientsRoutes"
 import ServicesRoutes from "./routes/servicesRoutes"
 import ProjectRoutes from "./routes/projectRoutes"
+import MessagesRoutes from "./routes/messages"
 import logger from "morgan"
 import { Server } from "socket.io"
 import {createServer} from "node:http"
@@ -46,6 +47,7 @@ app.use("/api/user", UserRoutes);
 app.use("/api/client", ClientRoutes);
 app.use("/api/service", ServicesRoutes);
 app.use("/api/project", ProjectRoutes);
+app.use("/api/message", MessagesRoutes);
 
 
 server.listen(port, () => { 

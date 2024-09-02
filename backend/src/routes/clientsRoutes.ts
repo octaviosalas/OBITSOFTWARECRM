@@ -47,14 +47,12 @@ router.put("/updateClientData/:clientId",
     updateClientData
 )
 
-
 router.delete("/deleteClient/:clientId", 
     param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
     errorsHanlder,
     validateClientExistense,
 
 )
-
 
 router.post("/createClientFollowUp/:clientId/:userId",
     param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import ClientModel from "../models/clients";
 import FollowUpClientsModel from "../models/followUpClients";
+import ProjectModel from "../models/projects";
 
 export const createClient = async (req: Request, res: Response): Promise <void> => { 
 
@@ -25,11 +26,38 @@ export const createClient = async (req: Request, res: Response): Promise <void> 
 export const clientData = async (req: Request, res: Response): Promise <void> => { 
 
     const {clientId} = req.params
+    console.log(clientId)
 
    try {
        const clientSelected = await ClientModel.findByPk(clientId)
-       res.status(200).send(clientSelected)
+
+       const clientProjects = await ProjectModel.findAll({
+         where: { 
+            client: clientId
+         },
+         include: [{ 
+            model: ClientModel,
+            as: "clientData"
+         }]
+       })
+
+       const clientFollowUp = await FollowUpClientsModel.findAll({
+         where: { 
+            clientId: clientId
+         },
+         include: [{ 
+            model: ClientModel,
+            as: "clientData"
+         }]
+       })
+
+       res.status(200).json({
+          clientData: clientSelected,
+          clientProjects: clientProjects,
+          clientFollowUp: clientFollowUp
+       })
    } catch (error) {
+      console.log(error)
       res.status(500).send(error)
    }
 }

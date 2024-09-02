@@ -9,8 +9,7 @@ import ProjectRemindersModels from "../models/projectReminders";
 import { formateDate } from "../utils/transformDate";
 import UserModel from "../models/user";
 import { Op } from 'sequelize';
-import UserNotificationModel from "../models/userNotifications";
-
+import { createNotification } from "../utils/notificationCreator";
 
 //CREAR UN PROYECTO NUEVO
 export const createNewProject = async (req: Request, res: Response) => { 
@@ -117,34 +116,16 @@ export const establishNewProjectPlanification = async (req: Request, res: Respon
 
     try {
 
-        const projectData = await ProjectModel.findByPk(projectId);
-        const projectName = projectData.name;
-
-        const userData = await UserModel.findByPk(userId);
-        const userName = userData.name;
-
         await ProjectPlanificationModel.create({ 
             projectId: projectId,
             userId: userId,
             date: date,
             note: note
-        });
+        }); 
 
-        const projectUsers = await UserAccesModel.findAll({ 
-            where: { projectId: projectId }
-        });
-
-        const notifications = projectUsers.map((userData) => ({
-            userId: userData.userId,
-            projectId: projectId,
-            notificationType: "PROJECT_PLANIFICATION",
-            message: `${userName} ha creado un nueva planificacion en el proyecto ${projectName}`,
-            read: false
-        }));
-
-        await UserNotificationModel.bulkCreate(notifications);
-
+        await createNotification(projectId, userId, "PROJECT_PLANIFICATION")
         res.status(200).send("Se ha creado correctamente un nueva planificacion en el proyecto");
+
     } catch (error) {
         res.status(500).send(error);
     }
@@ -208,14 +189,7 @@ export const createProjectReminder = async (req: Request, res: Response) => {
     
      const {userId, projectId} = req.params
      const {date, reminderData} = req.body
-
      const reminderDate = formateDate(date)
-
-     const projectData = await ProjectModel.findByPk(projectId);
-     const projectName = projectData.name;
-
-     const userData = await UserModel.findByPk(userId);
-     const userName = userData.name;
 
     try {
          await ProjectRemindersModels.create({ 
@@ -224,21 +198,9 @@ export const createProjectReminder = async (req: Request, res: Response) => {
             date,
             reminderData
          })
-         
 
-        const projectUsers = await UserAccesModel.findAll({ 
-            where: { projectId: projectId }
-        });
+         await createNotification(projectId, userId, "PROJECT_REMINDER")
 
-        const notifications = projectUsers.map((userData) => ({
-            userId: userData.userId,
-            projectId: projectId,
-            notificationType: "PROJECT_REMINDER",
-            message: `${userName} ha creado un nuevo recordatorio en el proyecto ${projectName}`,
-            read: false
-        }));
-
-         await UserNotificationModel.bulkCreate(notifications);
          res.status(200).send(`Se almaceno correctamente el recordatorio para el dia ${reminderDate}`)
     } catch (error) {
         res.status(500).send(error)
@@ -344,3 +306,4 @@ export const deleteProjectReminderData = async (req: Request, res: Response) => 
         res.status(500).send(error)
     }
 }
+

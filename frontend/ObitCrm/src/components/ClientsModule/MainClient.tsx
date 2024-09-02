@@ -2,9 +2,32 @@ import ClientDetailModal from "./ClientDetailModal";
 import ClientProjectsModal from "./ClientProjectsModal";
 import CreateNewClientModal from "./CreateNewClientModal";
 import "./styles/clientModule.css"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { clientPersonalDataType } from "../../types/Clients";
+import apiBackendUrl from "../../lib/axiosData";
 
 const MainClient = () => { 
+
+    const [everyClientsData, setEveryClientsData] = useState<clientPersonalDataType[] | []>([])
+
+    const getClientsData = async () => { 
+        try {
+            const {data, status} = await apiBackendUrl.get("/client/everyClientsData")
+            console.log(status)
+            console.log(data)
+            if(status === 200) { 
+                console.log(data)
+                setEveryClientsData(data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => { 
+        getClientsData()
+    }, [])
+    
 
     const clientsData = [
         { id: 1, nombre: 'Cliente A', telefono: '(123) 456-7890', email: 'clientea@example.com', estado: 'Activo' },
@@ -54,7 +77,7 @@ const MainClient = () => {
         setSearchTerm(event.target.value.toLowerCase());
     };
 
-    const filteredClients = clientsData.filter(client =>
+    const filteredClients = everyClientsData.filter(client =>
         Object.values(client).some(value =>
             value.toString().toLowerCase().includes(searchTerm)
         )
@@ -81,7 +104,6 @@ const MainClient = () => {
                 <table id="clientes-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Nombre</th>
                             <th>Teléfono</th>
                             <th>Email</th>
@@ -91,14 +113,14 @@ const MainClient = () => {
                     </thead>
                     <tbody>
                         {filteredClients.map(client => (
-                            <tr key={client.id}>
-                                <td>{client.id}</td>
-                                <td>{client.nombre}</td>
-                                <td>{client.telefono}</td>
+                            <tr key={client.name}>
+                                <td>{client.name}</td>
+                                <td>{client.phone}</td>
                                 <td>{client.email}</td>
-                                <td>{client.estado}</td>
+                                {client.active === true ? 
+                                <td>Activo</td> : <td>Inactivo</td>}
                                 <td className="flex">
-                                    <ClientDetailModal/>
+                                    <ClientDetailModal clientId={client.id}/>
                                     <ClientProjectsModal/>
                                     <button className="btn-btn" onClick={() => openModal('followUps')}>Seguimientos</button>
                                     <button className="delete-icon" onClick={() => deleteClient(client.id)}>Eliminar</button>

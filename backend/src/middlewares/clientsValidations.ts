@@ -34,7 +34,8 @@ export const validateClientExistense = async (req: Request, res: Response, next:
             res.status(404).send("El cliente no existe almacenado en la base de datos")
         }
     } catch (error) {
-        
+        res.status(500).send(error)
+
     }
 }
 
