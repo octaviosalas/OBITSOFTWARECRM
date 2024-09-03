@@ -1,25 +1,48 @@
-import React from 'react'
 import {Modal, ModalContent, useDisclosure} from "@nextui-org/react";
 import "./styles/clientModule.css"
+import { useState } from "react";
+import { getClientData } from "../../utils/getClientData";
+import handleError from "../../utils/axiosErrorHanlder";
+import { clientProjectsDataType } from "../../types/Clients";
+import SpinnerComponent from "../Spinner/Spinner";
 
-const ClientProjectsModal = () => {
+interface Props { 
+    clientId: number
+  }
+
+const ClientProjectsModal = ({clientId}: Props) => {
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const projectsData = [
-        { id: 1, nombre: 'Proyecto X' },
-        { id: 2, nombre: 'Proyecto Y' },
-    ];
+    const [clientsProjectsData, setClientsProjectsData] = useState<clientProjectsDataType[] | []>()
+    const [load, setLoad] = useState<boolean>(false)
+
+
+    const handleOpen = async () => { 
+        onOpen()
+        try {
+           const clientDetail = await getClientData(clientId, setLoad)
+           console.log(clientDetail.clientProjects)
+           setClientsProjectsData(clientDetail.clientProjects)
+           setLoad(false)  
+         } catch (error) {
+           handleError(error, setLoad)
+         }
+ }
 
 
   return (
     <div>
-         <button className="btn-btn" onClick={onOpen}>Proyectos</button>
+         <button className="btn-btn" onClick={handleOpen}>Proyectos</button>
          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
             {(onClose) => (
                 <>
                 
                 <div id="projects-modal" className="modal">
+                   {load ?  
+                   <div className="flex justify-center items-center m-4">
+                       <SpinnerComponent/> 
+                    </div> : 
                     <div className="modal-content">
                         <h2>Proyectos del Cliente</h2>
                         <table>
@@ -31,16 +54,22 @@ const ClientProjectsModal = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {projectsData.map(project => (
+                            {clientsProjectsData && clientsProjectsData.length > 0 ? (
+                                clientsProjectsData.map((project, index) => (
                                     <tr key={project.id}>
-                                        <td>{project.id}</td>
-                                        <td>{project.nombre}</td>
-                                        <td><span className="table-icon" >Ir</span></td>
+                                        <td>{index + 1}</td>
+                                        <td>{project.name}</td>
+                                        <td><span className="table-icon">Ir</span></td>
                                     </tr>
-                                ))}
+                                ))
+                            ) : (
+                                <tr>
+                                    <td>No hay proyectos</td>
+                                </tr>
+                            )}
                             </tbody>
                         </table>
-                    </div>
+                    </div>}
                 </div>
                 
                 </>

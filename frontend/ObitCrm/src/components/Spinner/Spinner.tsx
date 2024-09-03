@@ -2,7 +2,9 @@ import {Spinner} from "@nextui-org/react";
 
 const SpinnerComponent = () => {
   return (
-    <Spinner />
+    <div className="flex items-center justify-center"> 
+       <Spinner />
+    </div>
   );
 }
 

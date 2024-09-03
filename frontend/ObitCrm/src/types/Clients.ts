@@ -1,4 +1,4 @@
-type userSocialNetworksType = { 
+export type userSocialNetworksType = { 
     instagram: string,
     facebook: string
 }
@@ -8,14 +8,14 @@ export type clientPersonalDataType = {
     name: string,
     phone: string,
     email: string,
-    dischargeDate: string | null,
+    dischargeDate: string,
     active: boolean,
     socialNetworks: userSocialNetworksType,
     createdAt: string,
     updatedAt: string
 }
 
-type clientProjectsDataType = { 
+export type clientProjectsDataType = { 
     id: number,
     name: string,
     startDate: string,
@@ -24,10 +24,9 @@ type clientProjectsDataType = {
     createdAt: string,
     updatedAt: string,
     clientData: clientPersonalDataType,
-    
 }
 
-type clientFollowUpDataType = { 
+export type clientFollowUpDataType = { 
     id: number,
     userId: number,
     clientId: number,
@@ -39,6 +38,4 @@ type clientFollowUpDataType = {
     clientData: clientProjectsDataType
 }
 
-type everyClientsDataType = { 
-
-}
+export type newClientDataType = Omit<clientPersonalDataType, 'createdAt' | 'updatedAt' | 'id'>;

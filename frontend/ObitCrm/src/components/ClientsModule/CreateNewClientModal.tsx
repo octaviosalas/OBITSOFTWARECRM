@@ -1,14 +1,50 @@
-import React from "react";
+
 import {Modal, ModalContent, useDisclosure} from "@nextui-org/react";
 import "./styles/clientModule.css"
+import apiBackendUrl from "../../lib/axiosData";
+import { useState } from "react";
+import { newClientDataType } from "../../types/Clients";
+import handleError from "../../utils/axiosErrorHanlder";
 
 const CreateNewClientModal = () => {
 
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [load, setLoad] = useState<boolean>(false)
+  const [name, setName] = useState<string>("")
+  const [phone, setPhone] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [dischargeDate, setDischargeDate] = useState<string>("")
+  const [active, setActive] = useState<boolean>(false)
+  const [facebook, setFacebook] = useState<string>("")
+  const [instagram, setInstagram] = useState<string>("")
+
+  const handleSubmit = async () => { 
+    const newClientData : newClientDataType = ({ 
+      name: name,
+      phone: phone,
+      email: email,
+      dischargeDate: dischargeDate,
+      active: active,
+      socialNetworks: {
+        facebook: facebook,
+        instagram: instagram
+      }
+    })
+    try {
+        const {data, status} = await apiBackendUrl.post("/client/createClient", newClientData)
+        console.log(status, data)
+        if(status === 200) { 
+            console.log(data)
+        }
+      } catch (error) {
+        handleError(error, setLoad)
+      }
+    }
 
   return (
     <>
       <button onClick={onOpen}>Nuevo</button>
+      
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -38,7 +74,7 @@ const CreateNewClientModal = () => {
                             <label htmlFor="socialNetworks">Redes Sociales:</label>
                             <input type="text" id="socialNetworks" name="socialNetworks" placeholder="Nombre de usuario" />
 
-                            <button type="submit">Guardar Cliente</button>
+                            <button type="submit" onClick={handleSubmit}>Guardar Cliente</button>
                         </form>
                     </div>
                 </div>    
