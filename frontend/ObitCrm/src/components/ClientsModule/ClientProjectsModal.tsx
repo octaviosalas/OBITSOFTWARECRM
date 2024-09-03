@@ -45,30 +45,32 @@ const ClientProjectsModal = ({clientId}: Props) => {
                     </div> : 
                     <div className="modal-content">
                         <h2>Proyectos del Cliente</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre del Proyecto</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {clientsProjectsData && clientsProjectsData.length > 0 ? (
-                                clientsProjectsData.map((project, index) => (
-                                    <tr key={project.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{project.name}</td>
-                                        <td><span className="table-icon">Ir</span></td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td>No hay proyectos</td>
-                                </tr>
-                            )}
-                            </tbody>
-                        </table>
+                           {clientsProjectsData && clientsProjectsData.length > 0 ? ( 
+                             <table>
+                             <thead>
+                                 <tr>
+                                     <th>ID</th>
+                                     <th>Nombre del Proyecto</th>
+                                     <th>Acción</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                             
+                                 {clientsProjectsData.map((project, index) => (
+                                     <tr key={project.id}>
+                                         <td>{index + 1}</td>
+                                         <td>{project.name}</td>
+                                         <td><span className="table-icon">Ir</span></td>
+                                     </tr>
+                                 ))}
+                        
+                             </tbody>
+                         </table>
+                           ) : ( 
+                            <p>nada</p>
+                           )}
+                            
+
                     </div>}
                 </div>
                 

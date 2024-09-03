@@ -5,10 +5,13 @@ import React, { useState } from "react";
 import { formatDateInputElement } from "../../utils/transformDate";
 import apiBackendUrl from "../../lib/axiosData";
 import handleError from "../../utils/axiosErrorHanlder";
+import SpinnerComponent from "../Spinner/Spinner";
+import { shootSuccesToast } from "../../utils/succesToastFunction";
 
 interface Props { 
     clientData: clientPersonalDataType |  undefined,
-    resetTable: () => void
+    resetTable: () => void,
+    closeChildrenModal: () => void
 }
 
 interface clientNewData  { 
@@ -23,7 +26,7 @@ interface clientNewData  {
     active: boolean | undefined
 }
 
-const ClientEditDataModal = ({clientData, resetTable}: Props) => {
+const ClientEditDataModal = ({clientData, resetTable, closeChildrenModal}: Props) => {
 
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
     const [load, setLoad] = useState<boolean>(false)
@@ -69,7 +72,7 @@ const ClientEditDataModal = ({clientData, resetTable}: Props) => {
 
         const handleSubmit = async (event : any) => { 
             event.preventDefault();
-            setLoad(false)
+            setLoad(true)
             const updatedData : clientNewData = ({ 
                  name: clientName,
                  phone: clientPhone,
@@ -85,10 +88,12 @@ const ClientEditDataModal = ({clientData, resetTable}: Props) => {
                 const {data, status} = await apiBackendUrl.put(`/client/updateClientData/${clientData?.id}`, updatedData)
                 console.log(data, status)
                 if(status === 200) { 
-                    resetTable()
+                    shootSuccesToast(data)
+                    resetTable()                   
                     console.log(data)
                     setLoad(false)
                     onClose()
+                    closeChildrenModal()
                 }
             } catch (error) {
                 handleError(error, setLoad)
@@ -132,7 +137,7 @@ const ClientEditDataModal = ({clientData, resetTable}: Props) => {
                             <label htmlFor="socialNetworks">Facebook</label>
                             <input type="text" id="socialNetworks" name="socialNetworks" placeholder="Nombre de usuario" value={clientFacebook} onChange={handleChangeFacebook}/>
 
-                            <button type="submit" onClick={handleSubmit}>Guardar Cliente</button>
+                            {!load ? <button type="submit" onClick={handleSubmit}>Guardar Cliente</button> : <SpinnerComponent/>}
                         </form>
                     </div>
                 </div>    

@@ -7,6 +7,7 @@ import SpinnerComponent from "../Spinner/Spinner";
 import handleError from "../../utils/axiosErrorHanlder";
 import { getClientData } from "../../utils/getClientData";
 import ClientEditDataModal from "./ClientEditDataModal";
+import { formateDate } from "../../utils/transformDate";
 
 interface Props { 
   clientId: number,
@@ -15,7 +16,7 @@ interface Props {
 
 const ClientDetailModal = ({clientId, resetTable}: Props) => {
 
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
   const [clientPersonalData, setClientPersonalData] = useState<clientPersonalDataType>()
   const [load, setLoad] = useState<boolean>(false)
 
@@ -48,15 +49,25 @@ const ClientDetailModal = ({clientId, resetTable}: Props) => {
                         <div  className="modal-content">          
                            <div className="flex justify-betweem">
                               <h2>Detalles del Cliente</h2>
-                              <ClientEditDataModal clientData={clientPersonalData} resetTable={resetTable}/>
+                              <ClientEditDataModal clientData={clientPersonalData} resetTable={resetTable} closeChildrenModal={onClose}/>
                            </div>                
                             <form id="client-form" className="mt-4">
                                   <p><strong>Nombre:</strong> {clientPersonalData?.name}</p>
                                   <p><strong>Teléfono:</strong> {clientPersonalData?.phone}</p>
                                   <p><strong>Email:</strong> {clientPersonalData?.email}m</p>
-                                  <p><strong>Fecha de Creación:</strong> {clientPersonalData?.dischargeDate}</p>
+                                  <p><strong>Fecha de Creación:</strong> {formateDate(clientPersonalData?.dischargeDate)}</p>
                                   <p><strong>Estado:</strong> {clientPersonalData?.active === true ? "Activo" : "Inactivo"}</p>
-                     
+
+                                  {clientPersonalData?.socialNetworks.instagram === null ? 
+                                    <p><strong>Instagram:</strong> - </p>  : 
+                                    <p><strong>Instagram:</strong> {clientPersonalData?.socialNetworks.instagram}</p>
+                                   }
+                                   
+                                   {clientPersonalData?.socialNetworks.facebook === null ? 
+                                    <p><strong>Facebook:</strong> - </p>  : 
+                                    <p><strong>Facebook:</strong> {clientPersonalData?.socialNetworks.facebook}</p>
+                                   }
+
                          
                                     <div className="flex items-center gap-2 mt-4">
                                       <button className="mt-2">Ir a Proyectos</button>

@@ -1,7 +1,7 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
-import { createClient, clientData, everyClients, updateMyCustomerClientTracking,
+import { createClient, clientData, everyClients, deleteClient, updateMyCustomerClientTracking,
          updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking,
          deleteMyCustomerClientTracking } from "../controllers/clients"
 import { 
@@ -51,7 +51,7 @@ router.delete("/deleteClient/:clientId",
     param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
     errorsHanlder,
     validateClientExistense,
-
+    deleteClient
 )
 
 router.post("/createClientFollowUp/:clientId/:userId",

@@ -2,8 +2,10 @@
 import './App.css'
 import MainClient from './components/ClientsModule/MainClient'
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  // Importa los estilos CSS aquí
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { userStore } from './store/UserAccount';
+import Navbar from './components/navbar/Navbar';
 
 function App() {
 
@@ -11,10 +13,10 @@ function App() {
 
   return (
     <div className='h-screen w-screen'>
-    <Routes>       
- 
+      <Navbar/>
+       <Routes>       
           <Route path="/" element={<MainClient />} />      
-      </Routes>
+        </Routes>
     <ToastContainer />
   </div>
     

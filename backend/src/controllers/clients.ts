@@ -5,14 +5,14 @@ import ProjectModel from "../models/projects";
 
 export const createClient = async (req: Request, res: Response): Promise <void> => { 
 
-    const {email, phone, name, disrchageDate, socialNetworks, active} = req.body
+    const {email, phone, name, dischargeDate, socialNetworks, active} = req.body
 
    try {
        const newClientToBeSaved = new ClientModel({ 
            email,
            phone,
            name,
-           disrchageDate,
+           dischargeDate,
            socialNetworks,
            active
         })
@@ -74,13 +74,14 @@ export const everyClients = async (req: Request, res: Response): Promise <void> 
 
 export const updateClientData = async (req: Request, res: Response): Promise <void> => { 
     const {clientId} = req.params
-    const {email, phone, name, socialNetworks, active} = req.body
+    const {email, phone, name, socialNetworks, active, dischargeDate} = req.body
     try {
         const clientSelected = await ClientModel.findByPk(clientId)
         clientSelected.name = name
         clientSelected.phone = phone
         clientSelected.email = email
         clientSelected.socialNetworks = socialNetworks
+        clientSelected.dischargeDate = dischargeDate
         clientSelected.active = active
         await clientSelected.save()
 
@@ -88,6 +89,18 @@ export const updateClientData = async (req: Request, res: Response): Promise <vo
     } catch (error) {
        res.status(500).send(error)
     }
+}
+
+export const deleteClient = async (req: Request, res: Response): Promise <void> => { 
+   const {clientId} = req.params
+   
+   try {
+       const client = await ClientModel.findByPk(clientId)
+       client.destroy()
+       res.status(200).send("Cliente eliminado")
+   } catch (error) {
+      res.status(500).send(error)
+   }
 }
 
 export const createNewClientFlowUp = async (req: Request, res: Response): Promise <void> => { 
@@ -148,7 +161,6 @@ export const updateMyCustomerClientTracking = async (req: Request, res: Response
       res.status(500).send(error)
    }
 }
-
 
 export const deleteMyCustomerClientTracking = async (req: Request, res: Response): Promise <void> => { 
    

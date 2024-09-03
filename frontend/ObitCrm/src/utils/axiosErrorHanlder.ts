@@ -17,14 +17,13 @@ const handleError = (error: unknown, setLoad: (value: boolean) => void) => {
             });
         setLoad(false)
     }  if (error.response && !Array.isArray(error.response)) {
-        console.log("SEGUNDO IF error.response && !Array.isArray(error.response)")    
         console.log(error.response.data)       
-    toast.error(error.response.data, {
-        style: { backgroundColor: 'white', color: 'red' },
-        pauseOnHover: false,
-        autoClose: 2500
-    });
-    setLoad(false);
+          toast.error(error.response.data, {
+              style: { backgroundColor: 'white', color: 'red' },
+              pauseOnHover: false,
+              autoClose: 2500
+          });
+        setLoad(false);
   } else { 
     console.log('Unexpected error:', error);
     setLoad(false)

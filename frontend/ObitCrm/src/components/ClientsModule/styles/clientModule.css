@@ -195,7 +195,7 @@ button:hover {
 }
 
 .delete-icon:hover {
-    color: #d32f2f;
+    background-color: red;
 }
 
 /* Notification Styles */

@@ -6,10 +6,13 @@ import { useEffect, useState } from 'react';
 import { clientPersonalDataType } from "../../types/Clients";
 import apiBackendUrl from "../../lib/axiosData";
 import ClientFollowUpModal from "./ClientFollowUpModal";
+import ClientDeleteModal from "./ClientDeleteModal";
 
 const MainClient = () => { 
 
+    const [originalClientsData, setOriginalClientsData] = useState<clientPersonalDataType[] | []>([])
     const [everyClientsData, setEveryClientsData] = useState<clientPersonalDataType[] | []>([])
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
     const getClientsData = async () => { 
         try {
@@ -19,6 +22,7 @@ const MainClient = () => {
             if(status === 200) { 
                 console.log(data)
                 setEveryClientsData(data)
+                setOriginalClientsData(data)
             }
         } catch (error) {
             console.log(error)
@@ -30,51 +34,33 @@ const MainClient = () => {
     }, [])
     
 
-
-    
-    const deleteClient = (clientId) => {
-        // Aquí iría el código para eliminar un cliente
-        alert('Eliminar cliente ' + clientId);
-    };
-    
-
-
-    const [searchTerm, setSearchTerm] = useState('');
-    const [modals, setModals] = useState({
-        clientForm: false,
-        details: false,
-        projects: false,
-        followUps: false
-    });
-
-
-    const handleSearch = (event) => {
-        setSearchTerm(event.target.value.toLowerCase());
-    };
-
-    const filteredClients = everyClientsData.filter(client =>
-        Object.values(client).some(value =>
-            value.toString().toLowerCase().includes(searchTerm)
+    const handleChangeTableData =  (e: React.ChangeEvent<HTMLInputElement>) => { 
+        const item = e.target.value.toLowerCase();
+        const searched = everyClientsData.filter(client => 
+            Object.values(client).some(value =>
+                value.toString().toLowerCase().includes(item)
+            )
         )
-    );
+        setEveryClientsData(searched)
+        if(item === "") { 
+            setEveryClientsData(originalClientsData)
+        }
+    }
 
     return (
         <div className="main-client">
-            {/* Barra superior con botón de crear cliente */}
             <div className="top-bar">
-                <CreateNewClientModal/>
+                <CreateNewClientModal resetTableData={getClientsData}/>
                 <div className="bottom-bar">
                     <input
                         type="text"
                         id="search"
-                        placeholder="Buscar clientes..."
-                        onChange={handleSearch}
-                        value={searchTerm}
+                        className="text-black"
+                        onChange={handleChangeTableData}
                     />
                 </div>
             </div>
 
-            {/* Vista de Clientes */}
             <div id="clientes-view">
                 <table id="clientes-table">
                     <thead>
@@ -87,7 +73,7 @@ const MainClient = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredClients.map(client => (
+                        {everyClientsData.map(client => (
                             <tr key={client.name}>
                                 <td>{client.name}</td>
                                 <td>{client.phone}</td>
@@ -98,16 +84,13 @@ const MainClient = () => {
                                     <ClientDetailModal clientId={client.id}  resetTable={getClientsData}/>
                                     <ClientProjectsModal clientId={client.id}/>
                                     <ClientFollowUpModal clientId={client.id}/>
-                                    <button className="delete-icon" onClick={() => deleteClient(client.id)}>Eliminar</button>
+                                    <ClientDeleteModal clientId={client.id} resetTableData={getClientsData}/>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-
-          
-
         </div>
     );
 }

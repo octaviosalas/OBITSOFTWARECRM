@@ -276,7 +276,6 @@ export const updateProjectReminderData = async (req: Request, res: Response) => 
     const {reminderId} = req.params
     const {date, reminderData} = req.body
 
-
     try {
         const reminderSelected = await ProjectRemindersModels.findByPk(reminderId)
         reminderSelected.date = date
@@ -294,9 +293,6 @@ export const updateProjectReminderData = async (req: Request, res: Response) => 
 export const deleteProjectReminderData = async (req: Request, res: Response) => { 
 
     const {reminderId} = req.params
-    const {date, reminderData} = req.body
-
-
     try {
         const reminderSelected = await ProjectRemindersModels.findByPk(reminderId)
         reminderSelected.destroy()
