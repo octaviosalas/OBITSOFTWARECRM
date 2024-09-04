@@ -4,8 +4,9 @@ import { useState } from "react"
 import apiBackendUrl from "../../lib/axiosData"
 import handleError from "../../utils/axiosErrorHanlder"
 import { newReminderData } from "../../types/Projects"
-import { shootSuccesToast } from "../../utils/succesToastFunction"
+import { shootSuccesToast, shootSuccesWithOutLoginFunction } from "../../utils/succesToastFunction"
 import SpinnerComponent from "../Spinner/Spinner"
+
 
 interface Props { 
     hideForm: () => void,
@@ -27,15 +28,20 @@ const CreateNewProjectReminder = ({hideForm, projectId, updateReminders}: Props)
     }
 
     const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        console.log(e.target.value)
         setDate(e.target.value)
     }
 
     const createReminder = async () => { 
+        if(user === null) { 
+           return shootSuccesWithOutLoginFunction("Debes iniciar sesion para crear un recordatorio")
+        }
         const remindetData : newReminderData = ({ 
             date,
             reminderData
         })
         setLoad(true)
+        console.log(remindetData)
         try {
             const {data, status} = await apiBackendUrl.post(`/project/createProjectReminder/${projectId}/${user?.id}`, remindetData)
             console.log(data, status)
@@ -55,7 +61,7 @@ const CreateNewProjectReminder = ({hideForm, projectId, updateReminders}: Props)
       <h3>Crear Recordatorio</h3>
             <div className="form-group">
                 <label htmlFor="reminderDate">Fecha:</label>
-                <input type="date" id="reminderDate" onRateChange={handleChangeDate}/>
+                <input type="date" id="reminderDate" onChange={handleChangeDate}/>
             </div>
             <div className="form-group">
                 <label htmlFor="reminderMessage">Mensaje:</label>

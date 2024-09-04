@@ -1,24 +1,32 @@
+import { projectMessagesType } from "../../types/Projects"
+import ProjectMessagesData from "./ProjectMessagesData"
 import "./proyectDetail.css"
 import SendProjectMessage from "./SendProjectMessage"
 import { useState } from "react"
 
-const ProjectMessagesDetail = () => { 
+interface Props { 
+    projectsMessages: projectMessagesType[] | [],
+    updateMessages: () => void,
+    projectId: string | undefined
+}
+
+
+const ProjectMessagesDetail = ({projectsMessages, updateMessages, projectId}: Props) => { 
      
     const [showSendMessage, setShowSendMessage] = useState<boolean>(false)
+
+    const ocultSendMessage = () => { 
+        setShowSendMessage(false)
+    }
 
     return ( 
         <div className="flex flex-col items-start justify-start">
             <h2>Mensajería</h2>
             <button className="btn"  onClick={() => setShowSendMessage(prev => !prev)}>Enviar Mensaje</button>
 
-              {showSendMessage ? <SendProjectMessage/> : null}
+              {showSendMessage ? <SendProjectMessage projectId={projectId} updateMessages={updateMessages} ocultSendMessage={ocultSendMessage}/> : null}
 
-            <div id="messageHistory" className="message-box">
-                <h3>Historial de Mensajes</h3>
-                <p><strong>Usuario 1:</strong> Hola a todos, tenemos una reunión mañana.</p>
-                <p><strong>Usuario 2:</strong> Gracias por el aviso.</p>
-            
-            </div>
+            <ProjectMessagesData projectsMessages={projectsMessages}/>
         </div>
     )
 }

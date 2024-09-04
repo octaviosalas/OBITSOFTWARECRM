@@ -9,7 +9,7 @@ interface Props {
 const ProjectTableCurrentDateReminders = ({currentDateReminders} : Props) => { 
     return ( 
        <div>
-           <h3>Recordatorios del Día</h3>
+           <h3 className="font-medium">Recordatorios del Día</h3>
            <table className="table" id="dailyReminders">
                 <thead>
                     <tr>
@@ -20,7 +20,7 @@ const ProjectTableCurrentDateReminders = ({currentDateReminders} : Props) => {
                 </thead>
             <tbody>
                 {currentDateReminders.length === 0 ? 
-                    <div className='w-full  flex items-center justify-center mt-4'>
+                    <div className='w-full  flex items-start justify-start mt-4'>
                         <p>No hay recordatorios para la fecha actual</p>
                     </div>
                     :

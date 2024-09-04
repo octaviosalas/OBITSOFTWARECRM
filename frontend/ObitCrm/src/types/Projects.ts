@@ -38,3 +38,20 @@ export type newReminderData = {
     date: string,
     reminderData: string
 }
+
+export type projectMessagesType = { 
+    userData: UserTypeData,
+    updatedAt: string,
+    createdAt: string,
+    clientData: clientPersonalDataType,
+    date: string,
+    id: number,
+    message: string,
+    userId: number,
+    projectId: number
+}
+
+export type newMessageProjectType = { 
+    date: string,
+    message: string
+}

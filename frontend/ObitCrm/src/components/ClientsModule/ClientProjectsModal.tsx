@@ -5,6 +5,7 @@ import { getClientData } from "../../utils/getClientData";
 import handleError from "../../utils/axiosErrorHanlder";
 import { clientProjectsDataType } from "../../types/Clients";
 import SpinnerComponent from "../Spinner/Spinner";
+import { useNavigate } from "react-router-dom";
 
 interface Props { 
     clientId: number
@@ -15,6 +16,7 @@ const ClientProjectsModal = ({clientId}: Props) => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [clientsProjectsData, setClientsProjectsData] = useState<clientProjectsDataType[] | []>()
     const [load, setLoad] = useState<boolean>(false)
+    const navigate = useNavigate()
 
 
     const handleOpen = async () => { 
@@ -28,6 +30,10 @@ const ClientProjectsModal = ({clientId}: Props) => {
            handleError(error, setLoad)
          }
  }
+
+    const redirectToPage = (projectId: number) => { 
+        navigate(`/projectDetail/${projectId}`)
+    }
 
 
   return (
@@ -60,7 +66,7 @@ const ClientProjectsModal = ({clientId}: Props) => {
                                      <tr key={project.id}>
                                          <td>{index + 1}</td>
                                          <td>{project.name}</td>
-                                         <td><span className="table-icon">Ir</span></td>
+                                         <td><span className="table-icon" onClick={() => redirectToPage(project.id)}>Ir</span></td>
                                      </tr>
                                  ))}
                         

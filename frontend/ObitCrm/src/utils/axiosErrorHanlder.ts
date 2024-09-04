@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { errorType } from '../types/Errors';
+import { shootErrorToast } from './succesToastFunction';
 
 const handleError = (error: unknown, setLoad: (value: boolean) => void) => {
   setLoad(false);
@@ -10,19 +11,11 @@ const handleError = (error: unknown, setLoad: (value: boolean) => void) => {
         if (error.response && Array.isArray(error.response.data.errors)) {  
             console.log("error.response && Array.isArray(error.response.data.errors)")            
             const errorMessage = error.response.data.errors.map((er: errorType) => er.msg)[0]
-            toast.error(errorMessage, {
-                style: { backgroundColor: 'white', color: 'red' },
-                pauseOnHover: false,
-                autoClose: 2500
-            });
+            shootErrorToast(errorMessage)
         setLoad(false)
     }  if (error.response && !Array.isArray(error.response)) {
         console.log(error.response.data)       
-          toast.error(error.response.data, {
-              style: { backgroundColor: 'white', color: 'red' },
-              pauseOnHover: false,
-              autoClose: 2500
-          });
+        shootErrorToast(error.response.data)
         setLoad(false);
   } else { 
     console.log('Unexpected error:', error);

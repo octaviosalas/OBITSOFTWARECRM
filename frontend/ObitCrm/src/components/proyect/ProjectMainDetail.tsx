@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { userStore } from '../../store/UserAccount';
 import handleError from '../../utils/axiosErrorHanlder';
 import SpinnerComponent from '../Spinner/Spinner';
-import { projectDataType, userAccesProjectType, projectRemindersType } from '../../types/Projects';
+import { projectDataType, userAccesProjectType, projectRemindersType, projectMessagesType } from '../../types/Projects';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDateWithoutTime } from '../../utils/actualDate';
 
@@ -21,7 +21,7 @@ const ProjectMainDetail = () => {
     const [projectsReminders, setProjectsReminders] = useState<projectRemindersType>();
     const [actualDateProjectsReminders, setActualDateProjectsReminders] = useState<projectRemindersType[] | []>([]);
     const [nextProjectsReminders, setNextProjectsReminders] = useState<projectRemindersType[] | []>([]);
-
+    const [projectsMessages, setProjectsMessages] = useState<projectMessagesType[] | []>([]);
 
     const {projectId} = useParams()
     const navigate = useNavigate()
@@ -44,6 +44,7 @@ const ProjectMainDetail = () => {
           setProjectInformation(data.projectData)
           setUserWithAcces(data.userWithAcces)
           setProjectsReminders(data.reminders)
+          setProjectsMessages(data.messages)
 
           const currentDateReminders = data.reminders.filter((reminder: projectRemindersType) => { 
             const reminderDate = reminder.date.split('T')[0]; 
@@ -57,9 +58,6 @@ const ProjectMainDetail = () => {
 
           setActualDateProjectsReminders(currentDateReminders)
           setNextProjectsReminders(upcomingReminders)
-
-          console.log("upcomingReminders", upcomingReminders)
-          console.log("currentdate", currentDateReminders)
 
          } 
       } catch (error) {
@@ -120,7 +118,11 @@ const ProjectMainDetail = () => {
 
          {activeSection === "messages" ? 
            <div className="section"  id="messages">
-               <ProjectMessagesDetail/>
+               <ProjectMessagesDetail 
+               projectsMessages={projectsMessages}
+               projectId={projectId}
+               updateMessages={getProjectData}
+               />
            </div> : null
           }
   

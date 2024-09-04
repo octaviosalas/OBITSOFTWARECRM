@@ -238,6 +238,8 @@ export const createProjectReminder = async (req: Request, res: Response) => {
      const {date, reminderData} = req.body
      const reminderDate = formateDate(date)
 
+     console.log(date)
+
     try {
          await ProjectRemindersModels.create({ 
             userId,
