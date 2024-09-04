@@ -8,13 +8,12 @@ import { userStore } from './store/UserAccount';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
+import ProjectMainDetail from './components/proyect/ProjectMainDetail';
 
 function App() {
 
-  const {user} = userStore()
-  const location = useLocation(); // Obtiene la ruta actual
+  const location = useLocation(); 
 
-  // Define las rutas donde no quieres mostrar la Navbar
   const noNavbarRoutes = ['/login', '/register'];
 
   return (
@@ -25,6 +24,8 @@ function App() {
           <Route path="/" element={<MainClient />} />    
           <Route path="/login" element={<Login />} />      
           <Route path="/register" element={<Register />} />   
+          <Route path="/projectDetail/:projectId" element={<ProjectMainDetail />} />   
+
         </Routes>
     <ToastContainer />
   </div>

@@ -1,0 +1,40 @@
+import { clientPersonalDataType } from "./Clients"
+import { UserTypeData } from "./User"
+
+export type projectDataType = { 
+    amount: number,
+    client: number,
+    createdAt: string,
+    id: number,
+    name: string,
+    startDate: string,
+    updatedAt: string,
+    clientData: clientPersonalDataType,
+    description: string
+}
+
+export type userAccesProjectType = { 
+    createdAt: string
+    id: number
+    projectId: number
+    updatedAt: string,
+    userData: UserTypeData,
+    userId: number
+}
+
+export type projectRemindersType = { 
+    userData: UserTypeData,
+    updatedAt: string,
+    clientData: clientPersonalDataType,
+    date: string,
+    id: number,
+    proejctId: number,
+    reminderData: string,
+    userId: number
+}
+
+
+export type newReminderData = { 
+    date: string,
+    reminderData: string
+}

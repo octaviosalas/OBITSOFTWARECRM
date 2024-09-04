@@ -27,6 +27,11 @@ class ProjectModel extends Model {
     declare name: string
 
     @Column ({ 
+        type: DataType.STRING
+    })
+    declare description: string
+
+    @Column ({ 
         type: DataType.DATE
     })
     declare startDate: Date

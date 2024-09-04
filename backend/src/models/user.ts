@@ -31,6 +31,11 @@ class UserModel extends Model {
     @Column({ 
         type: DataType.STRING
     })
+    declare rol: string
+
+    @Column({ 
+        type: DataType.STRING
+    })
     declare password: string
 
     @HasMany(() => UserRemindersModel, {foreignKey: 'userId' })

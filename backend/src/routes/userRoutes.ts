@@ -27,8 +27,9 @@ router.get("/everyUsersData",
 //CREAR UN NUEVO USUARIO
 router.post("/createUser", 
     body("name").notEmpty().withMessage("Es obligatorio indicar el nombre"),
-    body("email").notEmpty().withMessage("Es obligatorio indicar el nombre"),
-    body("password").notEmpty().withMessage("Es obligatorio indicar el nombre"),
+    body("email").notEmpty().withMessage("Debes indicar el email del usuario"),
+    body("password").notEmpty().withMessage("Debes indicar una contraseña para la cuenta"),
+    body("rol").notEmpty().withMessage("Debes indicar el rol del usuario"),
     body("password_confirmation").notEmpty().withMessage("La confirmacion de contraseña de tu futura cuenta es obligatoria"),
     body("password").isLength({min: 6}).withMessage("La contraseña debe tener mas de 6 caracteres"),
     body("password_confirmation").custom((value, {req}) => { 
@@ -44,8 +45,8 @@ router.post("/createUser",
 
 //LOGIN USUARIO
 router.post("/loginUserAccount", 
-    body("email").notEmpty().withMessage("Es obligatorio indicar el nombre"),
-    body("password").notEmpty().withMessage("Es obligatorio indicar el nombre"),
+    body("email").notEmpty().withMessage("Es obligatorio indicar el correo electronico"),
+    body("password").notEmpty().withMessage("Es obligatorio indicar la contraseña"),
     errorsHanlder,
     loginValidator
 )

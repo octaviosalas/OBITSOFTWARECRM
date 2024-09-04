@@ -9,13 +9,14 @@ import UserNotificationModel from "../models/userNotifications";
 //CREAR UN NUEVO USUARIO
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
 
-    const {name, email, password} = req.body
+    const {name, email, password, rol} = req.body
 
    try {
        const userData = new UserModel({ 
          email,
          name,
-         password
+         password,
+         rol
        })
        await userData.save()
        res.status(200).send("Usuario creado exitosamente")

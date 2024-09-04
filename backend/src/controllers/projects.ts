@@ -10,18 +10,20 @@ import { formateDate } from "../utils/transformDate";
 import UserModel from "../models/user";
 import { Op } from 'sequelize';
 import { createNotification } from "../utils/notificationCreator";
+import ProjectMessagesModel from "../models/projectMessages";
 
 //CREAR UN PROYECTO NUEVO
 export const createNewProject = async (req: Request, res: Response) => { 
     
     const {clientId, userId} = req.params
-    const {name, startDate, services} = req.body
+    const {name, startDate, services, description} = req.body
 
     try {
         const project = new ProjectModel({ 
             name: name,
             startDate: startDate,
             client: clientId,
+            description: description
         })
         await project.save()
 
@@ -81,7 +83,52 @@ export const projectData = async (req: Request, res: Response) => {
         }
       )
 
-      res.status(200).json({projectData: project, serviceData: projectServices})
+      const projectRemindersData = await ProjectRemindersModels.findAll(
+        {
+            where: { 
+                projectId: projectId
+            },
+            include: [
+                {
+                    model: UserModel,
+                    as: "userData"
+                }
+            ]
+           
+        }
+      )
+
+      const projectMessagesData = await ProjectMessagesModel.findAll(
+        {
+            where: { 
+                projectId: projectId
+            },
+            include: [
+                {
+                    model: UserModel,
+                    as: "userData"
+                }
+            ]
+           
+        }
+      )
+
+      const userWithAcces = await UserAccesModel.findAll(
+        {
+            where: { 
+                projectId: projectId
+            },
+            include: [
+                {
+                    model: UserModel,
+                    as: "userData"
+                }
+            ]
+           
+        }
+      )
+
+      res.status(200).json({projectData: project, serviceData: projectServices, reminders: projectRemindersData, messages: projectMessagesData, userWithAcces: userWithAcces})
    } catch (error) {
      res.status(500).send(error)
    }
