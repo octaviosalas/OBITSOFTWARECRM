@@ -7,12 +7,14 @@ import { clientPersonalDataType } from "../../types/Clients";
 import apiBackendUrl from "../../lib/axiosData";
 import ClientFollowUpModal from "./ClientFollowUpModal";
 import ClientDeleteModal from "./ClientDeleteModal";
+import { userStore } from "../../store/UserAccount";
 
 const MainClient = () => { 
 
     const [originalClientsData, setOriginalClientsData] = useState<clientPersonalDataType[] | []>([])
     const [everyClientsData, setEveryClientsData] = useState<clientPersonalDataType[] | []>([])
-    const [searchTerm, setSearchTerm] = useState<string>('');
+
+    const {user} = userStore()
 
     const getClientsData = async () => { 
         try {
@@ -58,6 +60,7 @@ const MainClient = () => {
                         className="text-black"
                         onChange={handleChangeTableData}
                     />
+                    {user?.name}
                 </div>
             </div>
 

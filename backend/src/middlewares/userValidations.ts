@@ -43,6 +43,7 @@ export const validateUserExist = async (req: Request, res: Response, next: NextF
     }
 } 
 
+
 export const validateUserExistWithId = async (req: Request, res: Response, next: NextFunction) => { 
     
     const {userId} = req.params

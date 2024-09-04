@@ -5,8 +5,8 @@ import { createUser, userData, everyUsers,
          updateUserData, deleteUserAccount, createMyReminder, 
          getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday,
          deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp,
-         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications } from "../controllers/user"
-import { validateUserExist, validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
+         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator } from "../controllers/user"
+import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
 
 const router = Router()
 
@@ -42,6 +42,13 @@ router.post("/createUser",
     createUser
 )
 
+//LOGIN USUARIO
+router.post("/loginUserAccount", 
+    body("email").notEmpty().withMessage("Es obligatorio indicar el nombre"),
+    body("password").notEmpty().withMessage("Es obligatorio indicar el nombre"),
+    errorsHanlder,
+    loginValidator
+)
 
 //ACTUALIZAR DATOS DE MI CUENTA DE USUARIO
 router.put("/updateUsertData/:userId", 

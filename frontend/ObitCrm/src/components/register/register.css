@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.navbar {
+    background-color: #003366; /* Azul oscuro */
+    padding: 10px 0;
+    color: #fff;
+    text-align: center;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.navbar-logo h1 {
+    margin: 0;
+}
+
+.navbar-logo a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 80px); /* Ajusta según la altura de tu header */
+    background-color: #f4f4f4;
+}
+
+.form-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.form-container h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #003366; /* Azul oscuro */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #003366; /* Azul oscuro */
+    margin-bottom: 5px;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: #007bff; /* Azul claro */
+    outline: none;
+}
+
+.submit-button {
+    background-color: #007bff; /* Azul */
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background-color: #0056b3; /* Azul más oscuro para hover */
+}
+
+.link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #003366; /* Azul oscuro */
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

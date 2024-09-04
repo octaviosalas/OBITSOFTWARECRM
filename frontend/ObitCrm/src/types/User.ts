@@ -6,3 +6,5 @@ export type UserTypeData = {
     createdAt: string,
     updatedAt: string
 }
+
+export type userLoginType = Omit<UserTypeData, 'id' | 'name' | 'createdAt' | 'updatedAt'>;

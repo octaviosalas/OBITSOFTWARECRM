@@ -3,19 +3,28 @@ import './App.css'
 import MainClient from './components/ClientsModule/MainClient'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Importa los estilos CSS aquí
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation  } from 'react-router-dom';
 import { userStore } from './store/UserAccount';
 import Navbar from './components/navbar/Navbar';
+import Login from './components/login/Login';
+import Register from './components/register/Register';
 
 function App() {
 
   const {user} = userStore()
+  const location = useLocation(); // Obtiene la ruta actual
+
+  // Define las rutas donde no quieres mostrar la Navbar
+  const noNavbarRoutes = ['/login', '/register'];
 
   return (
     <div className='h-screen w-screen'>
-      <Navbar/>
+           {!noNavbarRoutes.includes(location.pathname) && <Navbar />}
+
        <Routes>       
-          <Route path="/" element={<MainClient />} />      
+          <Route path="/" element={<MainClient />} />    
+          <Route path="/login" element={<Login />} />      
+          <Route path="/register" element={<Register />} />   
         </Routes>
     <ToastContainer />
   </div>

@@ -24,6 +24,54 @@ export const createUser = async (req: Request, res: Response): Promise <void> =>
    }
 }
 
+//LOGIN
+export const loginValidator = async (req: Request, res: Response) => { 
+    
+    const {email, password} = req.body
+    
+    try {
+        const user = await UserModel.findOne({ 
+            where: { 
+                email: email
+            }
+        })
+        if(!user) { 
+            return res.status(404).send("No existe un usuario almacenado con este correo electronico")
+        } 
+
+        const userPassword = user.password
+            if(userPassword !== password) { 
+                return res.status(404).send("La contraseña ingresada es incorrecta")
+            } else {
+                const userUnreadNotifications = await UserNotificationModel.findAll({ 
+                   where: { 
+                      userId: user.id
+                   }
+                }) 
+                const notificationsByType = userUnreadNotifications.reduce((acc, el) => { 
+                    const typeOfNotifications = el.notificationType
+                    if(acc[typeOfNotifications]) { 
+                        acc[typeOfNotifications].push(el)
+                    } else { 
+                        acc[typeOfNotifications] = [el]
+                    }
+                    return acc
+                }, {})
+ 
+                const notificationsOrdered = Object.entries(notificationsByType).map(([notificationType, data]) => { 
+                   return { 
+                    notificationType: notificationType,
+                    data: data
+                   }
+                })
+
+                return res.status(200).json({message: "Iniciaste sesion correctamente", data: user, notifications: userUnreadNotifications, order: notificationsOrdered, mm: notificationsByType})
+            }
+        
+    } catch (error) {
+        res.status(500).json("Hubo un error en el midddleware")
+    }
+} 
 
 //OBTENER DATOS DE UN SOLO USUARIO
 export const userData = async (req: Request, res: Response) => { 

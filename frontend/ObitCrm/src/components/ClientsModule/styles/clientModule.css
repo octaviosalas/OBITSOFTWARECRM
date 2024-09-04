@@ -122,6 +122,13 @@ button:hover {
     font-size: 25px;
 }
 
+@media (max-width: 1400px) {
+    .modal-content h2  {
+        color: #4682b4;
+         font-size: 20px;
+    }
+}
+
 /* Form Styles */
 #client-form {
     display: flex;
@@ -138,6 +145,14 @@ button:hover {
     border: 1px solid #4682b4;
     border-radius: 5px;
     margin-bottom: 15px;
+}
+
+@media (max-width: 1400px) {
+    #client-form input, #client-form select {
+        padding: 5px; /* Ajusta el padding */
+        border-radius: 4px; /* Ajusta el border-radius */
+        margin-bottom: 8px; /* Ajusta el margen */
+    }
 }
 
 #client-form button {
