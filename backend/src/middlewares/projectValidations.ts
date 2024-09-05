@@ -19,9 +19,9 @@ export const validateServicesExistenceInProjectCreation = async (req: Request, r
   
       await Promise.all(
         services.map(async (serv) => {
-          const service = await ServicesModel.findByPk(serv.serviceId);
+          const service = await ServicesModel.findByPk(serv.id);
           if (!service) {
-            console.log(`Servicio con ID ${serv.serviceId} no encontrado`);
+            console.log(`Servicio con ID ${serv.id} no encontrado`);
             hasErrors = true;
           }
         })

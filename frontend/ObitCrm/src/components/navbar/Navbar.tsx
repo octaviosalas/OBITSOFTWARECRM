@@ -25,12 +25,12 @@ const Navbar: React.FC = () => {
                     </button>
                     <ul className={`menu ${menuOpen ? 'open' : ''}`}>
                         <li><a href={`${PROJECT_URL}/`}>Clientes</a></li>
-                        <li><a href="http://crm-obit.local/?page_id=77">Seguimientos</a></li>
-                        <li><a href="http://crm-obit.local/?page_id=95">Proyectos</a></li>
-                        <li><a href="http://crm-obit.local/?page_id=110">Servicios</a></li>
-                        <li><a href="http://crm-obit.local/?page_id=2">Mi equipo</a></li>
+                        <li><a >Seguimientos</a></li>
+                        <li><a href={`${PROJECT_URL}/projects`}>Proyectos</a></li>
+                        <li><a >Servicios</a></li>
+                        <li><a >Mi equipo</a></li>
                     </ul>
-                    <button className="profile-button"><a href="http://crm-obit.local/?page_id=6">Mi perfil</a></button>
+                    <button className="profile-button"><a href={`${PROJECT_URL}/`}>Mi perfil</a></button>
                 </nav>
             </div>
         </header>

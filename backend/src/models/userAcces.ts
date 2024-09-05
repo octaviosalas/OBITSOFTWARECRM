@@ -7,7 +7,15 @@ import ProjectModel from "./projects";
 })
 
 class UserAccesModel extends Model { 
-
+  
+      @AutoIncrement
+      @PrimaryKey
+      @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+      })
+      declare id: number;
+      
     @ForeignKey(() => UserModel)
     @Column({
       type: DataType.INTEGER,

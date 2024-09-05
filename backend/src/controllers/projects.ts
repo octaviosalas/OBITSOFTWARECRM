@@ -16,7 +16,7 @@ import ProjectMessagesModel from "../models/projectMessages";
 export const createNewProject = async (req: Request, res: Response) => { 
     
     const {clientId, userId} = req.params
-    const {name, startDate, services, description} = req.body
+    const {name, startDate, services, description, usersWithAcces} = req.body
 
     try {
         const project = new ProjectModel({ 
@@ -26,21 +26,22 @@ export const createNewProject = async (req: Request, res: Response) => {
             description: description
         })
         await project.save()
-
-        const userAccesToProject = new UserAccesModel({ 
-            userId: userId,
-            projectId: project.id
-        })
-
-        await userAccesToProject.save()
+        
+        for (const us of usersWithAcces) { 
+            const user = new UserAccesModel({ 
+                userId: us.id,
+                projectId: project.id
+            });
+            await user.save();  
+        }  
 
         if(services.length > 0) { 
             const serviceProjects = services.map(service => ({
-                serviceId: service.serviceId,
+                serviceId: service.id,
                 projectId: project.id,
-                startDate: service.startDate,
-                endDate: service.endDate,
-                amount: service.amount,
+                startDate: null,
+                endDate: null,
+                amount: null,
               }));
         
               await ProjectServiceModel.bulkCreate(serviceProjects)
@@ -352,3 +353,62 @@ export const deleteProjectReminderData = async (req: Request, res: Response) => 
     }
 }
 
+//OBTENER CLIENTES DISPONIBLES, USUARIOS DISPONIBLES, SERVICIOS DISPONIBLES PARA CREAR UN NUEVO PROYECTO
+export const getSystemDataToCreateNewProject = async (req: Request, res: Response) => { 
+
+    const {userId} = req.params
+
+    try {
+        const clients = await ClientModel.findAll()
+        const users = await UserModel.findAll()
+        const services = await ServicesModel.findAll()
+        res.status(200).json({clients: clients, users: users, services: services})
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+
+
+/* 
+export const createNewProject = async (req: Request, res: Response) => { 
+    
+    const {clientId, userId} = req.params
+    const {name, startDate, services, description} = req.body
+
+    try {
+        const project = new ProjectModel({ 
+            name: name,
+            startDate: startDate,
+            client: clientId,
+            description: description
+        })
+        await project.save()
+
+        const userAccesToProject = new UserAccesModel({ 
+            userId: userId,
+            projectId: project.id
+        })
+
+        await userAccesToProject.save()
+
+        if(services.length > 0) { 
+            const serviceProjects = services.map(service => ({
+                serviceId: service.serviceId,
+                projectId: project.id,
+                startDate: service.startDate,
+                endDate: service.endDate,
+                amount: service.amount,
+              }));
+        
+              await ProjectServiceModel.bulkCreate(serviceProjects)
+        }
+
+        res.status(200).send("Se creo exitosamente el projecto")
+
+    } catch (error) {
+         res.status(500).send(error)
+    }
+}
+*/

@@ -17,3 +17,8 @@ export type UserTypeData = {
 }
 
 export type userLoginType = Omit<UserTypeData, 'id' | 'name' | 'createdAt' | 'updatedAt'>;
+
+export type usersDataProjectType = { 
+    id: number,
+    name: string,
+}

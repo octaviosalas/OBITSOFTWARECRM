@@ -11,6 +11,7 @@ import SpinnerComponent from '../Spinner/Spinner';
 import { projectDataType, userAccesProjectType, projectRemindersType, projectMessagesType } from '../../types/Projects';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDateWithoutTime } from '../../utils/actualDate';
+import { shootSuccesWithOutLoginFunction } from '../../utils/succesToastFunction';
 
 const ProjectMainDetail = () => { 
 
@@ -27,17 +28,16 @@ const ProjectMainDetail = () => {
     const navigate = useNavigate()
     const {user} = userStore()
 
-    const showSection = (section: string) => {
-      console.log(section)
-      setActiveSection(section);
-    };
 
-     
-    const getProjectData = async () => { 
+    const getProjectData = async () => {
+      if(user === null) { 
+        navigate(`/`)
+        return shootSuccesWithOutLoginFunction("Debes iniciar sesion para poder utilizar el CRM")
+      } 
       const actualDate = getCurrentDateWithoutTime()
       setLoad(true)
       try {
-         const {data, status} = await apiBackendUrl.get(`/project/projectData/${projectId}/1`) 
+         const {data, status} = await apiBackendUrl.get(`/project/projectData/${projectId}/${user?.id}`) 
          console.log(status, data)
          if(status === 200) { 
           setLoad(false)
@@ -70,6 +70,10 @@ const ProjectMainDetail = () => {
       getProjectData()
     }, [])
 
+    const showSection = (item: string) => { 
+      setActiveSection(item)
+    }
+
     return (
       <> 
       {load ? 
@@ -90,6 +94,9 @@ const ProjectMainDetail = () => {
           </div>
           <div className={`navbar-item-projectDetail ${activeSection === 'messages' ? 'active' : ''}`} onClick={() => showSection('messages')}>
             Mensajería
+          </div>
+          <div className={`navbar-item-projectDetail ${activeSection === 'messages' ? 'active' : ''}`} onClick={() => showSection('acces')}>
+            Accesos
           </div>
         </div>
   
@@ -119,9 +126,9 @@ const ProjectMainDetail = () => {
          {activeSection === "messages" ? 
            <div className="section"  id="messages">
                <ProjectMessagesDetail 
-               projectsMessages={projectsMessages}
-               projectId={projectId}
-               updateMessages={getProjectData}
+                projectsMessages={projectsMessages}
+                projectId={projectId}
+                updateMessages={getProjectData}
                />
            </div> : null
           }

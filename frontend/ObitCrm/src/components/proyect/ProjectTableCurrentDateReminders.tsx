@@ -25,11 +25,11 @@ const ProjectTableCurrentDateReminders = ({currentDateReminders} : Props) => {
                     </div>
                     :
                     currentDateReminders.map((cc: projectRemindersType) => ( 
-                    <> 
+                    <tr> 
                         <td>{formateDate(cc.date)}</td>
                         <td>{cc.userData.name}</td>
                         <td>{cc.reminderData}</td>
-                    </>
+                      </tr>
                     ))
                 }
             </tbody>

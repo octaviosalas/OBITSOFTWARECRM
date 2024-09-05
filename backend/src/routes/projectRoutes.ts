@@ -6,7 +6,7 @@ import { validateUserExist, validateUserExistWithId } from "../middlewares/userV
 import { createNewProject, projectData, establishNewProjectPlanification, projectsUserWithAcces, 
          getProjectAllPlanifications, getProjectReminder, createProjectReminder,
          getOneProjectReminderData, projectNextReminders, updateProjectReminderData,
-         deleteProjectReminderData, updateTrackingData, deleteProjectPlanification
+         deleteProjectReminderData, updateTrackingData, deleteProjectPlanification, getSystemDataToCreateNewProject
        } from "../controllers/projects"
 import { validateServicesExistenceInProjectCreation, validateProjectExistenceWithId, 
          validateUserHasAccesToProjectData, validateReminderExistenceAndIfIsOfTheProject,
@@ -24,6 +24,8 @@ router.post("/createProject/:userId/:clientId",
     body("startDate").notEmpty().withMessage("Debes indicar el nombre del proyecto que deseas crear"),
     body("amount").notEmpty().withMessage("Debes indicar el valor que pagara tu cliente, en caso de aun no estar definido, ingresa 0"),
     body("description").notEmpty().withMessage("Debes indicar una breve descripcion del proyecto"),
+    body("usersWithAcces").notEmpty().withMessage("Debes indicar al menos un usuario con acceso al proyecto"),
+    body("services").notEmpty().withMessage("Debes indicar cual o cuales servicios son los que se brindaran en este proyecto"),
     errorsHanlder,
     validateClientExistense,
     validateUserExistWithId,
@@ -188,6 +190,12 @@ router.delete("/deleteProjectReminder/:reminderId/:projectId/:userId",
     deleteProjectReminderData
 )
 
-
+//OBTENER CLIENTES DISPONIBLES, USUARIOS DISPONIBLES, SERVICIOS DISPONIBLES PARA CREAR UN NUEVO PROYECTO
+router.get("/dataToCreateProjects/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    getSystemDataToCreateNewProject
+)
 
 export default router

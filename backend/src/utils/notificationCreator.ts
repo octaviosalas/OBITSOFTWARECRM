@@ -16,7 +16,9 @@ export const createNotification = async (projectId: string, userId: string, noti
         where: { projectId: projectId }
     }); 
 
-    const notifications = projectUsers.map((userData) => {
+    const filterUsers = projectUsers.filter((us) => us.userId !== Number(userId))
+
+    const notifications = filterUsers.map((userData) => {
         let message: string;
 
         switch (notificationType) {

@@ -4,11 +4,11 @@ import MainClient from './components/ClientsModule/MainClient'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Importa los estilos CSS aquí
 import { Routes, Route, useLocation  } from 'react-router-dom';
-import { userStore } from './store/UserAccount';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import ProjectMainDetail from './components/proyect/ProjectMainDetail';
+import ProjectMain from './components/proyect/MainProject/ProjectMain';
 
 function App() {
 
@@ -24,6 +24,7 @@ function App() {
           <Route path="/" element={<MainClient />} />    
           <Route path="/login" element={<Login />} />      
           <Route path="/register" element={<Register />} />   
+          <Route path="/projects" element={<ProjectMain />} />   
           <Route path="/projectDetail/:projectId" element={<ProjectMainDetail />} />   
 
         </Routes>

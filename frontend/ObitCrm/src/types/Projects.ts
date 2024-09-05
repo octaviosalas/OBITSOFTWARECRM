@@ -1,5 +1,6 @@
 import { clientPersonalDataType } from "./Clients"
 import { UserTypeData } from "./User"
+import { usersDataProjectType } from "./User"
 
 export type projectDataType = { 
     amount: number,
@@ -54,4 +55,22 @@ export type projectMessagesType = {
 export type newMessageProjectType = { 
     date: string,
     message: string
+}
+
+export type usersNewProjectsType = { 
+    id: number
+}
+
+export type servicesNewProjectsType = { 
+    id: number,
+    name: string
+}
+
+export type newProjectDataType = { 
+   amount: number,
+   name: string,
+   description: string,
+   startDate: string,
+   usersWithAcces: usersDataProjectType[] | [],
+   services: servicesNewProjectsType[] | []
 }
