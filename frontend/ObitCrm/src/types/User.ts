@@ -1,3 +1,6 @@
+import { clientPersonalDataType } from "./Clients"
+import { serviceUserProjectType } from "./Services"
+
 export type newUserTypeData = { 
     name: string,
     email: string,
@@ -21,4 +24,26 @@ export type userLoginType = Omit<UserTypeData, 'id' | 'name' | 'createdAt' | 'up
 export type usersDataProjectType = { 
     id: number,
     name: string,
+}
+
+type projectDataUserPersonalType = { 
+    amount: number,
+    client: number,
+    createdAt: string,
+    id: number,
+    name: string,
+    startDate: string,
+    updatedAt: string,
+    clientData: clientPersonalDataType,
+    description: string,
+    services: serviceUserProjectType[] | []
+}
+
+export type userPersonalProjectsType = { 
+    createdAt: string,
+    projectId: number,
+    id: number,
+    updatedAt: string,
+    userId: number,
+    projectData: projectDataUserPersonalType
 }

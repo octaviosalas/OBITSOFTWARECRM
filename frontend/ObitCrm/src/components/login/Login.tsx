@@ -42,7 +42,7 @@ const Login = () => {
                  console.log(data)
                  setLoad(false)
                  shootSuccesToast(data.message)
-                 navigate(`/`)
+                 navigate(`/projects`)
                  setUserAccountData(data.data)
             }
         } catch (error) {

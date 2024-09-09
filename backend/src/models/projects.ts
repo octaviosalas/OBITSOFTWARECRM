@@ -51,7 +51,7 @@ class ProjectModel extends Model {
     clientData: ClientModel;
 
     @HasMany(() => ProjectServiceModel, { foreignKey: 'projectId' }) 
-    projects: ProjectServiceModel[]; 
+    services: ProjectServiceModel[]; 
 
     @HasMany(() => ProjectPlanificationModel, { foreignKey: 'projectId' }) 
     follows: ProjectPlanificationModel[]; 

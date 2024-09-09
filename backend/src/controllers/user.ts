@@ -5,6 +5,11 @@ import { formateDate } from "../utils/transformDate";
 import { Op } from 'sequelize';
 import FollowUpClientsModel from "../models/followUpClients";
 import UserNotificationModel from "../models/userNotifications";
+import UserAccesModel from "../models/userAcces";
+import ProjectModel from "../models/projects";
+import ClientModel from "../models/clients";
+import ProjectServiceModel from "../models/projectServices";
+import ServicesModel from "../models/services";
 
 //CREAR UN NUEVO USUARIO
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
@@ -140,6 +145,47 @@ export const deleteUserAccount = async (req: Request, res: Response) => {
             await userSelected.destroy()
             res.status(200).send("Usuario eliminado correctamente")
         } 
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const userProjectsAcces = async (req: Request, res: Response) => { 
+
+    const {userId} = req.params
+
+    try {
+        const projects = await UserAccesModel.findAll({ 
+            where: { 
+                userId: userId
+            },
+            include: [{ 
+                model: ProjectModel,
+                as: "projectData",
+                include: [
+                    { 
+                    model: ClientModel,
+                    as: "clientData"
+                   },
+                   { 
+                    model: ClientModel,
+                    as: "clientData"
+                   },
+                   { 
+                    model: ProjectServiceModel, 
+                    as: "services",
+                    include: [ 
+                        {
+                            model: ServicesModel,
+                            as: "service"
+                        }
+                    ] 
+                   }
+                ]
+            }]
+        })
+        console.log(projects)
+        res.status(200).send(projects)
     } catch (error) {
         res.status(500).send(error)
     }

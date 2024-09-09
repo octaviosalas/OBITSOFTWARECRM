@@ -1,5 +1,3 @@
-import apiBackendUrl from "../../../lib/axiosData"
-import { useState } from "react"
 import "../proyectMain.css"
 import AddNewProject from "./AddNewProject"
 
