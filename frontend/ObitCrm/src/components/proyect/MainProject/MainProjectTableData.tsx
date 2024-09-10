@@ -2,6 +2,9 @@ import { useState } from "react"
 import "../proyectMain.css"
 import { userPersonalProjectsType } from "../../../types/User"
 import { formateDate } from "../../../utils/transformDate"
+import UsersWithAccesProjectTable from "./UsersWithAccesProjectTable"
+import { useNavigate } from "react-router-dom"
+import EditProjectData from "./EditProjectData"
 
 interface Props { 
     projects: userPersonalProjectsType[] | []
@@ -11,6 +14,7 @@ const MainProjectTableData = ({projects}: Props) => {
 
 
     const [allProjects, setAllProjects] = useState<userPersonalProjectsType[] | []>(projects)
+    const navigate = useNavigate()
 
     const handleChangeTableData =  (e: React.ChangeEvent<HTMLInputElement>) => { 
         const item = e.target.value.toLowerCase();
@@ -25,14 +29,20 @@ const MainProjectTableData = ({projects}: Props) => {
         }
     }
 
+    const redirectToProjectDetail = (projectId: number) => { 
+        navigate(`/projectDetail/${projectId}`)
+    }
+
    return ( 
       <div>
+     {projects.length > 0 ? 
+       <div>
         <div className="search-bar">
             <input type="text" placeholder="Buscar proyectos..." onChange={handleChangeTableData}/>
         </div>
 
-         <table className="projects-table">
-           {projects.length > 0 ? 
+           <table className="projects-table">
+         
            <> 
            <thead>
                 <tr>
@@ -51,24 +61,29 @@ const MainProjectTableData = ({projects}: Props) => {
                          <tr>
                         <td>{project.projectData.clientData.name}</td>
                         <td>{project.projectData.name}</td>
-                        <td>Ver usuarios con acceso</td>
+                        <td><UsersWithAccesProjectTable projectId={project.projectData.id}/></td>
                         {project.projectData.services.map((ser) => ( 
                             <td>{ser.service.name}</td>
                         ))}
                         <td>{formateDate(project.projectData.startDate)}</td>
                         <td>{project.projectData.description}</td>
                         <td>
-                            <button className="btn-action edit"><i className="fas fa-pencil-alt"></i></button>
+                            <EditProjectData projectData={project.projectData}/>
                             <button className="btn-action delete"><i className="fas fa-trash-alt"></i></button>
-                            <button className="btn-action details"><i className="fas fa-eye"></i></button>
+                            <button className="btn-action details" onClick={() => redirectToProjectDetail(project.projectData.id)}><i className="fas fa-eye"></i></button>
                         </td>
                         </tr>
                     ))}
                    
              
             </tbody>
-            </> : <p>No hay</p>}
-        </table>
+            </> 
+          </table>
+        </div> : 
+        <div className="flex items-center justify-center mt-36">
+            <p className="font-medium">No se encontraron proyectos a los cuales tengas acceso</p>
+        </div> 
+        }
      </div>
    )
 }

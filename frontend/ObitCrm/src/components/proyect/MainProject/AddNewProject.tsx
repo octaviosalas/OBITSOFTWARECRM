@@ -160,7 +160,7 @@ const AddNewProject =  () => {
     <>
       <button className="btn-new-project" onClick={handleOpen}>Agregar Proyecto</button>
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}  size="2xl" className="max-h-[400px] 2xl:max-h-[920px] overflow-y-auto">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}  size="2xl" className="max-h-[650px] 2xl:max-h-[920px] overflow-y-auto">
         <ModalContent >
           {(onClose) => (
             <>
@@ -242,7 +242,7 @@ const AddNewProject =  () => {
                             
                             <div className="form-buttons">
                                 <button type="submit" className="btn-submit">Guardar</button>
-                                <button type="button" className="btn-cancel" id="closeProjectSection">Cancelar</button>
+                                <button type="button" className="btn-cancel" id="closeProjectSection" onClick={onClose}>Cancelar</button>
                             </div>
                         </form> 
                         : <SpinnerComponent/>}

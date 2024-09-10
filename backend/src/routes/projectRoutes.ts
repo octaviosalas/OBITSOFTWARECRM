@@ -5,7 +5,7 @@ import { validateClientExistense } from "../middlewares/clientsValidations"
 import { validateUserExist, validateUserExistWithId } from "../middlewares/userValidations"
 import { createNewProject, projectData, establishNewProjectPlanification, projectsUserWithAcces, 
          getProjectAllPlanifications, getProjectReminder, createProjectReminder,
-         getOneProjectReminderData, projectNextReminders, updateProjectReminderData,
+         getOneProjectReminderData, projectNextReminders, updateProjectReminderData, updateProjectData,
          deleteProjectReminderData, updateTrackingData, deleteProjectPlanification, getSystemDataToCreateNewProject
        } from "../controllers/projects"
 import { validateServicesExistenceInProjectCreation, validateProjectExistenceWithId, 
@@ -70,7 +70,6 @@ router.post("/establishNewProjectPlanification/:projectId/:userId",
 //OBTENER TODAS LAS PLANIFICACIONES DE UN PROYECTO
 router.get("/getProjectPlanification/:projectId/:userId",
     param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
-    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
     errorsHanlder,
     validateUserExistWithId,
     validateProjectExistenceWithId,
@@ -78,6 +77,13 @@ router.get("/getProjectPlanification/:projectId/:userId",
     getProjectAllPlanifications
 )
 
+router.put("/editProjectData/:projectId", 
+    param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
+    errorsHanlder,
+    validateProjectExistenceWithId,
+    updateProjectData
+
+)
 
 //ACTUALIZAR FECHA O MENSAJE DE LA PLANIFICACION CREADA EN UN PROYECTO
 router.put("/updatePlanification/:followUpId/:projectId/:userId",

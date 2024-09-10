@@ -41,6 +41,7 @@ export const validateServicesExistenceInProjectCreation = async (req: Request, r
 export const validateProjectExistenceWithId = async (req: Request, res: Response, next: NextFunction) => { 
     
     const {projectId} = req.params
+    console.log(projectId)
     
     try {
         const project = await ProjectModel.findByPk(projectId)

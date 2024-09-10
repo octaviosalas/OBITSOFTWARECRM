@@ -26,7 +26,7 @@ export type usersDataProjectType = {
     name: string,
 }
 
-type projectDataUserPersonalType = { 
+export type projectDataUserPersonalType = { 
     amount: number,
     client: number,
     createdAt: string,
@@ -47,3 +47,8 @@ export type userPersonalProjectsType = {
     userId: number,
     projectData: projectDataUserPersonalType
 }
+
+export type usersWithAccesData = Omit<userPersonalProjectsType, "projectData"> & {
+    userData: UserTypeData;
+  };
+

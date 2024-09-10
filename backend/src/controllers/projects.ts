@@ -11,6 +11,7 @@ import UserModel from "../models/user";
 import { Op } from 'sequelize';
 import { createNotification } from "../utils/notificationCreator";
 import ProjectMessagesModel from "../models/projectMessages";
+import { checkUsersWhenProjectIsUpdated } from "../utils/projectsFunctionsAttachts";
 
 //CREAR UN PROYECTO NUEVO
 export const createNewProject = async (req: Request, res: Response) => { 
@@ -197,6 +198,41 @@ export const getProjectAllPlanifications = async (req: Request, res: Response) =
     }
 }
 
+
+//EDITAR DATOS - USUARIOS - SERVICIOS DE UN PROJECTO
+
+export const updateProjectData = async (req: Request, res: Response) => { 
+   
+    const {projectId} = req.params
+    const {name, amount, description, startDate, usersWithAcces, services} = req.body
+
+    try {
+      /*  const project = await ProjectModel.findByPk(projectId)
+        project.name = name
+        project.amount = amount
+        project.description = description
+        project.startDate = startDate
+        await project.save() */
+
+        const membersData = await UserAccesModel.findAll({ 
+            where: { 
+                projectId: projectId,            
+            },
+            attributes: {
+                exclude: ["id", "updatedAt", 'projectId', 'createdAt'],  
+              },
+        })
+
+        if(usersWithAcces.length > 0) { 
+           await checkUsersWhenProjectIsUpdated(membersData, usersWithAcces, Number(projectId))
+        } 
+
+        res.status(200).send(membersData)
+        
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
 
 //ACTUALIZAR FECHA O MENSAJE DE LA PLANIFICACION CREADA EN UN PROYECTO
 export const updateTrackingData = async (req: Request, res: Response) => { 

@@ -7,11 +7,12 @@ import { userStore } from "../../../store/UserAccount"
 import handleError from "../../../utils/axiosErrorHanlder"
 import { shootSuccesWithOutLoginFunction } from "../../../utils/succesToastFunction"
 import { userPersonalProjectsType } from "../../../types/User"
+import SpinnerComponent from "../../Spinner/Spinner"
 
 const ProjectMain =  () => { 
 
    const {user} = userStore()
-   const [laod, setLoad] = useState<boolean>(false)
+   const [load, setLoad] = useState<boolean>(false)
    const [projects, setProjects] = useState<userPersonalProjectsType[] | []>([]) 
 
   const getUserProjectsAvailables = async () => { 
@@ -39,7 +40,11 @@ const ProjectMain =  () => {
    return ( 
     <div>
        <NavbarProjectMain/>
-       <MainProjectTableData projects={projects}/>
+      {!load ? 
+        <MainProjectTableData projects={projects}/> : 
+        <div className="flex items-center justify-center mt-36"> 
+        <SpinnerComponent/>
+       </div>}
     </div>
    )
 }
