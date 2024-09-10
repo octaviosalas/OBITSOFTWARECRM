@@ -10,10 +10,10 @@ interface Props {
   currentDateReminders: projectRemindersType[] | [],
   nextProjectReminders: projectRemindersType[] | [],
   updateReminders: () => void,
-  projectId: string | undefined
+  projectId: number
 }
 
-const ProjectRemindersDetail = ({everyProjectsReminders, currentDateReminders, nextProjectReminders, updateReminders, projectId}: Props) => { 
+const ProjectRemindersDetail = ({ currentDateReminders, nextProjectReminders, updateReminders, projectId}: Props) => { 
 
     const [isFormVisible, setIsFormVisible] = useState(false);
 
@@ -36,9 +36,9 @@ const ProjectRemindersDetail = ({everyProjectsReminders, currentDateReminders, n
             <CreateNewProjectReminder hideForm={hideCreateReminderForm} projectId={projectId} updateReminders={updateReminders}/>
           )}
 
-          <ProjectTableCurrentDateReminders currentDateReminders={currentDateReminders}/>
+           <ProjectTableCurrentDateReminders currentDateReminders={currentDateReminders} projectId={projectId} updateReminders={updateReminders}/>
 
-          <ProjectTableNextReminders nextProjectReminders={nextProjectReminders}/> 
+           <ProjectTableNextReminders nextProjectReminders={nextProjectReminders} projectId={projectId} updateReminders={updateReminders}/> 
     </div>
     )
 }

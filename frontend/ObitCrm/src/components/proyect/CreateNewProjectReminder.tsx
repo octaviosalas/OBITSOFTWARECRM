@@ -10,7 +10,7 @@ import SpinnerComponent from "../Spinner/Spinner"
 
 interface Props { 
     hideForm: () => void,
-    projectId: string | undefined,
+    projectId: number,
     updateReminders: () => void,
 
 }

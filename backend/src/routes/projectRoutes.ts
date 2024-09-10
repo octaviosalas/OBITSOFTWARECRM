@@ -4,7 +4,7 @@ import { errorsHanlder } from "../utils/errorsHanlder"
 import { validateClientExistense } from "../middlewares/clientsValidations"
 import { validateUserExist, validateUserExistWithId } from "../middlewares/userValidations"
 import { createNewProject, projectData, establishNewProjectPlanification, projectsUserWithAcces, 
-         getProjectAllPlanifications, getProjectReminder, createProjectReminder,
+         getProjectAllPlanifications, getProjectReminder, createProjectReminder, deleteProject,
          getOneProjectReminderData, projectNextReminders, updateProjectReminderData, updateProjectData,
          deleteProjectReminderData, updateTrackingData, deleteProjectPlanification, getSystemDataToCreateNewProject
        } from "../controllers/projects"
@@ -77,6 +77,7 @@ router.get("/getProjectPlanification/:projectId/:userId",
     getProjectAllPlanifications
 )
 
+//EDITAR PROYECTO
 router.put("/editProjectData/:projectId", 
     param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
     errorsHanlder,
@@ -84,6 +85,17 @@ router.put("/editProjectData/:projectId",
     updateProjectData
 
 )
+
+//ELIMINAR PROYECTO
+router.delete("/deleteProject/:projectId/:userId", 
+    param("projectId").notEmpty().withMessage("Debes indicar ID del proyecto que intentas obtener"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateProjectExistenceWithId,
+    validateUserHasAccesToProjectData,
+    deleteProject
+)
+
 
 //ACTUALIZAR FECHA O MENSAJE DE LA PLANIFICACION CREADA EN UN PROYECTO
 router.put("/updatePlanification/:followUpId/:projectId/:userId",
@@ -185,12 +197,9 @@ router.put("/updateProjectReminder/:reminderId/:projectId/:userId",
 router.delete("/deleteProjectReminder/:reminderId/:projectId/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     param("reminderId").notEmpty().withMessage("Es obligatorio indicar el recordatorio que deseas actualizar"),
-    body("date").notEmpty().withMessage("Es obligatorio indicar la fecha del recordatorio para actualizarlo"),
-    body("reminderData").notEmpty().withMessage("Es obligatorio indicar el mensaje del recordatorio para poder actualizarlo"),
     errorsHanlder,
     validateUserExistWithId,
     validateProjectExistenceWithId,
-    validateUserExistWithId,
     validateReminderExistenceAndIfIsOfTheProject,
     validateIfReminderWasCreatedByUser,
     deleteProjectReminderData

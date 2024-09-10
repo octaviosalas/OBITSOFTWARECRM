@@ -39,9 +39,9 @@ const ProjectMain =  () => {
 
    return ( 
     <div>
-       <NavbarProjectMain/>
+       <NavbarProjectMain updateTable={getUserProjectsAvailables}/>
       {!load ? 
-        <MainProjectTableData projects={projects}/> : 
+        <MainProjectTableData projects={projects} updateTable={getUserProjectsAvailables}/> : 
         <div className="flex items-center justify-center mt-36"> 
         <SpinnerComponent/>
        </div>}

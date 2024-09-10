@@ -5,12 +5,14 @@ import { formateDate } from "../../../utils/transformDate"
 import UsersWithAccesProjectTable from "./UsersWithAccesProjectTable"
 import { useNavigate } from "react-router-dom"
 import EditProjectData from "./EditProjectData"
+import DeleteProject from "./DeleteProject"
 
 interface Props { 
-    projects: userPersonalProjectsType[] | []
+    projects: userPersonalProjectsType[] | [],
+    updateTable: () => void
 }
 
-const MainProjectTableData = ({projects}: Props) => { 
+const MainProjectTableData = ({projects, updateTable}: Props) => { 
 
 
     const [allProjects, setAllProjects] = useState<userPersonalProjectsType[] | []>(projects)
@@ -58,7 +60,7 @@ const MainProjectTableData = ({projects}: Props) => {
             <tbody>
        
                     {allProjects.map((project : userPersonalProjectsType) => ( 
-                         <tr>
+                         <tr key={project.projectData.id}>
                         <td>{project.projectData.clientData.name}</td>
                         <td>{project.projectData.name}</td>
                         <td><UsersWithAccesProjectTable projectId={project.projectData.id}/></td>
@@ -66,10 +68,14 @@ const MainProjectTableData = ({projects}: Props) => {
                             <td>{ser.service.name}</td>
                         ))}
                         <td>{formateDate(project.projectData.startDate)}</td>
-                        <td>{project.projectData.description}</td>
-                        <td>
-                            <EditProjectData projectData={project.projectData}/>
-                            <button className="btn-action delete"><i className="fas fa-trash-alt"></i></button>
+                           <td>
+                            {project.projectData.description.length > 50 
+                                ? `${project.projectData.description.substring(0, 50)}...` 
+                                : project.projectData.description}
+                            </td>          
+                            <td>
+                            <EditProjectData projectData={project.projectData} updateTable={updateTable}/>
+                            <DeleteProject projectId={project.projectData.id} updateTable={updateTable}/>
                             <button className="btn-action details" onClick={() => redirectToProjectDetail(project.projectData.id)}><i className="fas fa-eye"></i></button>
                         </td>
                         </tr>

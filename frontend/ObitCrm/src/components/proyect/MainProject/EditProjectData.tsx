@@ -16,10 +16,11 @@ import {  formatDateInputElement } from "../../../utils/transformDate";
 
 
 interface Props { 
-    projectData: projectDataUserPersonalType
+    projectData: projectDataUserPersonalType,
+    updateTable: () => void
 }
 
-const EditProjectData =  ({projectData}: Props) => { 
+const EditProjectData =  ({projectData, updateTable}: Props) => { 
 
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
 
@@ -132,6 +133,7 @@ const EditProjectData =  ({projectData}: Props) => {
   const chooseUser= (id: number, name: string) => { 
      const userExist = usersNames.some((us) => us.id === id)
      if(userExist) { 
+        setFilteredUserNames([])
         return shootErrorToast("El usuario ya forma parte del projecto")
      }
      const users : usersDataProjectType = ({
@@ -178,7 +180,9 @@ const EditProjectData =  ({projectData}: Props) => {
 
   const editProjectData = async (e : any) => { 
     e.preventDefault()
+    setLoad(true)
     const newProjectData : newProjectDataType = ({
+       client: Number(client),
        name: projectName,
        amount: Number(projectAmount),
        description: description,
@@ -189,12 +193,19 @@ const EditProjectData =  ({projectData}: Props) => {
     console.log(newProjectData)
     try {
          const {data, status} = await apiBackendUrl.put(`/project/editProjectData/${projectData.id}`, newProjectData)
+         console.log("data", data)
+         console.log("status", status)
+
          if(status === 200) { 
             console.log(data)
             shootSuccesToast(data)
+            setLoad(false)
+            updateTable()
+            onClose()
          }
     } catch (error) {
         handleError(error, setLoad)
+        console.log("error", error)
     }
   }
 
@@ -213,7 +224,7 @@ const EditProjectData =  ({projectData}: Props) => {
               <ModalBody >
               <div className="full-screen-section flex flex-col items-center" id="projectSection">
                     <div className="form-section">
-                        <h2>Agregar/Editar Proyecto</h2>
+                        <h2>Editar Proyecto</h2>
                       {!load ?
                         <form id="projectForm" onSubmit={editProjectData}>
                             <div className="form-group">
@@ -291,7 +302,8 @@ const EditProjectData =  ({projectData}: Props) => {
                                 <button type="button" className="btn-cancel" id="closeProjectSection" onClick={onClose}>Cancelar</button>
                             </div>
                         </form> 
-                        : <SpinnerComponent/>}
+                        : <SpinnerComponent/>
+                        }
                     </div>
                </div>
               </ModalBody>

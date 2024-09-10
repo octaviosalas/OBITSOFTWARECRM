@@ -79,6 +79,27 @@ body {
     background: #e6f2ff; /* Azul claro */
 }
 
+
+.cancel-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.confirm-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 .btn {
     background-color: #007bff; /* Azul */
     color: white;
@@ -135,8 +156,10 @@ body {
     margin: 5px 0;
 }
 
-h3 {
+.section h3 {
     font-size: 1rem;
+    margin-top: 0;
+    color: #003366; 
 }
 
 /* Media Queries para Responsividad */

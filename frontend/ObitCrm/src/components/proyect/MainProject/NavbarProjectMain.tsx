@@ -1,11 +1,15 @@
 import "../proyectMain.css"
 import AddNewProject from "./AddNewProject"
 
-const NavbarProjectMain =  () => { 
+interface Props { 
+   updateTable: () => void
+}
+
+const NavbarProjectMain =  ({updateTable}: Props) => { 
    return ( 
         <div className="custom-header">
             <div className="header-container">
-               <AddNewProject/>
+               <AddNewProject updateTable={updateTable}/>
             </div>
         </div>
    )

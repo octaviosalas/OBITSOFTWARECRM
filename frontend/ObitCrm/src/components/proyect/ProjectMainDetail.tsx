@@ -12,12 +12,14 @@ import { projectDataType, userAccesProjectType, projectRemindersType, projectMes
 import { useNavigate } from 'react-router-dom';
 import { getCurrentDateWithoutTime } from '../../utils/actualDate';
 import { shootSuccesWithOutLoginFunction } from '../../utils/succesToastFunction';
+import { serviceUserProjectType } from '../../types/Services';
 
 const ProjectMainDetail = () => { 
 
     const [activeSection, setActiveSection] = useState('info');
     const [load, setLoad] = useState<boolean>(false);
     const [projectInformation, setProjectInformation] = useState<projectDataType>();
+    const [projectServices, setProjectServices] = useState<serviceUserProjectType[] | []>([]);
     const [usersWithAcces, setUserWithAcces] = useState<userAccesProjectType[] | []>([]);
     const [projectsReminders, setProjectsReminders] = useState<projectRemindersType>();
     const [actualDateProjectsReminders, setActualDateProjectsReminders] = useState<projectRemindersType[] | []>([]);
@@ -42,6 +44,7 @@ const ProjectMainDetail = () => {
          if(status === 200) { 
           setLoad(false)
           setProjectInformation(data.projectData)
+          setProjectServices(data.serviceData)
           setUserWithAcces(data.userWithAcces)
           setProjectsReminders(data.reminders)
           setProjectsMessages(data.messages)
@@ -106,6 +109,7 @@ const ProjectMainDetail = () => {
            <div className="section" id="info">
              <ProjectInfoDetail 
               projectInformation={projectInformation} 
+              projectServices={projectServices}
               usersWithAcces={usersWithAcces}/>
            </div> : null
           }
@@ -116,7 +120,7 @@ const ProjectMainDetail = () => {
                 everyProjectsReminders={projectsReminders} 
                 currentDateReminders={actualDateProjectsReminders} 
                 nextProjectReminders={nextProjectsReminders}
-                projectId={projectId}
+                projectId={Number(projectId)}
                 updateReminders={getProjectData}
               />
            </div> : null

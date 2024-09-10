@@ -1,14 +1,18 @@
 import "./proyectDetail.css"
 import { projectDataType, userAccesProjectType } from "../../types/Projects"
 import { formateDate } from "../../utils/transformDate"
-
+import { serviceUserProjectType } from "../../types/Services"
 
 interface Props { 
     projectInformation: projectDataType | undefined,
-    usersWithAcces: userAccesProjectType[] | undefined
+    usersWithAcces: userAccesProjectType[] | undefined,
+    projectServices: serviceUserProjectType[] | []
 }
 
-const ProjectInfoDetail = ({projectInformation, usersWithAcces}: Props) => { 
+const ProjectInfoDetail = ({projectInformation, usersWithAcces, projectServices}: Props) => { 
+
+    console.log(projectServices)
+
     return ( 
         <div>
             <h2>Información</h2>
@@ -26,6 +30,15 @@ const ProjectInfoDetail = ({projectInformation, usersWithAcces}: Props) => {
                         ))}
                 </div>
                 <p><strong>Descripción:</strong> {projectInformation?.description}</p>
+                <div className="flex items-center">
+                    <p><strong>Servicios: </strong></p>
+                    {projectServices.length > 0 ?
+                    <div className="flex flex-col items-start">
+                    {projectServices.map((pr: serviceUserProjectType) => ( 
+                        <p> {pr.service.name}</p>
+                    ))}
+                    </div> : null}
+                </div>
         </div>
     )
 }

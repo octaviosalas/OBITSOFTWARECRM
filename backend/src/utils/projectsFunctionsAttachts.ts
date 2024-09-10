@@ -10,7 +10,8 @@ type newUsersDataType = {
 }
 
 export const checkUsersWhenProjectIsUpdated = async (actualMembers: newUsersDataType[], newMembers: usersData[], projectId: number) => {
-    const promises = newMembers.map(async (user) => {
+
+    const addNewMembers = newMembers.map(async (user) => {
         const userExists = actualMembers.some(member => member.userId === user.id);
         
         if (!userExists) {
@@ -26,7 +27,25 @@ export const checkUsersWhenProjectIsUpdated = async (actualMembers: newUsersData
         return null;  
     });
 
-    return Promise.all(promises);  
+    const deleteOldMembers = actualMembers.map( async (member) => { 
+       const memberStill = newMembers.some((mem) => mem.id === member.userId)
+       if (!memberStill) {
+        await UserAccesModel.destroy({
+            where: {
+                projectId: projectId,
+                userId: member.userId
+            }
+        });
+      }
+      return null
+    })
+
+    await Promise.all([...addNewMembers, ...deleteOldMembers]);  
+    console.log("Agregados:", addNewMembers)
+    console.log("Ekliminafos:", deleteOldMembers)
+
+    return { addedUsers: addNewMembers, removedUsers: deleteOldMembers };
+
 };
 
 /* 

@@ -11,7 +11,11 @@ import { userStore } from "../../../store/UserAccount";
 import {  shootSuccesToast, shootSuccesWithOutLoginFunction } from "../../../utils/succesToastFunction";
 import { servicesType, servicesDataType } from "../../../types/Services";
 
-const AddNewProject =  () => { 
+interface Props  { 
+  updateTable: () => void
+}
+
+const AddNewProject =  ({updateTable}: Props) => { 
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
 
   const [availableClients, setAvailableClients] = useState<clientPersonalDataType[] | []>([])
@@ -60,6 +64,7 @@ const AddNewProject =  () => {
 
   const handleSearchClient = (e: React.ChangeEvent<HTMLInputElement>) => { 
     const name = e.target.value.toLowerCase();
+    setClientName(name)
     if(name.length === 0) { 
         setFilteredClientsNames([]);
     } else { 
@@ -135,7 +140,9 @@ const AddNewProject =  () => {
 
   const createNewProject = async (e : any) => { 
     e.preventDefault()
+    setLoad(true)
     const newProjectData : newProjectDataType = ({
+       client: Number(client),
        name: projectName,
        amount: Number(projectAmount),
        description: description,
@@ -147,8 +154,10 @@ const AddNewProject =  () => {
     try {
          const {data, status} = await apiBackendUrl.post(`/project/createProject/${user?.id}/${client}`, newProjectData)
          if(status === 200) { 
-            console.log(data)
+            updateTable()
             shootSuccesToast(data)
+            setLoad(false)
+            onClose()
          }
     } catch (error) {
         handleError(error, setLoad)
@@ -167,7 +176,7 @@ const AddNewProject =  () => {
               <ModalBody >
               <div className="full-screen-section flex flex-col items-center" id="projectSection">
                     <div className="form-section">
-                        <h2>Agregar/Editar Proyecto</h2>
+                        <h2>Agregar Proyecto</h2>
                       {!load ?
                         <form id="projectForm" onSubmit={createNewProject}>
                             <div className="form-group">

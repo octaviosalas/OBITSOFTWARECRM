@@ -67,6 +67,7 @@ export type servicesNewProjectsType = {
 }
 
 export type newProjectDataType = { 
+   client: number,
    amount: number,
    name: string,
    description: string,
@@ -74,3 +75,5 @@ export type newProjectDataType = {
    usersWithAcces: usersDataProjectType[] | [],
    services: servicesNewProjectsType[] | []
 }
+
+

@@ -9,7 +9,7 @@ interface Props {
 const ProjectMessagesData = ({projectsMessages}: Props) => {
   return (
     <div id="messageHistory" className="message-box w-full"> 
-       <h3>Historial de Mensajes</h3>
+       <h2>Historial de Mensajes</h2>
         {projectsMessages.length > 0 ?
         <div className='mt-2'>
             {projectsMessages.map((pr : projectMessagesType) => ( 
@@ -19,8 +19,8 @@ const ProjectMessagesData = ({projectsMessages}: Props) => {
             ))}
              
         </div> : 
-        <div>
-            <p>Sin mensajes</p>
+        <div className='mt-2 flex items-center'>
+           <strong> <p>No hay ningun mensaje registrado correspondiente a este proyecto</p> </strong>
         </div>
         }
    </div>

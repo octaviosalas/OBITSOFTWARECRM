@@ -200,19 +200,18 @@ export const getProjectAllPlanifications = async (req: Request, res: Response) =
 
 
 //EDITAR DATOS - USUARIOS - SERVICIOS DE UN PROJECTO
-
 export const updateProjectData = async (req: Request, res: Response) => { 
    
     const {projectId} = req.params
     const {name, amount, description, startDate, usersWithAcces, services} = req.body
 
     try {
-      /*  const project = await ProjectModel.findByPk(projectId)
+        const project = await ProjectModel.findByPk(projectId)
         project.name = name
         project.amount = amount
         project.description = description
         project.startDate = startDate
-        await project.save() */
+        await project.save() 
 
         const membersData = await UserAccesModel.findAll({ 
             where: { 
@@ -227,12 +226,48 @@ export const updateProjectData = async (req: Request, res: Response) => {
            await checkUsersWhenProjectIsUpdated(membersData, usersWithAcces, Number(projectId))
         } 
 
-        res.status(200).send(membersData)
+        res.status(200).send("Se edito correctamente la informacion del proyecto")
         
     } catch (error) {
         res.status(500).send(error)
     }
 }
+
+
+//ELIMINAR PROYECTO
+export const deleteProject = async (req: Request, res: Response) => { 
+   
+    const {projectId} = req.params
+
+    try {
+        const project = await ProjectModel.findByPk(projectId)
+
+        const membersAcces = await UserAccesModel.findAll({ 
+            where: { 
+                projectId: projectId
+            }
+        })
+       
+        await Promise.all(membersAcces.map((mem) => mem.destroy()));
+
+        const projectServices = await ProjectServiceModel.findAll({ 
+            where: { 
+                projectId: projectId
+            }
+        })
+
+        await Promise.all(projectServices.map((pr) => pr.destroy()));
+        await project.destroy()
+       
+        res.status(200).send("Se elimino correctamente el proyecto")
+
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
+
 
 //ACTUALIZAR FECHA O MENSAJE DE LA PLANIFICACION CREADA EN UN PROYECTO
 export const updateTrackingData = async (req: Request, res: Response) => { 
@@ -359,7 +394,7 @@ export const projectNextReminders = async (req: Request, res: Response) => {
 //ACTUALIZAR DATOS DE UN RECORDATORIO DE UN PROYECTO
 export const updateProjectReminderData = async (req: Request, res: Response) => { 
 
-    const {reminderId} = req.params
+    const {reminderId, projectId, userId} = req.params
     const {date, reminderData} = req.body
 
     try {
@@ -368,6 +403,7 @@ export const updateProjectReminderData = async (req: Request, res: Response) => 
         reminderSelected.reminderData = reminderData
 
         await reminderSelected.save()
+        createNotification(projectId, userId, 'PROJECT_REMINDER')
         res.status(200).send("Se actualizaron correctamente los datos del recordatorio")
     } catch (error) {
         res.status(500).send(error)
