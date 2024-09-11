@@ -6,6 +6,7 @@ import UsersWithAccesProjectTable from "./UsersWithAccesProjectTable"
 import { useNavigate } from "react-router-dom"
 import EditProjectData from "./EditProjectData"
 import DeleteProject from "./DeleteProject"
+import WithOutAcces from "../../reusableComponents/withOutAcces"
 
 interface Props { 
     projects: userPersonalProjectsType[] | [],
@@ -86,9 +87,7 @@ const MainProjectTableData = ({projects, updateTable}: Props) => {
             </> 
           </table>
         </div> : 
-        <div className="flex items-center justify-center mt-36">
-            <p className="font-medium">No se encontraron proyectos a los cuales tengas acceso</p>
-        </div> 
+          <WithOutAcces typeData="proyectos"/>
         }
      </div>
    )

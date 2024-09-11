@@ -9,17 +9,21 @@ import ClientFollowUpModal from "./ClientFollowUpModal";
 import ClientDeleteModal from "./ClientDeleteModal";
 import { userStore } from "../../store/UserAccount";
 import { pruebaType } from "../../types/Clients";
+import SpinnerComponent from "../Spinner/Spinner";
+import WithOutAcces from "../reusableComponents/withOutAcces";
 
 const MainClient = () => { 
 
     const [originalClientsData, setOriginalClientsData] = useState<clientPersonalDataType[] | []>([])
     const [everyClientsData, setEveryClientsData] = useState<clientPersonalDataType[] | []>([])
+    const [load, setLoad] = useState<boolean>(false)
 
     const {user} = userStore()
 
    
 
     const getClientsAccesUserData = async () => { 
+        setLoad(true)
         try {
             const {data, status} = await apiBackendUrl.get(`/user/userClientAcces/${user?.id}`)
             console.log("getClientsAccesUserData", data)            
@@ -31,6 +35,7 @@ const MainClient = () => {
                 })
                 setEveryClientsData(clientsOnlyData)
                 setOriginalClientsData(clientsOnlyData)
+                setLoad(false)
             }
         } catch (error) {
             console.log(error)
@@ -57,7 +62,9 @@ const MainClient = () => {
 
     return (
         <div className="main-client">
-            <div className="top-bar">
+            {!load && everyClientsData.length > 0 ? ( 
+                <>
+                 <div className="top-bar">
                 <CreateNewClientModal resetTableData={getClientsAccesUserData}/>
                 <div className="bottom-bar">
                     <input
@@ -66,7 +73,6 @@ const MainClient = () => {
                         className="text-black"
                         onChange={handleChangeTableData}
                     />
-                    {user?.name}
                 </div>
             </div>
 
@@ -100,6 +106,22 @@ const MainClient = () => {
                     </tbody>
                 </table>
             </div>
+                </>
+            ) : load ? ( 
+                <div className="flex items-center justify-center mt-36">
+                  <SpinnerComponent/>
+                </div>
+            ) : !load && everyClientsData.length === 0 ? ( 
+                <> 
+                <div className="top-bar">
+                    <CreateNewClientModal resetTableData={getClientsAccesUserData}/>
+                </div>
+                    <WithOutAcces typeData="clientes"/>
+                </>
+
+            ) : null}
+           
+
         </div>
     );
 }
