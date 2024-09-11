@@ -3,6 +3,8 @@ export type userSocialNetworksType = {
     facebook: string
 }
 
+
+
 export type clientPersonalDataType = { 
     id: number,
     name: string,
@@ -39,3 +41,14 @@ export type clientFollowUpDataType = {
 }
 
 export type newClientDataType = Omit<clientPersonalDataType, 'createdAt' | 'updatedAt' | 'id'>;
+
+
+
+export type pruebaType = { 
+    clientData: clientPersonalDataType,
+    clientId: number
+    createdAt: string
+    id: number
+    updatedAt: string
+    userId: number
+}

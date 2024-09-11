@@ -10,6 +10,7 @@ import ProjectModel from "../models/projects";
 import ClientModel from "../models/clients";
 import ProjectServiceModel from "../models/projectServices";
 import ServicesModel from "../models/services";
+import UserClientAccesModel from "../models/UserClientAcces";
 
 //CREAR UN NUEVO USUARIO
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
@@ -153,6 +154,7 @@ export const deleteUserAccount = async (req: Request, res: Response) => {
     }
 }
 
+//OBTENER PROJECTOS A LOS QUE EL USUARIO TIENE ACCESO
 export const userProjectsAcces = async (req: Request, res: Response) => { 
 
     const {userId} = req.params
@@ -193,6 +195,31 @@ export const userProjectsAcces = async (req: Request, res: Response) => {
         res.status(500).send(error)
     }
 }
+
+
+//OBTENER CLIENTES A LOS QUE EL USUARIO TIENE ACCESO
+export const userClientsAcces = async (req: Request, res: Response) => { 
+    const { userId } = req.params;
+
+    try {
+        const clientsWithAcces = await UserClientAccesModel.findAll({ 
+            where: { 
+                userId: userId
+            },
+            include: [{ 
+                model: ClientModel,
+                as: "clientData",            
+            }]
+        });
+
+        // Extraer solo los datos de `clientData`
+        const clientDataOnly = clientsWithAcces.map(clientAcces => clientAcces.clientData);
+
+        res.status(200).send(clientsWithAcces);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
 
 
 //CREAR UN NUEVO RECORDATORIO PARA MI MISMO, COMO USUARIO

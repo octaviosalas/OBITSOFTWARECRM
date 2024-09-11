@@ -1,4 +1,5 @@
 import UserAccesModel from "../models/userAcces"
+import { createNotification } from "./notificationCreator"
 
 type usersData = { 
     name: string,
@@ -47,24 +48,3 @@ export const checkUsersWhenProjectIsUpdated = async (actualMembers: newUsersData
     return { addedUsers: addNewMembers, removedUsers: deleteOldMembers };
 
 };
-
-/* 
-    const deleteOldUsersPromises = actualMembers.map(async (member) => {
-        const isStillMember = newMembers.some(user => user.id === member.userId);
-        
-        if (!isStillMember) {
-            // Eliminar el miembro del modelo `UserAccesModel`
-            await UserAccesModel.destroy({
-                where: {
-                    projectId: projectId,
-                    userId: member.userId
-                }
-            });
-        }
-
-        return null;
-    });
-
-    // 3. Ejecutar ambas operaciones en paralelo
-    await Promise.all([...addNewUsersPromises, ...deleteOldUsersPromises]);
-*/

@@ -1,6 +1,7 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default} from "sequelize-typescript"
 import FollowUpModel from "./projectPlanification"
 import ProjectModel from "./projects"
+import UserClientAccesModel from "./UserClientAcces"
 
 @Table({ 
     tableName: "clients",
@@ -52,6 +53,9 @@ class ClientModel extends Model {
 
     @HasMany(() => FollowUpModel, { foreignKey: 'client' }) 
     followUpsData: FollowUpModel[]; 
+    
+    @HasMany(() => UserClientAccesModel, { foreignKey: 'clientId' }) 
+    userAcces: UserClientAccesModel[]; 
 }
 
 export default ClientModel

@@ -41,10 +41,16 @@ const Login = () => {
             if(status === 200) { 
                  console.log(data.notifications)
                  setLoad(false)
-                 shootSuccesToast(data.message)
                  navigate(`/projects`)
                  setUserAccountData(data.data)
                  updateNotifications(data.notifications)
+                 if(data.notifications.length > 0 ) { 
+                  const quantityNotifications = data.notifications.length
+                    {quantityNotifications === 1 ? 
+                      shootSuccesToast(`Tenes ${quantityNotifications} notificacion sin leer`) :  
+                      shootSuccesToast(`Tenes ${quantityNotifications} notificaciones sin leer`)
+                    }               
+                  }
             }
         } catch (error) {
            setEmail("")

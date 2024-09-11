@@ -4,7 +4,7 @@ import { errorsHanlder } from "../utils/errorsHanlder"
 import { createUser, userData, everyUsers, 
          updateUserData, deleteUserAccount, createMyReminder, 
          getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday,
-         deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces,
+         deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces, userClientsAcces,
          updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator } from "../controllers/user"
 import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
 
@@ -70,12 +70,23 @@ router.delete("/deleteUserAccount/:userId",
     deleteUserAccount
 )
 
+//OBTENER PROJECTOS A LOS QUE EL USUARIO TIENE ACCESO
 router.get("/userAccesProjects/:userId", 
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     errorsHanlder,
     validateUserExistWithId,
     userProjectsAcces
 )
+
+
+//OBTENER CLIENTES A LOS QUE EL USUARIO TIENE ACCESO
+router.get("/userClientAcces/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    errorsHanlder,
+    validateUserExistWithId,
+    userClientsAcces
+)
+
 
 //CREAR UN NUEVO RECORDATORIO PARA MI MISMO, COMO USUARIO
 router.post("/createReminder/:userId", 

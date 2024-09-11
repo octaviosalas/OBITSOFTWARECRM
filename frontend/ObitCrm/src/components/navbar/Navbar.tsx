@@ -13,13 +13,12 @@ const Navbar: React.FC = () => {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const PROJECT_URL = import.meta.env.VITE_PROJECT_URL;
+    const navigate = useNavigate()
+    const {userNotifications, markNotificationAsRead} = userStore()
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
-
-    const navigate = useNavigate()
-    const {userNotifications, markNotificationAsRead} = userStore()
 
     const markNotificationAsReadIntoDataBase = async (notificationId: number) => { 
         try {

@@ -8,6 +8,7 @@ import apiBackendUrl from "../../lib/axiosData";
 import ClientFollowUpModal from "./ClientFollowUpModal";
 import ClientDeleteModal from "./ClientDeleteModal";
 import { userStore } from "../../store/UserAccount";
+import { pruebaType } from "../../types/Clients";
 
 const MainClient = () => { 
 
@@ -16,15 +17,20 @@ const MainClient = () => {
 
     const {user} = userStore()
 
-    const getClientsData = async () => { 
+   
+
+    const getClientsAccesUserData = async () => { 
         try {
-            const {data, status} = await apiBackendUrl.get("/client/everyClientsData")
-            console.log(status)
-            console.log(data)
+            const {data, status} = await apiBackendUrl.get(`/user/userClientAcces/${user?.id}`)
+            console.log("getClientsAccesUserData", data)            
             if(status === 200) { 
-                console.log(data)
-                setEveryClientsData(data)
-                setOriginalClientsData(data)
+                console.log("getClientsAccesUserData", data)   
+                const clientsOnlyData = data.map((c : pruebaType) => { 
+                    const onlyClientsData = c.clientData
+                    return onlyClientsData
+                })
+                setEveryClientsData(clientsOnlyData)
+                setOriginalClientsData(clientsOnlyData)
             }
         } catch (error) {
             console.log(error)
@@ -32,7 +38,7 @@ const MainClient = () => {
     }
 
     useEffect(() => { 
-        getClientsData()
+        getClientsAccesUserData()
     }, [])
     
 
@@ -52,7 +58,7 @@ const MainClient = () => {
     return (
         <div className="main-client">
             <div className="top-bar">
-                <CreateNewClientModal resetTableData={getClientsData}/>
+                <CreateNewClientModal resetTableData={getClientsAccesUserData}/>
                 <div className="bottom-bar">
                     <input
                         type="text"
@@ -84,10 +90,10 @@ const MainClient = () => {
                                 {client.active === true ? 
                                 <td>Activo</td> : <td>Inactivo</td>}
                                 <td className="flex">
-                                    <ClientDetailModal clientId={client.id}  resetTable={getClientsData}/>
+                                    <ClientDetailModal clientId={client.id}  resetTable={getClientsAccesUserData}/>
                                     <ClientProjectsModal clientId={client.id}/>
                                     <ClientFollowUpModal clientId={client.id}/>
-                                    <ClientDeleteModal clientId={client.id} resetTableData={getClientsData}/>
+                                    <ClientDeleteModal clientId={client.id} resetTableData={getClientsAccesUserData}/>
                                 </td>
                             </tr>
                         ))}
