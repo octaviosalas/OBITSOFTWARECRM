@@ -19,7 +19,7 @@ export type UserTypeData = {
     rol: string | null
 }
 
-export type userLoginType = Omit<UserTypeData, 'id' | 'name' | 'createdAt' | 'updatedAt'>;
+export type userLoginType = Omit<UserTypeData, 'id' | 'name' | 'createdAt' | 'updatedAt'  | 'rol'>;
 
 export type usersDataProjectType = { 
     id: number,
@@ -52,3 +52,14 @@ export type usersWithAccesData = Omit<userPersonalProjectsType, "projectData"> &
     userData: UserTypeData;
   };
 
+
+export type notificationsType = { 
+    createdAt: string,
+    id: number,
+    message: string,
+    notificationType: string,
+    projectId: number,
+    read: boolean,
+    updatedAt: string,
+    userId: number
+}

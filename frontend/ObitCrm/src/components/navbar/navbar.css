@@ -3,6 +3,11 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.icon-notifications { 
+    color: white;
+    background-color: red;
+}
+
 .navbar {
     background-color: #003366; /* Azul oscuro */
     padding: 20px;

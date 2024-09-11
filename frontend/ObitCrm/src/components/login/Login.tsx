@@ -18,7 +18,7 @@ const Login = () => {
     const [load, setLoad] = useState<boolean>(false)
     const navigate = useNavigate()
 
-    const {setUserAccountData} = userStore()
+    const {setUserAccountData, updateNotifications} = userStore()
 
 
     const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => { 
@@ -39,11 +39,12 @@ const Login = () => {
         try {
             const {data, status} = await apiBackendUrl.post("/user/loginUserAccount", userData)
             if(status === 200) { 
-                 console.log(data)
+                 console.log(data.notifications)
                  setLoad(false)
                  shootSuccesToast(data.message)
                  navigate(`/projects`)
                  setUserAccountData(data.data)
+                 updateNotifications(data.notifications)
             }
         } catch (error) {
            setEmail("")

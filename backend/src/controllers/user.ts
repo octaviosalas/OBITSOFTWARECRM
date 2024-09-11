@@ -53,8 +53,11 @@ export const loginValidator = async (req: Request, res: Response) => {
                    where: { 
                       userId: user.id
                    }
-                }) 
-                const notificationsByType = userUnreadNotifications.reduce((acc, el) => { 
+                })
+
+                const unreadNotifications = userUnreadNotifications.filter((not) => not.read === false)
+                  
+                const notificationsByType = unreadNotifications.reduce((acc, el) => { 
                     const typeOfNotifications = el.notificationType
                     if(acc[typeOfNotifications]) { 
                         acc[typeOfNotifications].push(el)
@@ -71,7 +74,7 @@ export const loginValidator = async (req: Request, res: Response) => {
                    }
                 })
 
-                return res.status(200).json({message: "Iniciaste sesion correctamente", data: user, notifications: userUnreadNotifications, order: notificationsOrdered, mm: notificationsByType})
+                return res.status(200).json({message: "Iniciaste sesion correctamente", data: user, notifications: unreadNotifications, order: notificationsOrdered})
             }
         
     } catch (error) {
