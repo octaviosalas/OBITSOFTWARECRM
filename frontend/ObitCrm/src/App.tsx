@@ -9,6 +9,7 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import ProjectMainDetail from './components/proyect/ProjectMainDetail';
 import ProjectMain from './components/proyect/MainProject/ProjectMain';
+import MainServices from './components/servicesModule/MainServices';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/register" element={<Register />} />   
           <Route path="/projects" element={<ProjectMain />} />   
           <Route path="/projectDetail/:projectId" element={<ProjectMainDetail />} />   
+          <Route path="/services" element={<MainServices />} />   
 
         </Routes>
     <ToastContainer />

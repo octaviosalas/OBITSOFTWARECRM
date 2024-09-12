@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import ClientModel from "../models/clients";
 import FollowUpClientsModel from "../models/followUpClients";
 import ProjectModel from "../models/projects";
+import UserClientAccesModel from "../models/UserClientAcces";
 
 export const createClient = async (req: Request, res: Response): Promise <void> => { 
 
     const {email, phone, name, dischargeDate, socialNetworks, active} = req.body
+    const {userId} = req.params
 
    try {
        const newClientToBeSaved = new ClientModel({ 
@@ -17,7 +19,20 @@ export const createClient = async (req: Request, res: Response): Promise <void> 
            active
         })
        await newClientToBeSaved.save()
-       res.status(200).send("Cliente creado exitosamente")
+
+       console.log({ 
+         "userId": userId,
+         "clientId": newClientToBeSaved.id
+       })
+
+       const userAcces = new UserClientAccesModel ({ 
+          userId: userId,
+          clientId: newClientToBeSaved.id
+       })
+
+       await userAcces.save()
+
+       res.status(200).json({data: newClientToBeSaved, message: "Cliente creado exitosamente"})
    } catch (error) {
       res.status(500).send(error)
    }

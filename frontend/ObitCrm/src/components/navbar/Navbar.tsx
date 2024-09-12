@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
                         <li><a href={`${PROJECT_URL}/`}>Clientes</a></li>
                         <li><a >Seguimientos</a></li>
                         <li><a href={`${PROJECT_URL}/projects`}>Proyectos</a></li>
-                        <li><a >Servicios</a></li>
+                        <li><a href={`${PROJECT_URL}/services`}>Servicios</a></li>
                         <li><a onClick={() => console.log(userNotifications)}>Mi equipo</a></li>
                     </ul>
                     <button className="profile-button"><a href={`${PROJECT_URL}/`}>Mi perfil</a></button>

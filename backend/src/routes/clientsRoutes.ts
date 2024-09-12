@@ -22,7 +22,10 @@ router.get("/clientData/:clientId",
     clientData
 )
 
-router.post("/createClient", 
+router.post("/createClient/:userId", 
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateUserExistWithId,
     body("name").notEmpty().withMessage("Esta faltando el nombre del cliente"),
     body("phone").notEmpty().withMessage("Esta faltando el telefono de contacto del cliente"),
     body("email").notEmpty().withMessage("Esta faltando el email del cliente"),

@@ -425,3 +425,28 @@ export const updateNotificationAsRead = async (req: Request, res: Response) => {
          res.status(500).send(error)
      }
 }
+
+
+export const createAcces = async (req: Request, res: Response) => { 
+    const { clientId } = req.params;
+    const { usersData } = req.body;
+
+    console.log(usersData)
+    
+    try {
+      const users = await Promise.all(
+        usersData.map(async (us) => {
+          const createAcces = new UserClientAccesModel({ 
+            userId: us.id,
+            clientId: Number(clientId)
+          });
+          await createAcces.save();
+          return createAcces; 
+        })
+      );
+  
+      res.status(200).send("Se añadieron correctamente a los usuarios");
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };

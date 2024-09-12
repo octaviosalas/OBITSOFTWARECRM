@@ -7,6 +7,8 @@ import { newClientDataType } from "../../types/Clients";
 import handleError from "../../utils/axiosErrorHanlder";
 import { shootSuccesToast } from "../../utils/succesToastFunction";
 import SpinnerComponent from "../Spinner/Spinner";
+import { userStore } from "../../store/UserAccount";
+import QuestionAfterCreationClient from "./QuestionAfterCreationClient";
 
 interface Props { 
   resetTableData: () => void
@@ -15,6 +17,7 @@ interface Props {
 const CreateNewClientModal = ({resetTableData} : Props) => {
 
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
+  const [size, setSize] = useState<number>()
   const [load, setLoad] = useState<boolean>(false)
   const [name, setName] = useState<string>("")
   const [phone, setPhone] = useState<string>("")
@@ -23,6 +26,9 @@ const CreateNewClientModal = ({resetTableData} : Props) => {
   const [active, setActive] = useState<boolean>(false)
   const [facebook, setFacebook] = useState<string>("")
   const [instagram, setInstagram] = useState<string>("")
+  const [secondStep, setSecondStep] = useState<boolean>(false)
+  const [newClientId, setNewClientId] = useState<number>()
+  const {user} = userStore()
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => { 
      setName(e.target.value)
@@ -73,13 +79,13 @@ const CreateNewClientModal = ({resetTableData} : Props) => {
     })
     console.log(newClientData)
     try {
-        const {data, status} = await apiBackendUrl.post("/client/createClient", newClientData)
+        const {data, status} = await apiBackendUrl.post(`/client/createClient/${user?.id}`, newClientData)
         console.log(status, data)
         if(status === 200) { 
-            resetTableData()
-            shootSuccesToast(data)
+            shootSuccesToast(data.message)
             setLoad(false)
-            onClose()
+            setSecondStep(true)
+            setNewClientId(data.data.id)
         }
       } catch (error) {
         handleError(error, setLoad)
@@ -90,12 +96,13 @@ const CreateNewClientModal = ({resetTableData} : Props) => {
     <>
       <button onClick={onOpen}>Nuevo</button>
       
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"2xl"}>
         <ModalContent>
           {(onClose) => (
             <>     
               <div id="client-form-modal" className="modal">
-                    <div className="modal-content">
+                     {!secondStep ?
+                     <div className="modal-content">
                         <h2>Crear/Modificar Cliente</h2>
                         <form id="client-form">
                             <label htmlFor="name">Nombre:</label>
@@ -124,7 +131,11 @@ const CreateNewClientModal = ({resetTableData} : Props) => {
 
                             {!load  ? <button type="submit" onClick={handleSubmit}>Guardar Cliente</button> : <SpinnerComponent/>}
                         </form>
-                    </div>
+                     </div> : 
+                       <div className="modal-content">
+                          <QuestionAfterCreationClient clientId={newClientId} updateTable={resetTableData} closeModal={onClose}/>
+                     </div>
+                     }
                 </div>    
             </>
           )}

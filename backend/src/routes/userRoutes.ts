@@ -5,8 +5,9 @@ import { createUser, userData, everyUsers,
          updateUserData, deleteUserAccount, createMyReminder, 
          getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday,
          deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces, userClientsAcces,
-         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator } from "../controllers/user"
+         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator, createAcces } from "../controllers/user"
 import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
+import { validateClientExistense } from "../middlewares/clientsValidations"
 
 const router = Router()
 
@@ -194,5 +195,11 @@ router.put("/updateNotificationAsRead/:notificationId",
     updateNotificationAsRead
 )
 
+router.post("/newUserClientAccess/:clientId", 
+    param("clientId").notEmpty().withMessage("Debes indicar a que notificacion deseas marcar como leida"),
+    errorsHanlder,
+    validateClientExistense,
+    createAcces
+)
 
 export default router
