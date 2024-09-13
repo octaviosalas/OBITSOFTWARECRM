@@ -3,7 +3,7 @@ import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { createUser, userData, everyUsers, 
          updateUserData, deleteUserAccount, createMyReminder, 
-         getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday,
+         getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday, getProjectsAndClientsUser,
          deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces, userClientsAcces,
          updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator, createAcces } from "../controllers/user"
 import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
@@ -195,11 +195,19 @@ router.put("/updateNotificationAsRead/:notificationId",
     updateNotificationAsRead
 )
 
+//DAR ACCESO A UN USUARIO A AL DATA DE UN CLIENTE
 router.post("/newUserClientAccess/:clientId", 
     param("clientId").notEmpty().withMessage("Debes indicar a que notificacion deseas marcar como leida"),
     errorsHanlder,
     validateClientExistense,
     createAcces
 )
+
+router.get("/projectsAndClientsToCreateService/:userId", 
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    getProjectsAndClientsUser
+)
+
 
 export default router

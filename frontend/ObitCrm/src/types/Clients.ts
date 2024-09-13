@@ -44,7 +44,7 @@ export type newClientDataType = Omit<clientPersonalDataType, 'createdAt' | 'upda
 
 
 
-export type pruebaType = { 
+export type clientDataType = { 
     clientData: clientPersonalDataType,
     clientId: number
     createdAt: string

@@ -61,7 +61,7 @@ const MainProjectTableData = ({projects, updateTable}: Props) => {
             <tbody>
        
                     {allProjects.map((project : userPersonalProjectsType) => ( 
-                         <tr key={project.projectData.id}>
+                        <tr key={project.projectData.id}>
                         <td>{project.projectData.clientData.name}</td>
                         <td>{project.projectData.name}</td>
                         <td><UsersWithAccesProjectTable projectId={project.projectData.id}/></td>

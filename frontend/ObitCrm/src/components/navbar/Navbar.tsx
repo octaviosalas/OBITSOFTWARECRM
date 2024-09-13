@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
                         </svg>
                     </button>
                     <ul className={`menu ${menuOpen ? 'open' : ''}`}>
-                        <li><a href={`${PROJECT_URL}/`}>Clientes</a></li>
+                        <li><a href={`${PROJECT_URL}/MainClient`}>Clientes</a></li>
                         <li><a >Seguimientos</a></li>
                         <li><a href={`${PROJECT_URL}/projects`}>Proyectos</a></li>
                         <li><a href={`${PROJECT_URL}/services`}>Servicios</a></li>

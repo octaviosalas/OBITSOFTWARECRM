@@ -91,3 +91,23 @@ export const servicesWorkingOnUserProjects = async (req: Request, res: Response)
         res.status(500).send(error)
     }
 } 
+
+
+export const updateServiceEndDate = async (req: Request, res: Response): Promise <void> => { 
+
+    const {serviceId, projectId} = req.params
+    console.log(serviceId)
+
+   try {
+       const service = await ProjectServiceModel.findByPk(serviceId)
+       service.endDate = req.body.endDateNew
+
+       await service.save()
+       res.status(200).send("Se actualizo correctamente la fecha de vencimiento de este servicio")
+
+   } catch (error) {
+      res.status(500).send(error)
+      console.log(error)
+   }
+}
+

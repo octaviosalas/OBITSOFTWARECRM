@@ -450,3 +450,41 @@ export const createAcces = async (req: Request, res: Response) => {
       res.status(500).send(error);
     }
   };
+
+
+  export const getProjectsAndClientsUser = async (req: Request, res: Response): Promise <void> => { 
+ 
+    const {userId} = req.params
+
+    try {
+       const projects = await UserAccesModel.findAll({ 
+        where: { 
+            userId: userId
+        },
+        include: [
+                    { 
+                        model: ProjectModel,
+                        as: "projectData"
+                    }
+                  ]
+       })
+
+       const clients = await UserClientAccesModel.findAll({ 
+        where: { 
+            userId: userId
+        },
+        include: [
+                    { 
+                        model: ClientModel,
+                        as: "clientData"
+                    }
+                  ]
+       })
+
+       const services = await ServicesModel.findAll()
+
+       res.status(200).json({projects: projects, clients: clients, services: services})
+    } catch (error) {
+       res.status(500).send(error)
+    }
+ }

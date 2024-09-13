@@ -174,7 +174,7 @@ const AddNewProject =  ({updateTable}: Props) => {
           {(onClose) => (
             <>
               <ModalBody >
-              <div className="full-screen-section flex flex-col items-center" id="projectSection">
+              <div className=" flex flex-col items-center" id="projectSection">
                     <div className="form-section">
                         <h2>Agregar Proyecto</h2>
                       {!load ?
@@ -205,7 +205,7 @@ const AddNewProject =  ({updateTable}: Props) => {
                                 <input type="text" id="participants" name="participants" onChange={handleSearchUser}/>
                                 {usersNames.length > 0 ? 
                                    usersNames.map((us : usersDataProjectType) => ( 
-                                     <div className="flex w-full items-center justify-between max-h-[25px] overflow-y-auto mt-3">
+                                     <div className="flex w-full items-center justify-between mt-3">
                                          <p>{us.name}</p>
                                          <p onClick={() => removeUser(us.id)} className="cursor-pointer text-sm">X</p>
                                      </div>
@@ -224,7 +224,7 @@ const AddNewProject =  ({updateTable}: Props) => {
                                 <input type="text" id="services" name="services" onChange={handleSearcServices}/>
                                 {services.length > 0 ? 
                                    services.map((serv : servicesNewProjectsType) => ( 
-                                     <div key={serv.id} className="flex w-full items-center justify-between max-h-[25px] overflow-y-auto mt-3">
+                                     <div key={serv.id} className="flex w-full items-center justify-between  mt-3">
                                          <p >{serv.name}</p>
                                          <p onClick={() => removeService(serv.id)} className="cursor-pointer text-sm">X</p>
                                      </div>

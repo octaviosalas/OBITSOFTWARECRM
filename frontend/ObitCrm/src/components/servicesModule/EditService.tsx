@@ -1,22 +1,73 @@
 import {Modal, ModalContent, ModalBody, useDisclosure} from "@nextui-org/react";
 import "./styles.css"
 import { UnifiedProjectType } from "../../types/Services"
-import { useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { shootErrorToast } from "../../utils/succesToastFunction";
+import apiBackendUrl from "../../lib/axiosData";
+import { userStore } from "../../store/UserAccount";
+import { servicesType } from "../../types/Services";
+import { servicesDataType } from "../../types/Services";
+import { formatDateInputElement } from "../../utils/transformDate";
 
 interface Props { 
-    servicesData: UnifiedProjectType 
+    servicesData: UnifiedProjectType,
+    service: servicesDataType
 }
 
-const EditService = ({servicesData}: Props) => { 
+const EditService = ({servicesData, service}: Props) => { 
 
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
-    const [serviceType, setServiceType] = useState<string>(servicesData.projectData.services[0].service.name);
+    const [serviceType, setServiceType] = useState<servicesDataType>(service);
+    const {user} = userStore()
+    const [load, setLoad] = useState<boolean>(false)
+    const [availableServices, setAvailableServices] = useState<servicesType[] | []>([])
+    const [serviceStartDate, setServiceStartDate] = useState<string>(servicesData.projectData.services[0].startDate)
+    const [serviceEndDate, setServiceEndDate] = useState<string>(servicesData.projectData.services[0].endDate)
+    const [serviceAmount, setServiceAmount] = useState<number>(servicesData.projectData.services[0].amount)
 
 
     const handleOpen = () => { 
         onOpen()
-        console.log(servicesData)
+        console.log("servicesData", servicesData)
+        console.log("objeto servicve", service)
+        getServices()
     }
+
+    const getServices = useCallback(async () => { 
+      try {
+        const {data, status} = await apiBackendUrl.get(`/project/dataToCreateProjects/${user?.id}`)
+        if(status === 200) {         
+           console.log(data.services)
+           setAvailableServices(data.services)
+           setLoad(false)
+        }
+      } catch (error) {
+          shootErrorToast("error")
+      }
+    }, [user])
+
+
+    const handleChangeServiceType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+       const serviceSelected = availableServices.filter((serv) => serv.name === e.target.value)
+       if(serviceSelected) { 
+        setServiceType(serviceSelected[0])
+       }
+    };
+
+    const handleChangeServiceStartDate= (e: React.ChangeEvent<HTMLInputElement>) => {
+      setServiceStartDate(e.target.value)
+     };
+
+    const handleChangeServiceEndDate= (e: React.ChangeEvent<HTMLInputElement>) => {
+        setServiceEndDate(e.target.value)
+    };
+
+    
+    const handleChangeServiceAmount= (e: React.ChangeEvent<HTMLInputElement>) => {
+      setServiceAmount(Number(e.target.value))
+    };
+
+
 
 
   return ( 
@@ -41,26 +92,26 @@ const EditService = ({servicesData}: Props) => {
 
                           <div className="form-group">
                               <label >Tipo de Servicio:</label>
-                              <select id="serviceType" name="serviceType" required value={serviceType}>
-                                  <option value="">Seleccionar</option>
-                                  <option value="Tipo1">Tipo 1</option>
-                                  <option value="Tipo2">Tipo 2</option>                            
-                              </select>
+                                <select id="serviceType" name="serviceType" required aria-placeholder={serviceType.name} value={serviceType.name} onChange={handleChangeServiceType}>
+                                    {availableServices.map((av : servicesType) => ( 
+                                      <option value={av.name} key={av.id}>{av.name}</option>
+                                    ))}                          
+                                </select>
                           </div>
 
                           <div className="form-group">
                               <label >Fecha de Contratación:</label>
-                              <input type="date" id="contractDate" name="contractDate" required/>
+                              <input type="date" id="contractDate" name="contractDate" required value={formatDateInputElement(serviceStartDate)} onChange={handleChangeServiceStartDate}/>
                           </div>
 
                           <div className="form-group">
                               <label >Fecha de Renovación:</label>
-                              <input type="date" id="renewalDate" name="renewalDate" required/>
+                              <input type="date" id="contractDate" name="contractDate" required value={formatDateInputElement(serviceEndDate)} onChange={handleChangeServiceEndDate}/>
                           </div>
 
                           <div className="form-group">
                               <label> Monto: </label>
-                              <input type="number" id="amount" name="amount" step="0.01" required/>
+                              <input type="number" id="contractDate" name="contractDate" required value={serviceAmount} onChange={handleChangeServiceAmount}/>
                           </div>
 
                           <div className="form-buttons">

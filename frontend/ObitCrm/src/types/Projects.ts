@@ -78,3 +78,12 @@ export type newProjectDataType = {
 
 
 export type userProjectAccesType = Omit<userAccesProjectType, | "userData">
+
+export type ProjectUserClientsData = { 
+    projectData: projectDataType,
+    createdAt: string,
+    id: number,
+    projectId: number,
+    updatedAt: string,
+    userId: number
+}

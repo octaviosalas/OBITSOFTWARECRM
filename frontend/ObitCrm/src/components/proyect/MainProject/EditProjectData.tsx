@@ -222,7 +222,7 @@ const EditProjectData =  ({projectData, updateTable}: Props) => {
           {(onClose) => (
             <>
               <ModalBody >
-              <div className="full-screen-section flex flex-col items-center" id="projectSection">
+              <div className=" flex flex-col items-center" id="projectSection">
                     <div className="form-section">
                         <h2>Editar Proyecto</h2>
                       {!load ?

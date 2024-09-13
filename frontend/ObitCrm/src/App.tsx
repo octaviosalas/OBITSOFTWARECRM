@@ -10,20 +10,25 @@ import Register from './components/register/Register';
 import ProjectMainDetail from './components/proyect/ProjectMainDetail';
 import ProjectMain from './components/proyect/MainProject/ProjectMain';
 import MainServices from './components/servicesModule/MainServices';
+import { userStore } from './store/UserAccount';
+import { Navigate } from 'react-router-dom';
 
 function App() {
 
   const location = useLocation(); 
 
-  const noNavbarRoutes = ['/login', '/register'];
+  const noNavbarRoutes = ['/', '/register'];
+  const {user} = userStore()
+
 
   return (
     <div className='h-screen w-screen'>
            {!noNavbarRoutes.includes(location.pathname) && <Navbar />}
 
        <Routes>       
-          <Route path="/" element={<MainClient />} />    
-          <Route path="/login" element={<Login />} />      
+          <Route path="/" element={!user? <Navigate to="/" replace /> : <Login />} />   
+          <Route path="/Login" element={<Login />} />    
+          <Route path="/MainClient" element={<MainClient />} />      
           <Route path="/register" element={<Register />} />   
           <Route path="/projects" element={<ProjectMain />} />   
           <Route path="/projectDetail/:projectId" element={<ProjectMainDetail />} />   
@@ -38,33 +43,3 @@ function App() {
 
 export default App
 
-
-/* 
-
-import './App.css'
-import MainClient from './components/ClientsModule/MainClient'
-import { ToastContainer } from 'react-toastify';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { userStore } from './store/UserAccount';
-
-function App() {
-
-  const {user} = userStore()
-
-  return (
-    <div className='h-screen w-screen'>
-    <Routes>       
-      <Route path="/" element={!user? <Navigate to="/login" replace /> : <MainApp />} />   
-        <Route path="/register" element={<Register />} />   
-        <Route path="/login" element={<Login />} />   
-        <Route path="/token" element={<Token />} />   
-      </Routes>
-    <ToastContainer />
-  </div>
-    
-  )
-}
-
-export default App
-
-*/

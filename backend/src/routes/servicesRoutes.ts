@@ -2,7 +2,7 @@ import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId } from "../middlewares/servicesValidations"
-import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects } from "../controllers/services"
+import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects, updateServiceEndDate } from "../controllers/services"
 import { validateUserExistWithId } from "../middlewares/userValidations"
 
 const router = Router()
@@ -35,5 +35,13 @@ router.get("/servicesWorking/:userId",
     validateUserExistWithId,
     servicesWorkingOnUserProjects
 )
+
+router.put("/updateServiceEndDate/:serviceId", 
+    param("serviceId").notEmpty().withMessage("Debes indicar que servicio deseas actualizar"),
+    body("endDateNew").notEmpty().withMessage("Debes indicar una fecha de vencimiento"),
+    errorsHanlder,
+    updateServiceEndDate
+)
+
 
 export default router

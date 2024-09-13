@@ -8,6 +8,7 @@ import apiBackendUrl from "../../lib/axiosData"
 import { userStore } from "../../store/UserAccount"
 import handleError from "../../utils/axiosErrorHanlder"
 import { UnifiedProjectType } from "../../types/Services"
+import SpinnerComponent from "../Spinner/Spinner"
 
 const MainServices =  () => { 
  
@@ -16,12 +17,14 @@ const MainServices =  () => {
   const [servicesData, setServicesData] = useState<UnifiedProjectType[] | []>([])
   const [load, setLoad] = useState<boolean>(false)
 
-    const getUserServices = async () => { 
+    const getUserServices = async () => {
+      setLoad(true) 
         try {
           const {data, status} = await apiBackendUrl.get(`/service/servicesWorking/${user?.id}`)
           if(status === 200) { 
             setServicesData(data)
-            console.log(data)
+            console.log("data", data)
+            setLoad(false) 
         }
         } catch (error) {
           handleError(error, setLoad)
@@ -39,6 +42,7 @@ const MainServices =  () => {
     <header className="custom-header">
       <div className="header-container">
         <div className="secondHeader">
+           <button className="btn-configure-alert" onClick={() => setMenu("services")}>Añadir Nuevo Servicio</button>
            <button className="btn-configure-alert" onClick={() => setMenu("services")}>Ver Servicios</button>
            <button className="btn-configure-alert" onClick={() => setMenu("expirations")}>Ver Próximos Vencimientos</button>
            <AddNewService/>
@@ -48,31 +52,38 @@ const MainServices =  () => {
       </div>
     </header>
 
-    <div className="search-bar">
-      <input type="text" placeholder="Buscar servicios..." />
-    </div>
+    {!load ? 
+    <>
+      <div className="search-bar">
+        <input type="text" placeholder="Buscar servicios..." />
+      </div>
 
-    <div className="sections-container">
+      <div className="sections-container">
 
-      {menu === "services" ? 
-        <div className="table-section" id="expirationsTable">
-            <h2>Servicios</h2>
-            <div id="expirationsTableContent">
-                <ServicesTable servicesData={servicesData}/>
-            </div>
-        </div> : null
-       }
+        {menu === "services" ? 
+          <div className="table-section" id="expirationsTable">
+              <h2>Servicios</h2>
+              <div id="expirationsTableContent">
+                  <ServicesTable servicesData={servicesData} updateTable={getUserServices}/>
+              </div>
+          </div> : null
+        }
 
-      {menu === "expirations" ? 
-        <div className="table-section" id="expirationsTable">
-            <h2>Próximos Vencimientos</h2>
-            <div id="expirationsTableContent">
-                <ExpirationsTable/>
-            </div>
-        </div> : null
-      }
+        {menu === "expirations" ? 
+          <div className="table-section" id="expirationsTable">
+              <h2>Próximos Vencimientos</h2>
+              <div id="expirationsTableContent">
+                  <ExpirationsTable/>
+              </div>
+          </div> : null
+        }
 
-    </div>
+      </div>
+     </> :
+     <div className="flex items-center justify-center mt-36">
+       <SpinnerComponent/>
+     </div>  }
+
   </div>
   )
 }
