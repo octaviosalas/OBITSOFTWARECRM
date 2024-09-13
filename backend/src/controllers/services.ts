@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
 import ServicesModel from "../models/services";
+import UserAccesModel from "../models/userAcces";
+import ProjectModel from "../models/projects";
+import { projectData } from "./projects";
+import ProjectServiceModel from "../models/projectServices";
+import ClientModel from "../models/clients";
 
 
 export const createService = async (req: Request, res: Response): Promise <void> => { 
@@ -44,3 +49,45 @@ export const deleteService = async (req: Request, res: Response): Promise <void>
       res.status(500).send(error)
    }
 }
+
+export const servicesWorkingOnUserProjects = async (req: Request, res: Response): Promise <void> => { 
+    
+    const {userId} = req.params
+
+    try {
+        const projectsAvailableForUser = await UserAccesModel.findAll({
+            where: { 
+                userId: userId 
+            },
+            include: [{
+                model: ProjectModel,
+                as: "projectData",
+                attributes: { exclude: ['createdAt', 'updatedAt'] }, // Excluir campos de ProjectModel
+                include: [
+                    {
+                        model: ProjectServiceModel,
+                        as: "services",
+                        attributes: { exclude: ['createdAt', 'updatedAt'] }, // Excluir campos de ProjectServiceModel
+                        include: [{ 
+                            model: ServicesModel,
+                            as: "service",
+                            attributes: { exclude: ['createdAt', 'updatedAt'] } // Excluir campos de ServicesModel
+                        }]
+                    },
+                    {
+                        model: ClientModel, // Incluir ClientModel
+                        as: "clientData",
+                        attributes: { exclude: ['createdAt', 'updatedAt'] } // Excluir campos de ClientModel
+                    }
+                ]
+            }]
+        });
+        if(projectsAvailableForUser.length === 0) { 
+          res.status(500).send("No tenes servicios")
+        } else { 
+            res.status(200).send(projectsAvailableForUser)
+        }
+    } catch (error) {
+        res.status(500).send(error)
+    }
+} 

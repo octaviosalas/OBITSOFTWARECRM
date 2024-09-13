@@ -4,6 +4,7 @@ import FollowUpModel from "./projectPlanification"
 import UserAccesModel from "./userAcces"
 import UserNotificationModel from "./userNotifications"
 import ProjectMessagesModel from "./projectMessages"
+import UserClientAccesModel from "./UserClientAcces"
 
 
 @Table({ 
@@ -52,6 +53,9 @@ class UserModel extends Model {
 
     @HasMany(() => ProjectMessagesModel, {foreignKey: 'userId' })
     projectMessages: ProjectMessagesModel[]
+
+    @HasMany(() => UserClientAccesModel, {foreignKey: 'userId' })
+    userData: UserClientAccesModel[]
 }
 
 export default UserModel

@@ -77,3 +77,4 @@ export type newProjectDataType = {
 }
 
 
+export type userProjectAccesType = Omit<userAccesProjectType, | "userData">

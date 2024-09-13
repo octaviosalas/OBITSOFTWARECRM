@@ -52,3 +52,7 @@ export type pruebaType = {
     updatedAt: string
     userId: number
 }
+
+
+//clientProjectsDataType
+export type clientPersonalDataServiceType = Omit<clientProjectsDataType, "updatedAt" | "createdAt">

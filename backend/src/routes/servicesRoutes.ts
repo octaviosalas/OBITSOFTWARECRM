@@ -2,7 +2,8 @@ import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId } from "../middlewares/servicesValidations"
-import { createService, deleteService, updateServiceName } from "../controllers/services"
+import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects } from "../controllers/services"
+import { validateUserExistWithId } from "../middlewares/userValidations"
 
 const router = Router()
 
@@ -28,5 +29,11 @@ router.put("/updateServiceName/:serviceId",
     updateServiceName
 )
 
+router.get("/servicesWorking/:userId", 
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateUserExistWithId,
+    servicesWorkingOnUserProjects
+)
 
 export default router

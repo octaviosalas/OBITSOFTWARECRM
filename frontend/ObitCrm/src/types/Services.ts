@@ -1,3 +1,5 @@
+import { clientPersonalDataServiceType } from "./Clients"
+
 export type servicesType = { 
     createdAt: string,
     id: number,
@@ -28,3 +30,29 @@ export type serviceUserProjectType = {
     updatedAt: string
     service: service
 }
+
+export type UnifiedProjectType = {
+    id: number;
+    userId: number;
+    projectId: number;
+    createdAt: string; 
+    updatedAt: string; 
+    projectData: {
+      id: number;
+      name: string;
+      description: string;
+      startDate: string;
+      amount: number;
+      client: number;
+      services: {
+        id: number;
+        projectId: number;
+        serviceId: number;
+        startDate: string; 
+        endDate: string;  
+        amount: number;
+        service: servicesDataType
+      }[];
+      clientData: clientPersonalDataServiceType
+    };
+  }
