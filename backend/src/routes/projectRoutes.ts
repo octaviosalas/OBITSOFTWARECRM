@@ -83,7 +83,6 @@ router.put("/editProjectData/:projectId",
     errorsHanlder,
     validateProjectExistenceWithId,
     updateProjectData
-
 )
 
 //ELIMINAR PROYECTO

@@ -56,3 +56,15 @@ export type UnifiedProjectType = {
       clientData: clientPersonalDataServiceType
     };
   }
+
+  export type ServiceWithProjectType = {
+    projectId: number;
+    projectName: string;
+    serviceId: number;
+    serviceName: string;
+    startDate: string;
+    endDate: string;
+    clientName: string;
+    amount: number;
+    projectServiceId: number; 
+  };

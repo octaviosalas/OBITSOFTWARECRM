@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../proyectMain.css"
 import {Modal, ModalContent, ModalBody, useDisclosure} from "@nextui-org/react";
 import { servicesNewProjectsType, newProjectDataType } from "../../../types/Projects";
@@ -165,12 +165,18 @@ const EditProjectData =  ({projectData, updateTable}: Props) => {
   };
 
   const chooseService= (id: number, name: string) => { 
-    const services : servicesDataType = ({
+    const actualServices : servicesDataType = ({
         name: name,
         id: id
     })
-    setServices((prevState) => [...prevState, services])
-    setFilteredServices([]);
+    const validateExistence = services.some((serv) => serv.id === id)
+    if(!validateExistence) { 
+      setServices((prevState) => [...prevState, actualServices])
+      setFilteredServices([]);
+    } else { 
+      setFilteredServices([]);
+      shootErrorToast("El servicio elegido ya forma parte de este proyecto")
+    }
   }
 
   const removeService= (id: number) => { 
@@ -190,7 +196,7 @@ const EditProjectData =  ({projectData, updateTable}: Props) => {
        usersWithAcces: usersNames,
        services: services
     })
-    console.log(newProjectData)
+    console.log("newProjectData.services", newProjectData.services)
     try {
          const {data, status} = await apiBackendUrl.put(`/project/editProjectData/${projectData.id}`, newProjectData)
          console.log("data", data)
@@ -209,7 +215,9 @@ const EditProjectData =  ({projectData, updateTable}: Props) => {
     }
   }
 
-  
+   useEffect(() => { 
+       console.log(services)
+   }, [services])
 
 
   return (

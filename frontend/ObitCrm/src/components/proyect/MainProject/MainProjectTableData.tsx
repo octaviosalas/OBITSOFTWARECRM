@@ -65,9 +65,7 @@ const MainProjectTableData = ({projects, updateTable}: Props) => {
                         <td>{project.projectData.clientData.name}</td>
                         <td>{project.projectData.name}</td>
                         <td><UsersWithAccesProjectTable projectId={project.projectData.id}/></td>
-                        {project.projectData.services.map((ser) => ( 
-                            <td>{ser.service.name}</td>
-                        ))}
+                            <td>{project.projectData.services.map((ser) => ser.service.name).join(', ')}</td>
                         <td>{formateDate(project.projectData.startDate)}</td>
                            <td>
                             {project.projectData.description.length > 50 

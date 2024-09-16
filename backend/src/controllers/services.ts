@@ -111,3 +111,22 @@ export const updateServiceEndDate = async (req: Request, res: Response): Promise
    }
 }
 
+export const updateProjectServiceData = async (req: Request, res: Response): Promise <void> => { 
+
+    const {serviceId, projectId} = req.params
+    const {serviceData, startDate, endDate, amount} = req.body
+
+
+   try {
+       const projectServiceSelected = await ProjectServiceModel.findByPk(serviceId)
+       projectServiceSelected.amount = amount;
+       projectServiceSelected.endDate = endDate;
+       projectServiceSelected.startDate = startDate;
+       projectServiceSelected.serviceId = serviceData.serviceId
+       await projectServiceSelected.save()
+       res.status(200).send("Se actualizo correctamente el servicio relacionado al proyecto")
+
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}

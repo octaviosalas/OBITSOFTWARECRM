@@ -1,9 +1,10 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
-import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId } from "../middlewares/servicesValidations"
-import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects, updateServiceEndDate } from "../controllers/services"
+import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId, validateProjectServiceExist } from "../middlewares/servicesValidations"
+import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects, updateServiceEndDate, updateProjectServiceData } from "../controllers/services"
 import { validateUserExistWithId } from "../middlewares/userValidations"
+import { validateProjectExistenceWithId } from "../middlewares/projectValidations"
 
 const router = Router()
 
@@ -43,5 +44,13 @@ router.put("/updateServiceEndDate/:serviceId",
     updateServiceEndDate
 )
 
+router.put("/updateProjectServiceData/:serviceId/:projectId", 
+    param("serviceId").notEmpty().withMessage("Debes indicar que servicio deseas actualizar"),
+    param("projectId").notEmpty().withMessage("Debes indicar a que projecto le corresponde este servicio"),
+    errorsHanlder,
+    validateProjectExistenceWithId,
+    validateProjectServiceExist,
+    updateProjectServiceData
+)
 
 export default router

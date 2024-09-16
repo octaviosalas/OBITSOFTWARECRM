@@ -7,14 +7,14 @@ import AddNewAlert from "./AddNewAlert"
 import apiBackendUrl from "../../lib/axiosData"
 import { userStore } from "../../store/UserAccount"
 import handleError from "../../utils/axiosErrorHanlder"
-import { UnifiedProjectType } from "../../types/Services"
+import { UnifiedProjectType, ServiceWithProjectType } from "../../types/Services"
 import SpinnerComponent from "../Spinner/Spinner"
 
 const MainServices =  () => { 
  
   const [menu, setMenu] = useState<string>("services")
   const {user} = userStore()
-  const [servicesData, setServicesData] = useState<UnifiedProjectType[] | []>([])
+  const [servicesData, setServicesData] = useState<ServiceWithProjectType[] | []>([])
   const [load, setLoad] = useState<boolean>(false)
 
     const getUserServices = async () => {
@@ -22,9 +22,26 @@ const MainServices =  () => {
         try {
           const {data, status} = await apiBackendUrl.get(`/service/servicesWorking/${user?.id}`)
           if(status === 200) { 
-            setServicesData(data)
-            console.log("data", data)
             setLoad(false) 
+            const createObject : ServiceWithProjectType[] = data.flatMap((project: UnifiedProjectType) => {
+              return project.projectData.services.map((service) => {
+                return {
+                  projectId: project.projectData.id,
+                  projectName: project.projectData.name,
+                  serviceId: service.serviceId,
+                  serviceName: service.service.name,
+                  startDate: service.startDate,
+                  endDate: service.endDate,
+                  amount: service.amount,
+                  clientName: project.projectData.clientData.name,
+                  projectServiceId: service.id                 
+                };
+              });
+            });
+      
+            console.log("createObject", createObject); 
+            setServicesData(createObject)
+      
         }
         } catch (error) {
           handleError(error, setLoad)

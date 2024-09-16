@@ -1,13 +1,13 @@
 import "./styles.css"
-import { UnifiedProjectType } from "../../types/Services"
+import { ServiceWithProjectType } from "../../types/Services"
 import { formateDate } from "../../utils/transformDate"
 import EditService from "./EditService"
-import { HTMLInputAutoCompleteAttribute, useState } from "react"
+import { useState } from "react"
 import apiBackendUrl from "../../lib/axiosData"
 import handleError from "../../utils/axiosErrorHanlder"
 
 interface Props { 
-    servicesData: UnifiedProjectType[] | [],
+    servicesData: ServiceWithProjectType[] | [],
     updateTable: () => void
 }
 
@@ -60,24 +60,24 @@ const ServicesTable =  ({servicesData, updateTable}: Props) => {
                 </tr>
             </thead>
             <tbody>
-                {servicesData.map((serv : UnifiedProjectType) => ( 
-                    <tr key={serv.id}>
-                        <td>{serv.projectData.services.map((s) => s.service.name)}</td>
-                        <td>{serv.projectData.name} </td>
-                        {serv.projectData.services.map((s) => s.endDate)[0] !== null ? 
-                            <td>{formateDate( serv.projectData.services.map((s) => s.endDate)[0])}</td>
-                             : serv.projectData.services.map((s) => s.endDate)[0] === null && chooseEndDateId !== serv.id ? (
-                                <td onClick={() => chooseEndDateNow(serv.id)} className="underline text-blue-800 text-md font-semibold cursor-pointer hover:text-red-600">Seleccionar fecha</td>
-                             ) : chooseEndDateId === serv.id ? ( 
+                {servicesData.map((serv : ServiceWithProjectType) => ( 
+                    <tr key={serv.serviceId}>
+                        <td>{serv.serviceName}</td>
+                        <td>{serv.projectName} </td>
+                        {serv.endDate !== null ? 
+                            <td>{formateDate(serv.endDate )}</td>
+                             : serv.endDate === null && chooseEndDateId !== serv.serviceId ? (
+                                <td onClick={() => chooseEndDateNow(serv.serviceId)} className="underline text-blue-800 text-md font-semibold cursor-pointer hover:text-red-600">Seleccionar fecha</td>
+                             ) : chooseEndDateId === serv.serviceId ? ( 
                                 <td className="flex gap-3"> 
                                     <input type="date" className="w-2/4 border" onChange={handleChangeEndDate}/> 
-                                    <button className="bg-blue-800 text-white" onClick={() => updateServiceEndDate(serv.projectData.services[0].id)}>Confirmar</button>
+                                    <button className="bg-blue-800 text-white" onClick={() => updateServiceEndDate(serv.projectServiceId)}>Confirmar</button>
                                     <button className="bg-red-600 text-white" onClick={() => setChooseEndDateId(0)}>Cancelar</button>
                                 </td>
                              ) : null
                         }
                         <td>
-                            <EditService servicesData={serv} service={serv.projectData.services.map((s) => s.service)[0]}/>
+                            <EditService updateTable={updateTable} servicesData={serv} service={serv}/>
                             <button className="btn-action delete"><i className="fas fa-trash-alt"></i></button>
                             <button className="btn-action details"><i className="fas fa-eye"></i></button>
                             <button className="btn-action configure-alert" id="openAlertSection"><i className="fas fa-bell"></i></button>

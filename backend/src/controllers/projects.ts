@@ -11,7 +11,7 @@ import UserModel from "../models/user";
 import { Op } from 'sequelize';
 import { createNotification } from "../utils/notificationCreator";
 import ProjectMessagesModel from "../models/projectMessages";
-import { checkUsersWhenProjectIsUpdated } from "../utils/projectsFunctionsAttachts";
+import { checkIfAnyServiceIsNew, checkUsersWhenProjectIsUpdated } from "../utils/projectsFunctionsAttachts";
 
 //CREAR UN PROYECTO NUEVO
 export const createNewProject = async (req: Request, res: Response) => { 
@@ -225,6 +225,10 @@ export const updateProjectData = async (req: Request, res: Response) => {
         if(usersWithAcces.length > 0) { 
            await checkUsersWhenProjectIsUpdated(membersData, usersWithAcces, Number(projectId))
         } 
+
+        if(services.length > 0) { 
+            await checkIfAnyServiceIsNew(services, Number(projectId))
+        }
 
         res.status(200).send("Se edito correctamente la informacion del proyecto")
         

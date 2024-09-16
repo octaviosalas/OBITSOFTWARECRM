@@ -1,3 +1,4 @@
+import ProjectServiceModel from "../models/projectServices"
 import UserAccesModel from "../models/userAcces"
 import { createNotification } from "./notificationCreator"
 
@@ -48,3 +49,31 @@ export const checkUsersWhenProjectIsUpdated = async (actualMembers: newUsersData
     return { addedUsers: addNewMembers, removedUsers: deleteOldMembers };
 
 };
+
+
+export const checkIfAnyServiceIsNew = async (services: usersData[], projectId: number) => { 
+
+  console.log("RECIBIIIII A", services)
+  const projectActualService = await ProjectServiceModel.findAll({ 
+     where: { 
+        projectId: projectId
+     }
+  })
+ 
+  const newServicesPromises = services.map(async (serv) => { 
+    const serviceExists = projectActualService.some((s) => s.serviceId === serv.id);
+    
+    if (!serviceExists) { 
+      return ProjectServiceModel.create({
+        projectId: projectId,
+        serviceId: serv.id,
+        startDate: null,
+        endDate: null,
+        amount: null
+      });
+    }
+  });
+
+  await Promise.all(newServicesPromises);
+  return newServicesPromises
+}
