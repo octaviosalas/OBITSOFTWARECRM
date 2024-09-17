@@ -14,7 +14,7 @@ export const createService = async (req: Request, res: Response): Promise <void>
    try {
        const service = new ServicesModel({ name })
        await service.save()
-       res.status(200).send("Servicio creado exitosamente")
+       res.status(200).send("Servicio creado exitosamente. Ya podes utilizarlo en tus proyectos")
    } catch (error) {
       res.status(500).send(error)
    }

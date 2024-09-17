@@ -39,7 +39,7 @@ const ClientProjectsModal = ({clientId}: Props) => {
   return (
     <div>
          <button className="btn-btn" onClick={handleOpen}>Proyectos</button>
-         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+         <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"2xl"}>
             <ModalContent>
             {(onClose) => (
                 <>
@@ -52,7 +52,7 @@ const ClientProjectsModal = ({clientId}: Props) => {
                     <div className="modal-content">
                         <h2>Proyectos del Cliente</h2>
                            {clientsProjectsData && clientsProjectsData.length > 0 ? ( 
-                             <table>
+                              <table id="clientes-table" className="mt-4">
                              <thead>
                                  <tr>
                                      <th>ID</th>

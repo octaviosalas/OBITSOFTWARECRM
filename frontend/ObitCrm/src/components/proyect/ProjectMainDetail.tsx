@@ -98,9 +98,7 @@ const ProjectMainDetail = () => {
           <div className={`navbar-item-projectDetail ${activeSection === 'messages' ? 'active' : ''}`} onClick={() => showSection('messages')}>
             Mensajería
           </div>
-          <div className={`navbar-item-projectDetail ${activeSection === 'messages' ? 'active' : ''}`} onClick={() => showSection('acces')}>
-            Accesos
-          </div>
+         
         </div>
   
         <div className="container">

@@ -10,7 +10,7 @@ import { servicesDataType } from "../../types/Services";
 
 const AddNewService = () => { 
 
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
     const {user} = userStore()
 
     const [availableClients, setAvailableClients] = useState<clientDataType[] | []>([])
@@ -90,15 +90,35 @@ const AddNewService = () => {
       setFilteredProjectsNames([])
     }
 
-  
-    const chooseService = (id: number, name: string) => { 
-      setServiceName(name)
-      setServiceReference(id)
-    }
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const selectedService = JSON.parse(e.target.value);
+      console.log("ID RECIBIDO EN SERVICEREFERENCE", selectedService.id);
+      console.log("NAME RECIBIDO EN SERVICEREFERENCE", selectedService.name);
+      setServiceName(selectedService.name);
+      setServiceReference(selectedService.id);
+  };
 
-    const addServiceToProjec = () => { 
+    const addServiceToProject = async () => { 
        setLoad(true)
-       
+       const newServiceProject = ({ 
+         endDate: serviceEndDate,
+         startDate: serviceStartDate,
+         amount: amount
+       })
+       const projectId = projectReference
+       const serviceId = serviceReference
+       const clientId = clientReference
+      try {
+          const {data, status} = await apiBackendUrl.post(`/service/addServiceNewToProject/${projectId}/${serviceId}/${clientId}`, newServiceProject)
+          if(status === 200) { 
+            setLoad(false)
+            onClose()
+            console.log(data)
+          }
+       } catch (error) {
+          console.log(error)
+          handleError(error, setLoad)
+       }
     }
 
 
@@ -139,11 +159,13 @@ const AddNewService = () => {
 
                           <div className="form-group">
                               <label >Tipo de Servicio:</label>
-                              <select id="serviceType" name="serviceType" required>
-                                  {availableServices.map((serv: servicesDataType) => (
-                                    <option key={serv.id} value={serv.id} onClick={() => chooseService(serv.id, serv.name)}>{serv.name}</option>
-                                  ))}                           
-                              </select>
+                                <select  id="serviceType"  name="serviceType" required  onChange={(e) => handleSelectChange(e)}>
+                                    {availableServices.map((serv: servicesDataType) => (
+                                        <option key={serv.id} value={JSON.stringify({ id: serv.id, name: serv.name })}>
+                                            {serv.name}
+                                        </option>
+                                    ))}
+                                </select>
                           </div>
 
                           <div className="form-group">
@@ -162,7 +184,7 @@ const AddNewService = () => {
                           </div>
 
                           <div className="form-buttons">
-                              <button type="submit" className="btn-submit">Guardar</button>
+                              <button type="button" className="btn-submit" onClick={() => addServiceToProject()}>Guardar</button>
                               <button type="button" className="btn-cancel" id="closeServiceSection">Cancelar</button>
                           </div>
                 </form>

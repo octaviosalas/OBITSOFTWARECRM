@@ -1,7 +1,7 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
-import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId, validateProjectServiceExist } from "../middlewares/servicesValidations"
+import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId, validateProjectServiceExist, validateIfServiceNotExistOnProjectsServices } from "../middlewares/servicesValidations"
 import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects, updateServiceEndDate, updateProjectServiceData } from "../controllers/services"
 import { validateUserExistWithId } from "../middlewares/userValidations"
 import { validateProjectExistenceWithId } from "../middlewares/projectValidations"
@@ -9,7 +9,9 @@ import { validateProjectExistenceWithId } from "../middlewares/projectValidation
 const router = Router()
 
 router.post("/createService", 
-    body("name").notEmpty().withMessage("Debes indicar el nombre del servicio que deseas agregar"),
+    body("name")
+    .notEmpty().withMessage("Debes indicar el nombre del servicio que deseas agregar")
+    .isLength({ min: 2 }).withMessage("El nombre del servicio debe tener al menos 2 caracteres"),
     errorsHanlder,
     validateServiceNotExist,
     createService
@@ -51,6 +53,16 @@ router.put("/updateProjectServiceData/:serviceId/:projectId",
     validateProjectExistenceWithId,
     validateProjectServiceExist,
     updateProjectServiceData
+)
+
+router.post("/addServiceNewToProject/:projectId/:serviceId/:clientId", 
+    param("serviceId").notEmpty().withMessage("Debes indicar que servicio deseas actualizar"),
+    param("projectId").notEmpty().withMessage("Debes indicar a que projecto le corresponde este servicio"),
+    param("clientId").notEmpty().withMessage("Debes indicar a que clienete le corresponde este servicio"),
+    errorsHanlder,
+    validateProjectExistenceWithId,
+    validateIfServiceNotExistOnProjectsServices,
+
 )
 
 export default router

@@ -9,6 +9,7 @@ import { userStore } from "../../store/UserAccount"
 import handleError from "../../utils/axiosErrorHanlder"
 import { UnifiedProjectType, ServiceWithProjectType } from "../../types/Services"
 import SpinnerComponent from "../Spinner/Spinner"
+import CreateNewService from "./CreateNewService"
 
 const MainServices =  () => { 
  
@@ -59,7 +60,7 @@ const MainServices =  () => {
     <header className="custom-header">
       <div className="header-container">
         <div className="secondHeader">
-           <button className="btn-configure-alert" onClick={() => setMenu("services")}>Añadir Nuevo Servicio</button>
+           <CreateNewService/>
            <button className="btn-configure-alert" onClick={() => setMenu("services")}>Ver Servicios</button>
            <button className="btn-configure-alert" onClick={() => setMenu("expirations")}>Ver Próximos Vencimientos</button>
            <AddNewService/>

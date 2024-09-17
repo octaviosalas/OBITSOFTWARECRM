@@ -1,10 +1,11 @@
-import "./styles.css"
+//import "./styles.css"
 import { ServiceWithProjectType } from "../../types/Services"
 import { formateDate } from "../../utils/transformDate"
 import EditService from "./EditService"
 import { useState } from "react"
 import apiBackendUrl from "../../lib/axiosData"
 import handleError from "../../utils/axiosErrorHanlder"
+import "../proyect/proyectDetail.css"
 
 interface Props { 
     servicesData: ServiceWithProjectType[] | [],
@@ -50,7 +51,7 @@ const ServicesTable =  ({servicesData, updateTable}: Props) => {
 
   return ( 
      <div>
-       <table className="services-table">
+       <table className="table">
             <thead>
                 <tr>
                     <th>Servicio</th>
@@ -79,8 +80,6 @@ const ServicesTable =  ({servicesData, updateTable}: Props) => {
                         <td>
                             <EditService updateTable={updateTable} servicesData={serv} service={serv}/>
                             <button className="btn-action delete"><i className="fas fa-trash-alt"></i></button>
-                            <button className="btn-action details"><i className="fas fa-eye"></i></button>
-                            <button className="btn-action configure-alert" id="openAlertSection"><i className="fas fa-bell"></i></button>
                         </td>
                    </tr>
                 ))}

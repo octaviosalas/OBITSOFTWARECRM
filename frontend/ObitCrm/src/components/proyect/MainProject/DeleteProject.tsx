@@ -45,7 +45,7 @@ const DeleteProject =  ({projectId, updateTable}: Props) => {
             {(onClose) => (
               <>
                 <ModalBody >
-                 <div className="full-screen-section flex flex-col items-center" id="projectSection">
+                 <div className=" flex flex-col items-center" id="projectSection">
                       <h2>Si eliminas el proyecto, se eliminara toda la informacion relacionada a el</h2>
                      {!load ?
                       <div className="flex gap-6 items-center mt-4 mb-2">

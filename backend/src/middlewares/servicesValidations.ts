@@ -25,16 +25,20 @@ export const validateServiceExistence = async (req: Request, res: Response, next
 export const validateServiceExistenceWithId = async (req: Request, res: Response, next: NextFunction) => { 
     
     const {serviceId} = req.params
-    
+    console.log("serviceId en validateServiceExistenceWithId", serviceId)
+
     try {
         const service = await ServicesModel.findByPk(serviceId)
         if(!service) { 
+            console.log("!service en validateServiceExistenceWithId", serviceId)
             res.status(404).send("No existe este servicio almacenado")
         } else { 
             next()
+            console.log("avaaaaaaaaaaaaanzo en validateServiceExistenceWithId", serviceId)
         }
     } catch (error) {
-        res.status(500).json("Hubo un error en el midddleware")
+        console.log("error en validateServiceExistenceWithId")
+        res.status(500).json(error)
     }
 } 
 
@@ -73,3 +77,27 @@ export const validateProjectServiceExist = async (req: Request, res: Response, n
         res.status(500).json("Hubo un error en el midddleware")
     }
 } 
+
+export const validateIfServiceNotExistOnProjectsServices = async (req: Request, res: Response, next: NextFunction) => { 
+    const {serviceId, projectId} = req.params
+    console.log("serviceId", serviceId)
+    console.log("projectId", projectId)
+
+    try {
+        const projectActualServices = await ProjectServiceModel.findOne({ 
+            where: { 
+                projectId: projectId,
+                serviceId: serviceId
+            }
+        })
+        if(projectActualServices) { 
+            return res.status(404).send("El servicio que estas intentando añadirle al proyecto ya forma parte del mismo")
+        }
+        next()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+

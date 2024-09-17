@@ -34,7 +34,7 @@ const ClientFollowUpModal = ({clientId}: Props) => {
   return (
     <div>
          <button className="btn-btn" onClick={handleOpen}>Seguimientos</button>
-         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+         <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"2xl"}>
             <ModalContent>
             {(onClose) => (
                 <>

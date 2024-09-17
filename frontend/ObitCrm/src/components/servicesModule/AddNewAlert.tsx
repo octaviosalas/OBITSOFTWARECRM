@@ -16,14 +16,7 @@ const AddNewAlert = () => {
                <div>
                     <form id="alertForm">
                         <h2>Crear Alerta</h2>
-                        <div className="form-group mt-4">
-                            <label >Tipo de Alerta:</label>
-                            <select id="alertType" name="alertType" required>
-                                <option value="">Seleccionar</option>
-                                <option value="Email">Email</option>
-                                <option value="SMS">SMS</option>
-                            </select>
-                        </div>
+                     
 
                         <div className="form-group">
                             <label >Fecha y Hora:</label>
