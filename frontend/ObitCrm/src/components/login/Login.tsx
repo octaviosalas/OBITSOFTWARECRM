@@ -1,6 +1,3 @@
-//saber si tiene proximo llamado a algun cliente hoy
-//saber si hay alguna notificacion hoy
-
 import { useState } from "react"
 import apiBackendUrl from "../../lib/axiosData"
 import { userLoginType } from "../../types/User"
@@ -10,6 +7,7 @@ import { shootSuccesToast } from "../../utils/succesToastFunction"
 import SpinnerComponent from "../Spinner/Spinner"
 import { userStore } from "../../store/UserAccount"
 import "./login.css"
+import obitLogo from "../../images/obitLogo.png"
 
 const Login = () => { 
 
@@ -18,7 +16,7 @@ const Login = () => {
     const [load, setLoad] = useState<boolean>(false)
     const navigate = useNavigate()
 
-    const {setUserAccountData, updateNotifications} = userStore()
+    const {setUserAccountData, updateNotifications, setUserAlertsData} = userStore()
 
 
     const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => { 
@@ -44,12 +42,16 @@ const Login = () => {
                  navigate(`/projects`)
                  setUserAccountData(data.data)
                  updateNotifications(data.notifications)
+                 setUserAlertsData(data.dateAlerts)
                  if(data.notifications.length > 0 ) { 
                   const quantityNotifications = data.notifications.length
                     {quantityNotifications === 1 ? 
                       shootSuccesToast(`Tenes ${quantityNotifications} notificacion sin leer`) :  
                       shootSuccesToast(`Tenes ${quantityNotifications} notificaciones sin leer`)
                     }               
+                  }
+                  if(data.dateAlerts.length > 0) { 
+                    shootSuccesToast(`Tenes alertas registradas para hoy`) 
                   }
             }
         } catch (error) {
@@ -60,28 +62,34 @@ const Login = () => {
     }
 
     return ( 
+      <> 
+       
         <main className="main-content">
-        <div className="form-container">
-          <h2>Inicio de Sesión</h2>
-          <form className="login-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input type="email" id="email" name="email" required value={email} onChange={handleChangeEmail}/>
+            <div className="form-container">
+              <div className="flex items-center justify-center">
+                  <img src={obitLogo} className="h-14 w-14"/>
+              </div>
+              <h2 className="mt-4">Inicio de Sesión</h2>
+              <form className="login-form" onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input type="email" id="email" name="email" required value={email} onChange={handleChangeEmail}/>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required value={password} onChange={handleChangePassword}/>
+                  </div>
+                    {!load ? <button type="submit" className="submit-button">Iniciar Sesión</button> : <SpinnerComponent/>}
+                  <div className="forgot-password">
+                    <a href="/forgot-password" className="link">¿Olvidaste tu contraseña?</a>
+                  </div>
+                  <div className="register-link">
+                    <a href="/register" className="link">¿Aún no tienes cuenta? Regístrate</a>
+                  </div>
+              </form>
             </div>
-            <div className="form-group">
-              <label htmlFor="password">Contraseña</label>
-              <input type="password" id="password" name="password" required value={password} onChange={handleChangePassword}/>
-            </div>
-              {!load ? <button type="submit" className="submit-button">Iniciar Sesión</button> : <SpinnerComponent/>}
-            <div className="forgot-password">
-              <a href="/forgot-password" className="link">¿Olvidaste tu contraseña?</a>
-            </div>
-            <div className="register-link">
-              <a href="/register" className="link">¿Aún no tienes cuenta? Regístrate</a>
-            </div>
-          </form>
-        </div>
       </main>
+      </>
     )
 }
 

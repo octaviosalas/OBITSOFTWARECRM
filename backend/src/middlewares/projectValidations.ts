@@ -141,9 +141,8 @@ export const validateIfFollowUpWasCreatedByUser = async (req: Request, res: Resp
         next()
       }
 
-    
-
   } catch (error) {
       res.status(500).json("Hubo un error en el midddleware")
   }
 } 
+

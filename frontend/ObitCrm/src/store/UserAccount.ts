@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { UserTypeData } from "../types/User";
 import { notificationsType } from "../types/User";
+import { userAlertsType } from "../types/Alerts";
 
 type UserAccountStore = { 
     user: UserTypeData | null;
@@ -8,7 +9,8 @@ type UserAccountStore = {
     userNotifications: notificationsType[] | [];
     updateNotifications: (data: notificationsType[] | []) => void;
     markNotificationAsRead: (id: number) => void; 
-
+    userAlerts: userAlertsType[] | [];
+    setUserAlertsData: (data: userAlertsType[] | []) => void;
 };
 
 export const userStore = create<UserAccountStore>((set) => ({
@@ -19,16 +21,21 @@ export const userStore = create<UserAccountStore>((set) => ({
         localStorage.setItem('user', JSON.stringify(data));
     },
 
+    setUserAlertsData: (data: userAlertsType[] | []) => {
+        set({ userAlerts: data });
+        localStorage.setItem('userAlerts', JSON.stringify(data));
+    },
+
     userNotifications: [],
 
+    userAlerts: [],
+
     updateNotifications: (data: notificationsType[] | []) => { 
-        console.log("Estas son las notificaciones que recibio el store para setearlas", data)
         set({userNotifications: data})
         localStorage.setItem('notifications', JSON.stringify(data));
     },
 
     markNotificationAsRead: (id: number) => {
-        console.log("Me llego este id para eliminar del store de notifiaciones1", id)
         set((state) => {
             const updatedNotifications = state.userNotifications.filter(
                 (notification : notificationsType) => notification.id !== id

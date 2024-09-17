@@ -25,15 +25,17 @@ export const validateIfClientEmailNotExist = async (req: Request, res: Response,
 export const validateClientExistense = async (req: Request, res: Response, next: NextFunction) => { 
 
     const {clientId} = req.params
+    console.log("comprobando existensia del cliente", clientId)
 
     try {
         const clientSelected = await ClientModel.findByPk(clientId)
-        if(clientSelected) { 
-            next()
-        } else { 
-            res.status(404).send("El cliente no existe almacenado en la base de datos")
-        }
+        if(!clientSelected) { 
+            return res.status(404).send("El cliente no existe almacenado en la base de datos")
+        }   
+       next()
+
     } catch (error) {
+        console.log("error en validateClientExistense")
         res.status(500).send(error)
 
     }

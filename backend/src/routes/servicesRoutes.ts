@@ -1,10 +1,12 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
-import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId, validateProjectServiceExist, validateIfServiceNotExistOnProjectsServices } from "../middlewares/servicesValidations"
-import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects, updateServiceEndDate, updateProjectServiceData } from "../controllers/services"
+import { validateServiceExistence, validateServiceNotExist, validateServiceExistenceWithId, 
+        validateProjectServiceExist, validateIfServiceNotExistOnProjectsServices, validateIfProjectSelectedIsClientSelectedProject } from "../middlewares/servicesValidations"
+import { createService, deleteService, updateServiceName, servicesWorkingOnUserProjects, updateServiceEndDate, updateProjectServiceData, createNewProjectService } from "../controllers/services"
 import { validateUserExistWithId } from "../middlewares/userValidations"
 import { validateProjectExistenceWithId } from "../middlewares/projectValidations"
+import { validateClientExistense } from "../middlewares/clientsValidations"
 
 const router = Router()
 
@@ -61,8 +63,10 @@ router.post("/addServiceNewToProject/:projectId/:serviceId/:clientId",
     param("clientId").notEmpty().withMessage("Debes indicar a que clienete le corresponde este servicio"),
     errorsHanlder,
     validateProjectExistenceWithId,
+    validateClientExistense,
+    validateIfProjectSelectedIsClientSelectedProject,
     validateIfServiceNotExistOnProjectsServices,
-
+    createNewProjectService
 )
 
 export default router

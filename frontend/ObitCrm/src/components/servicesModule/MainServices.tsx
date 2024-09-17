@@ -63,7 +63,7 @@ const MainServices =  () => {
            <CreateNewService/>
            <button className="btn-configure-alert" onClick={() => setMenu("services")}>Ver Servicios</button>
            <button className="btn-configure-alert" onClick={() => setMenu("expirations")}>Ver Próximos Vencimientos</button>
-           <AddNewService/>
+           <AddNewService update={getUserServices}/>
            <AddNewAlert/>
         </div>
        

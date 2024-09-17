@@ -10,6 +10,7 @@ import Register from './components/register/Register';
 import ProjectMainDetail from './components/proyect/ProjectMainDetail';
 import ProjectMain from './components/proyect/MainProject/ProjectMain';
 import MainServices from './components/servicesModule/MainServices';
+import MainfollowsUp from './components/FollowsUp/MainFollowsUp';
 import { userStore } from './store/UserAccount';
 import { Navigate } from 'react-router-dom';
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/projects" element={<ProjectMain />} />   
           <Route path="/projectDetail/:projectId" element={<ProjectMainDetail />} />   
           <Route path="/services" element={<MainServices />} />   
+          <Route path="/followsUp" element={<MainfollowsUp />} />   
 
         </Routes>
     <ToastContainer />

@@ -11,6 +11,8 @@ import ClientModel from "../models/clients";
 import ProjectServiceModel from "../models/projectServices";
 import ServicesModel from "../models/services";
 import UserClientAccesModel from "../models/UserClientAcces";
+import AlertsModel from "../models/alerts";
+import { currentDate } from "../utils/transformDate";
 
 //CREAR UN NUEVO USUARIO
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
@@ -35,6 +37,7 @@ export const createUser = async (req: Request, res: Response): Promise <void> =>
 export const loginValidator = async (req: Request, res: Response) => { 
     
     const {email, password} = req.body
+    const today = currentDate()
     
     try {
         const user = await UserModel.findOne({ 
@@ -75,7 +78,21 @@ export const loginValidator = async (req: Request, res: Response) => {
                    }
                 })
 
-                return res.status(200).json({message: "Iniciaste sesion correctamente", data: user, notifications: unreadNotifications, order: notificationsOrdered})
+                const userAlerts = await AlertsModel.findAll({ 
+                    where: { 
+                      userId: user.id
+                    }
+                  });
+                  
+                  const today = new Date().toISOString().split('T')[0];  
+                  
+                  const todayAlerts = userAlerts.filter((alert) => {
+                    const alertDate = new Date(alert.date).toISOString().split('T')[0]; 
+                    return alertDate === today;
+                  });
+                  
+
+                return res.status(200).json({message: "Iniciaste sesion correctamente", data: user, notifications: unreadNotifications, order: notificationsOrdered, dateAlerts: todayAlerts})
             }
         
     } catch (error) {

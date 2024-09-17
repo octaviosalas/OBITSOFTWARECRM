@@ -130,3 +130,29 @@ export const updateProjectServiceData = async (req: Request, res: Response): Pro
       res.status(500).send(error)
    }
 }
+
+export const createNewProjectService = async (req: Request, res: Response): Promise <void> => { 
+
+    const {projectId, serviceId} = req.params
+    const {startDate, endDate, amount} = req.body
+
+    const projectSelected = await ProjectModel.findByPk(projectId)
+    const projectName = projectSelected.name
+
+
+   try {
+      const projectService = new ProjectServiceModel({ 
+        projectId: projectId,
+        serviceId: serviceId,
+        startDate: startDate,
+        endDate: endDate,
+        amount: Number(amount)
+      })
+     await projectService.save()
+     res.status(200).send(`Se añadio correctamente el servicio para el proyecto ${projectName}`)
+
+   } catch (error) {
+       console.log("error en el endpoint createNewProjectService")
+      res.status(500).send(error)
+   }
+}

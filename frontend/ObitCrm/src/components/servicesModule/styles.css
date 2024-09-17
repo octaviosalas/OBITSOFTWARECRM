@@ -24,10 +24,12 @@ body {
     gap: 5px;
 }
 
+
+
 .btn-new-service, .btn-configure-alert, .btn-toggle-tables {
-    background-color: #007bff;
+    background-color: #28a745;
+    color: #fff;
     border: none;
-    color: white;
     padding: 10px 20px;
     cursor: pointer;
 }

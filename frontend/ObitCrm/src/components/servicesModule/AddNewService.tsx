@@ -2,13 +2,19 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDis
 import "./styles.css"
 import apiBackendUrl from "../../lib/axiosData";
 import { userStore } from "../../store/UserAccount";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import handleError from "../../utils/axiosErrorHanlder";
 import { clientDataType } from "../../types/Clients";
 import { ProjectUserClientsData } from "../../types/Projects";
 import { servicesDataType } from "../../types/Services";
+import { shootSuccesToast } from "../../utils/succesToastFunction";
+import SpinnerComponent from "../Spinner/Spinner";
 
-const AddNewService = () => { 
+interface Props { 
+  update: () => void
+}
+
+const AddNewService = ({update}: Props) => { 
 
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
     const {user} = userStore()
@@ -92,35 +98,32 @@ const AddNewService = () => {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedService = JSON.parse(e.target.value);
-      console.log("ID RECIBIDO EN SERVICEREFERENCE", selectedService.id);
-      console.log("NAME RECIBIDO EN SERVICEREFERENCE", selectedService.name);
       setServiceName(selectedService.name);
       setServiceReference(selectedService.id);
   };
 
     const addServiceToProject = async () => { 
        setLoad(true)
+       const projectId = projectReference
+       const serviceId = serviceReference
+       const clientId = clientReference
        const newServiceProject = ({ 
          endDate: serviceEndDate,
          startDate: serviceStartDate,
          amount: amount
        })
-       const projectId = projectReference
-       const serviceId = serviceReference
-       const clientId = clientReference
       try {
           const {data, status} = await apiBackendUrl.post(`/service/addServiceNewToProject/${projectId}/${serviceId}/${clientId}`, newServiceProject)
           if(status === 200) { 
+            update()
             setLoad(false)
+            shootSuccesToast(data)
             onClose()
-            console.log(data)
           }
        } catch (error) {
-          console.log(error)
           handleError(error, setLoad)
        }
     }
-
 
 
     
@@ -141,7 +144,7 @@ const AddNewService = () => {
                               {filteredClientsNames.length > 0 ?
                                  <div className="flex flex-col mt-2 shadow-lg">
                                      {filteredClientsNames.map((clients: clientDataType) => (  
-                                        <p key={clients.id} className="mt-1 cursor-pointer" onClick={() => chooseClient(clients.id, clients.clientData.name)}>{clients.clientData.name}</p>
+                                        <p key={clients.id} className="mt-1 cursor-pointer" onClick={() => chooseClient(clients.clientId, clients.clientData.name)}>{clients.clientData.name}</p>
                                      ))}
                                 </div> : null}
                           </div>
@@ -183,10 +186,14 @@ const AddNewService = () => {
                               <input type="number" id="amount" name="amount" step="0.01" required onChange={(e) => setAmount(e.target.value)}/>
                           </div>
 
+                         {!load ?
                           <div className="form-buttons">
                               <button type="button" className="btn-submit" onClick={() => addServiceToProject()}>Guardar</button>
                               <button type="button" className="btn-cancel" id="closeServiceSection">Cancelar</button>
-                          </div>
+                          </div> : 
+                          <div className="flex items-center justify-center mt-4 mb-2">
+                             <SpinnerComponent/>
+                          </div>}
                 </form>
               </ModalBody>
             </>

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import ServicesModel from "../models/services";
 import ProjectServiceModel from "../models/projectServices";
+import ProjectModel from "../models/projects";
 
 export const validateServiceExistence = async (req: Request, res: Response, next: NextFunction) => { 
     
@@ -80,8 +81,7 @@ export const validateProjectServiceExist = async (req: Request, res: Response, n
 
 export const validateIfServiceNotExistOnProjectsServices = async (req: Request, res: Response, next: NextFunction) => { 
     const {serviceId, projectId} = req.params
-    console.log("serviceId", serviceId)
-    console.log("projectId", projectId)
+  
 
     try {
         const projectActualServices = await ProjectServiceModel.findOne({ 
@@ -95,9 +95,26 @@ export const validateIfServiceNotExistOnProjectsServices = async (req: Request, 
         }
         next()
     } catch (error) {
+        console.log("error en validateIfServiceNotExistOnProjectsServices")
         console.log(error)
     }
 }
 
+export const validateIfProjectSelectedIsClientSelectedProject = async (req: Request, res: Response, next: NextFunction) => { 
+    
+    const {projectId, clientId} = req.params
+    
+    try {
+        const projectSelected = await ProjectModel.findByPk(projectId)
 
+        if(projectSelected.client !== Number(clientId)) { 
+          return res.status(404).send("El cliente que elegiste no es el cliente correspondiente al proyecto elegido")
+        }
+        next()
+  
+    } catch (error) {
+        console.log("error en validateIfProjectSelectedIsClientSelectedProject")
+        res.status(500).json("Hubo un error en el midddleware")
+    }
+  }
 
