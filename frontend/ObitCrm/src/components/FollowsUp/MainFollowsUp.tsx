@@ -7,6 +7,7 @@ import apiBackendUrl from "../../lib/axiosData"
 import { useEffect, useState } from "react"
 import { userFollowsUpType } from "../../types/FollowsUp"
 import handleError from "../../utils/axiosErrorHanlder"
+import SpinnerComponent from "../Spinner/Spinner"
 
 const MainfollowsUp = () => { 
     
@@ -34,7 +35,10 @@ const MainfollowsUp = () => {
 
     return ( 
         <div>
-            <div className="custom-header">
+
+           {!load ? 
+           <>
+           <div className="custom-header">
                 <div className="header-container">
                 <div id="modals-container">
                         <AddNewFollowUp updateTable={getUserFollowsUp}/>
@@ -43,16 +47,20 @@ const MainfollowsUp = () => {
                 </div>
             </div>
     
-        <div className="search-bar">
-            <input type="text" placeholder="Buscar seguimientos..." />
-        </div>
-    
-        <div id="table-container">
-            <FollowsUpTable userFollowsUpData={userFollowsUpData}/>
-        </div>
-
-
+            <div className="search-bar">
+                <input type="text" placeholder="Buscar seguimientos..." />
             </div>
+        
+            <div id="table-container">
+                <FollowsUpTable userFollowsUpData={userFollowsUpData}/>
+            </div>
+           </>  : 
+           <div className="mt-36">
+             <SpinnerComponent/>
+           </div>
+           }
+
+        </div>
     )
 }
 

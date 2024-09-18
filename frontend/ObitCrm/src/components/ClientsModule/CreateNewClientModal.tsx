@@ -94,7 +94,7 @@ const CreateNewClientModal = ({resetTableData} : Props) => {
 
   return (
     <>
-      <button onClick={onOpen}>Nuevo</button>
+      <button onClick={onOpen}>Nuevo Cliente</button>
       
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"2xl"}>
         <ModalContent>

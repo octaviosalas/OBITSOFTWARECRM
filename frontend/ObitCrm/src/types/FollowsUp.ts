@@ -12,6 +12,8 @@ export type userFollowsUpType = {
    userId:1
 }
 
+export type clientHistoricFollowUpType = Omit<userFollowsUpType, | "clientData">
+
 export type newFollowUpType = { 
    contactDate:string
    nextContactDate: string

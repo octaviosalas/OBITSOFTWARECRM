@@ -6,9 +6,9 @@ body {
 }
 
 .top-bar, .bottom-bar {
-    width: 100%;
+
     padding: 10px;
-    background-color: #87CEFA;
+    background-color: #333;
     color: white;
     display: flex;
     align-items: center;
@@ -16,24 +16,24 @@ body {
 
 .top-bar {
     justify-content: flex-start;
+    background-color: #333;
 }
 
 .bottom-bar {
     justify-content: flex-start;
+    background-color: #333;
+    
 }
 
 .top-bar button {
-    background-color: #4682b4;
+    background-color:  #28a745;
     color: white;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
-    border-radius: 5px;
 }
 
-.top-bar button:hover {
-    background-color: #4169e1;
-}
+
 
 .bottom-bar input {
     width: 300px;
