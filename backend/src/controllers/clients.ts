@@ -140,6 +140,29 @@ export const createNewClientFlowUp = async (req: Request, res: Response): Promis
    }
 }
 
+
+export const myHistoricFollowsUp = async (req: Request, res: Response): Promise <void> => { 
+   
+   const {userId} = req.params
+
+   try {
+       const userFollowsUp = await FollowUpClientsModel.findAll({ 
+         where: { 
+            userId: userId,
+         },
+         include: [{
+            model: ClientModel,
+            as: "clientData"
+         }]
+       })
+       res.status(200).send(userFollowsUp)
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}
+
+
+
 export const getMyCustomerClientHistoricTracking = async (req: Request, res: Response): Promise <void> => { 
    
    const {userId, clientId} = req.params

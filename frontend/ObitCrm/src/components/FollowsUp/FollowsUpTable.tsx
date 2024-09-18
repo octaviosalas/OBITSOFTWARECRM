@@ -1,6 +1,11 @@
+import { userFollowsUpType } from "../../types/FollowsUp"
 import "./styles.css"
 
-const FollowsUpTable = () => { 
+interface Props { 
+    userFollowsUpData: userFollowsUpType[] | []
+}
+
+const FollowsUpTable = ({userFollowsUpData}: Props) => { 
     return ( 
         <div>
            <table className="trackings-table">
@@ -15,10 +20,11 @@ const FollowsUpTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Cliente A</td>
-                        <td>2024-08-01 Detalles aquí</td>
-                        <td>2024-09-01 Detalles aquí</td>
+                   {userFollowsUpData.map((us : userFollowsUpType) => (  
+                    <tr key={us.id}>
+                        <td>{us.clientData.name}</td>
+                        <td>{us.contactDate}</td>
+                        <td>{us.nextContactDate}</td>
                         <td>Información adicional</td>
                         <td><button className="btn-action view-history" data-client="Cliente A">Ver Histórico</button></td>
                         <td>
@@ -27,6 +33,7 @@ const FollowsUpTable = () => {
                             <button className="btn-action details" data-client="Cliente A"><i className="fas fa-eye"></i></button>
                         </td>
                     </tr>
+                   ))}
                 </tbody>
            </table>
         </div>

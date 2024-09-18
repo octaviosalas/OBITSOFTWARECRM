@@ -2,7 +2,7 @@ import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { createClient, clientData, everyClients, deleteClient, updateMyCustomerClientTracking,
-         updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking,
+         updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking, myHistoricFollowsUp,
          deleteMyCustomerClientTracking } from "../controllers/clients"
 import { 
     validateIfClientEmailNotExist, validateClientExistense, 
@@ -67,6 +67,14 @@ router.post("/createClientFollowUp/:clientId/:userId",
     validateClientExistense,
     validateUserExistWithId,
     createNewClientFlowUp
+)
+
+
+router.get("/myHistoricFollowsUp/:userId",
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateUserExistWithId,
+    myHistoricFollowsUp
 )
 
 router.get("/myCustomerClientTracking/:clientId/:userId",
