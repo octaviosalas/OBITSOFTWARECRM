@@ -1,4 +1,5 @@
 import { userFollowsUpType } from "../../types/FollowsUp"
+import { formateDate } from "../../utils/transformDate"
 import "./styles.css"
 
 interface Props { 
@@ -11,10 +12,10 @@ const FollowsUpTable = ({userFollowsUpData}: Props) => {
            <table className="trackings-table">
                 <thead>
                     <tr>
-                        <th>Referencia Cliente</th>
+                        <th>Cliente</th>
                         <th>Última Comunicación</th>
                         <th>Próxima Comunicación</th>
-                        <th>Información Adicional</th>
+                        <th>Nota</th>
                         <th>Histórico</th>
                         <th>Acciones</th>
                     </tr>
@@ -23,9 +24,9 @@ const FollowsUpTable = ({userFollowsUpData}: Props) => {
                    {userFollowsUpData.map((us : userFollowsUpType) => (  
                     <tr key={us.id}>
                         <td>{us.clientData.name}</td>
-                        <td>{us.contactDate}</td>
-                        <td>{us.nextContactDate}</td>
-                        <td>Información adicional</td>
+                        <td>{formateDate(us.contactDate)}</td>
+                        <td>{formateDate(us.nextContactDate)}</td>
+                        <td>{us.note}</td>
                         <td><button className="btn-action view-history" data-client="Cliente A">Ver Histórico</button></td>
                         <td>
                             <button className="btn-action edit" data-client="Cliente A"><i className="fas fa-pencil-alt"></i></button>

@@ -1,13 +1,91 @@
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {Modal, ModalContent, useDisclosure} from "@nextui-org/react";
 import "./styles.css"
+import React, { useEffect, useState } from "react";
+import { newFollowUpType } from "../../types/FollowsUp";
+import apiBackendUrl from "../../lib/axiosData";
+import { userStore } from "../../store/UserAccount";
+import handleError from "../../utils/axiosErrorHanlder";
+import { clientPersonalDataType } from "../../types/Clients";
+import { getCurrentDateWithoutTime } from "../../utils/actualDate";
+import SpinnerComponent from "../Spinner/Spinner";
+import { shootSuccesToast } from "../../utils/succesToastFunction";
 
-const AddNewFollowUp = () => {
+interface Props { 
+    updateTable: () => void
+}
+
+const AddNewFollowUp = ({updateTable}: Props) => {
 
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
+  const [everyClientsData, setEveryClientsData] = useState<clientPersonalDataType[] | []>([])
+  const [load, setLoad] = useState<boolean>(false)
+  const [note, setNote] = useState<string>("")
+  const [contactDate, setContactDate] = useState<string>(getCurrentDateWithoutTime())
+  const [nextContactDate, setNextContactDate] = useState<string>("")
+  const [clientId, setClientId] = useState<number>()
+  const [clientName, setClientName] = useState<string>("")
+
+  const {user} = userStore()
+
+    const handleOpen = () => { 
+        getClientsAccesUserData()
+        onOpen()
+    }
+
+    const getClientsAccesUserData = async () => { 
+        setLoad(true)
+        try {
+            const {data, status} = await apiBackendUrl.get(`/user/userClientAcces/${user?.id}`)
+            if(status === 200) { 
+                const clientsOnlyData = data.map((c : any) => { 
+                    const onlyClientsData = c.clientData
+                    return onlyClientsData
+                })
+                setLoad(false)
+                setEveryClientsData(clientsOnlyData)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const chooseClient = (id: number) => { 
+        setClientId(id)
+    }
+
+    const handleChangeNote = (e: React.ChangeEvent<HTMLTextAreaElement>) => { 
+        setNote(e.target.value)
+    }
+
+    const createNewFollowUp = async () => {
+        setLoad(true)
+        const followUpData : newFollowUpType = ({ 
+            note,
+            contactDate,
+            nextContactDate
+        })
+        console.log(followUpData)
+        console.log("id cliente", clientId)
+        console.log("id usuario", user?.id)
+       try {
+            const {data, status} = await apiBackendUrl.post(`/client/createClientFollowUp/${clientId}/${user?.id}`, followUpData)
+            if(status === 200) { 
+                setLoad(false)
+                updateTable()
+                console.log(data)
+                onClose()
+                shootSuccesToast(data)
+            }
+        } catch (error) {
+            handleError(error, setLoad)
+        }
+    }
+
+
 
   return (
     <>
-      <button className="btn-new-tracking" id="openTrackingSection" onClick={onOpen}> Agregar Seguimiento </button>
+      <button className="btn-new-tracking" id="openTrackingSection" onClick={handleOpen}> Agregar Seguimiento </button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"3xl"}>
         <ModalContent>
           {(onClose) => (
@@ -16,46 +94,40 @@ const AddNewFollowUp = () => {
                     <div className="form-section">
                         <button className="btn-close" id="closeTrackingSection" onClick={() => onClose()}>&times;</button>
                         <h2>Agregar/Editar Seguimiento</h2>
-                        <form id="trackingForm">
+                        <div id="trackingForm">
                             <div className="form-row">
                                 <div className="form-col">
                                     <div className="form-group">
                                         <label >Referencia al Cliente:</label>
-                                        <input type="text" id="clientRef" name="clientRef" required/>
+                                        <select  id="clientRef" name="clientRef" required onChange={(e) => chooseClient(Number(e.target.value))}>
+                                           {everyClientsData.map((c : clientPersonalDataType) => ( 
+                                              <option key={c.id} value={c.id}>{c.name}</option>
+                                           ))}
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="form-col">
                                     <div className="form-group">
-                                        <label >Última Comunicación (Fecha):</label>
-                                        <input type="date" id="lastCommDate" name="lastCommDate" required/>
+                                        <label >Fecha de Registro:</label>
+                                        <input type="date" id="nextCommDate" name="nextCommDate" required value={contactDate} onChange={(e) => setContactDate(e.target.value)}/>
                                     </div>
                                 </div>
+                               
                                 <div className="form-col">
                                     <div className="form-group">
                                         <label >Próxima Comunicación (Fecha):</label>
-                                        <input type="date" id="nextCommDate" name="nextCommDate" required/>
+                                        <input type="date" id="nextCommDate" name="nextCommDate" required onChange={(e) => setNextContactDate(e.target.value)}/>
                                     </div>
                                 </div>
                             </div>
                             <div className="form-row">
                                 <div className="form-col">
                                     <div className="form-group">
-                                        <label >Última Comunicación (Detalles):</label>
-                                        <textarea id="lastCommDetails" name="lastCommDetails"></textarea>
+                                        <label >Nota del seguimiento</label>
+                                        <textarea id="lastCommDetails" name="lastCommDetails" onChange={handleChangeNote}></textarea>
                                     </div>
                                 </div>
-                                <div className="form-col">
-                                    <div className="form-group">
-                                        <label >Próxima Comunicación (Detalles):</label>
-                                        <textarea id="nextCommDetails" name="nextCommDetails"></textarea>
-                                    </div>
-                                </div>
-                                <div className="form-col">
-                                    <div className="form-group">
-                                        <label >Información Adicional:</label>
-                                        <textarea id="additionalInfo" name="additionalInfo"></textarea>
-                                    </div>
-                                </div>
+                                                            
                             </div>
                             <div className="form-row">
                                 <div className="form-col">
@@ -71,11 +143,16 @@ const AddNewFollowUp = () => {
                                     </div>
                                 </div>
                             </div>
+                            {!load ? 
                             <div className="form-buttons">
-                                <button type="submit" className="btn-submit">Guardar</button>
-                                <button type="button" className="btn-cancel" id="closeTrackingSection">Cancelar</button>
+                                <button  className="btn-submit" onClick={() => createNewFollowUp()}>Guardar</button>
+                                <button type="button" className="btn-cancel" id="closeTrackingSection" onClick={() => onClose()}>Cancelar</button>
+                            </div> : 
+                            <div className="flex items-center justify-center mt-2 mb-2">
+                               <SpinnerComponent/>
                             </div>
-                        </form>
+                            }
+                        </div>
                     </div>
                </div>
             </>

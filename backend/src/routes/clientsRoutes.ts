@@ -69,7 +69,6 @@ router.post("/createClientFollowUp/:clientId/:userId",
     createNewClientFlowUp
 )
 
-
 router.get("/myHistoricFollowsUp/:userId",
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
     errorsHanlder,

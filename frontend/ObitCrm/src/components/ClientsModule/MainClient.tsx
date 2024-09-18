@@ -8,7 +8,6 @@ import apiBackendUrl from "../../lib/axiosData";
 import ClientFollowUpModal from "./ClientFollowUpModal";
 import ClientDeleteModal from "./ClientDeleteModal";
 import { userStore } from "../../store/UserAccount";
-import { pruebaType } from "../../types/Clients";
 import SpinnerComponent from "../Spinner/Spinner";
 import WithOutAcces from "../reusableComponents/withOutAcces";
 
@@ -29,7 +28,7 @@ const MainClient = () => {
             console.log("getClientsAccesUserData", data)            
             if(status === 200) { 
                 console.log("getClientsAccesUserData", data)   
-                const clientsOnlyData = data.map((c : pruebaType) => { 
+                const clientsOnlyData = data.map((c : any) => { 
                     const onlyClientsData = c.clientData
                     return onlyClientsData
                 })

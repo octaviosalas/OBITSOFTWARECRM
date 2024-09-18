@@ -37,7 +37,7 @@ const MainfollowsUp = () => {
             <div className="custom-header">
                 <div className="header-container">
                 <div id="modals-container">
-                        <AddNewFollowUp/>
+                        <AddNewFollowUp updateTable={getUserFollowsUp}/>
                         <SendEmail/>
                 </div>
                 </div>

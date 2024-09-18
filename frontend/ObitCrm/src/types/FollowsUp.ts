@@ -11,3 +11,9 @@ export type userFollowsUpType = {
    updatedAt:string
    userId:1
 }
+
+export type newFollowUpType = { 
+   contactDate:string
+   nextContactDate: string
+   note:string
+}
