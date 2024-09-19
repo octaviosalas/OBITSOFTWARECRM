@@ -1,6 +1,7 @@
 import { userFollowsUpType } from "../../types/FollowsUp"
 import { formateDate } from "../../utils/transformDate"
 import "./styles.css"
+import ViewAllFollowUpNote from "./ViewAllFollowUpNote"
 import ViewClientHistoricFollowUp from "./ViewClientHistoricFollowUp"
 
 interface Props { 
@@ -27,7 +28,12 @@ const FollowsUpTable = ({userFollowsUpData}: Props) => {
                         <td>{us.clientData.name}</td>
                         <td>{formateDate(us.contactDate)}</td>
                         <td>{formateDate(us.nextContactDate)}</td>
-                        <td>{us.note}</td>
+                        <td className="border b-2">
+                                {us.note.length > 50
+                                ? `${us.note.slice(0, 50)}... ` 
+                                : us.note}
+                                {us.note.length > 50 &&  <ViewAllFollowUpNote message={us.note}/>}
+                            </td>                        
                         <td><ViewClientHistoricFollowUp clientId={Number(us.clientData.id)} clientName={us.clientData.name}/></td>
                         <td>
                             <button className="btn-action edit" data-client="Cliente A"><i className="fas fa-pencil-alt"></i></button>
