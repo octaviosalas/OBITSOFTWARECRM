@@ -10,10 +10,11 @@ import { formateDate } from "../../utils/transformDate";
 
 interface Props { 
     clientId: number,
-    clientName: string
+    clientName: string,
+    type: string
 }
 
-const ViewClientHistoricFollowUp = ({clientId, clientName}: Props) => {
+const ViewClientHistoricFollowUp = ({clientId, clientName, type}: Props) => {
 
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
   const [load, setLoad] = useState<boolean>(false)
@@ -37,7 +38,11 @@ const ViewClientHistoricFollowUp = ({clientId, clientName}: Props) => {
 
   return (
     <>
-      <p onClick={handleOpen} className="cursor-pointer">Ver Historico</p>
+      {type === "onTable" ? 
+        <button className="btn-action details" data-client="Cliente A"><i onClick={handleOpen} className="fas fa-eye" style={{color:"blue"}}></i></button>
+         : 
+        <p onClick={handleOpen} className="open-history-modal cursor-pointer underline" style={{color:"#003366"}}>Ver Histórico</p>
+       }
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"3xl"}>
         <ModalContent>
           {(onClose) => (

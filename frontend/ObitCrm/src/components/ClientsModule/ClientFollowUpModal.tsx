@@ -46,7 +46,7 @@ const ClientFollowUpModal = ({clientId}: Props) => {
                     </div> : 
                     <div className="modal-content">
                      
-                                    <h2>Seguimientos del Cliente</h2>
+                                 <h2>Seguimientos del Cliente</h2>
                                   {clientFollowUpData && clientFollowUpData.length > 0 ?
                                     <table id="clientes-table">
                                         <thead>

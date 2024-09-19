@@ -1,7 +1,7 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
-import { createClient, clientData, everyClients, deleteClient, updateMyCustomerClientTracking,
+import { createClient, clientData, everyClients, deleteClient, updateMyCustomerClientTracking, updateFollowUpMessage,
          updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking, myHistoricFollowsUp,
          deleteMyCustomerClientTracking } from "../controllers/clients"
 import { 
@@ -89,6 +89,9 @@ router.put("/updateMyTrackingData/:trackingId/:clientId/:userId",
     param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
     param("trackingId").notEmpty().withMessage("Debes indicar cual de tus anotaciones deseas modificar"),
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    body("note").notEmpty().withMessage("Debes asentar un mensaje para el seguimiento"),
+    body("contactDate").notEmpty().withMessage("Debes indicar una fecha de contacto"),
+    body("nextContactDate").notEmpty().withMessage("Debes indicar una fecha de proximo contacto"),
     errorsHanlder,
     validateClientExistense,
     validateUserExistWithId,
@@ -96,6 +99,20 @@ router.put("/updateMyTrackingData/:trackingId/:clientId/:userId",
     validateTrackingToClientWasCreatedByUser,
     updateMyCustomerClientTracking
 )
+
+router.put("/updateFollowUpMessage/:trackingId/:clientId/:userId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    param("trackingId").notEmpty().withMessage("Debes indicar cual de tus anotaciones deseas modificar"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    body("note").notEmpty().withMessage("Debes escribir una nota para el seguimiento"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    validateTrackingToClientExist,
+    validateTrackingToClientWasCreatedByUser,
+    updateFollowUpMessage
+)
+
 
 router.delete("/deleteMyTrackingData/:trackingId/:clientId/:userId",
     param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),

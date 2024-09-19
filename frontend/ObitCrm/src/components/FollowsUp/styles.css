@@ -5,7 +5,8 @@ body {
 
 #modals-container { 
     display: flex;
-    gap: 6px;
+    align-items: center;
+    gap: 10px;
 }
 
 .full-screen-section {
@@ -20,11 +21,22 @@ body {
     align-items: center;
     z-index: 9999;
 }
+
 .btn-new-tracking {
     background-color: #28a745;
     color: #fff;
     border: none;
     padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.btn-view-historic {
+    background-color: #4682b4;;
+    color: #fff;
+    border: none;
+    padding: 2px 2px;
     cursor: pointer;
 }
 

@@ -79,7 +79,7 @@ const ServicesTable =  ({servicesData, updateTable}: Props) => {
                         }
                         <td>
                             <EditService updateTable={updateTable} servicesData={serv} service={serv}/>
-                            <button className="btn-action delete"><i className="fas fa-trash-alt"></i></button>
+                            <button className="btn-action delete"><i className="fas fa-trash-alt" style={{color:"red"}}></i></button>
                         </td>
                    </tr>
                 ))}

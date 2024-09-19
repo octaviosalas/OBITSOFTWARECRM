@@ -75,7 +75,7 @@ const MainProjectTableData = ({projects, updateTable}: Props) => {
                             <td>
                             <EditProjectData projectData={project.projectData} updateTable={updateTable}/>
                             <DeleteProject projectId={project.projectData.id} updateTable={updateTable}/>
-                            <button className="btn-action details" onClick={() => redirectToProjectDetail(project.projectData.id)}><i className="fas fa-eye"></i></button>
+                            <button className="btn-action details" onClick={() => redirectToProjectDetail(project.projectData.id)}><i className="fas fa-eye" style={{color:"blue"}}></i></button>
                         </td>
                         </tr>
                     ))}
@@ -92,3 +92,5 @@ const MainProjectTableData = ({projects, updateTable}: Props) => {
 }
 
 export default MainProjectTableData
+
+

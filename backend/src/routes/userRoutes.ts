@@ -5,9 +5,10 @@ import { createUser, userData, everyUsers,
          updateUserData, deleteUserAccount, createMyReminder, 
          getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday, getProjectsAndClientsUser,
          deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces, userClientsAcces,
-         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator, createAcces } from "../controllers/user"
+         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator, createAcces, createUserAcces } from "../controllers/user"
 import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
 import { validateClientExistense } from "../middlewares/clientsValidations"
+import { validateProjectExistenceWithId } from "../middlewares/projectValidations"
 
 const router = Router()
 
@@ -207,6 +208,16 @@ router.get("/projectsAndClientsToCreateService/:userId",
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
     errorsHanlder,
     getProjectsAndClientsUser
+)
+
+
+router.post("/createNewUserAcces/:projectId/:userId", 
+    param("projectId").notEmpty().withMessage("Debes iniciar el proyecto al cual deseas dar acceso"),
+    param("userId").notEmpty().withMessage("Debes indicar a que usuario darle acceso"),
+    errorsHanlder,
+    validateProjectExistenceWithId,
+    validateUserExistWithId,
+    createUserAcces
 )
 
 

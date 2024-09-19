@@ -223,7 +223,7 @@ const EditProjectData =  ({projectData, updateTable}: Props) => {
   return (
     <>
 
-     <button className="btn-action edit"><i className="fas fa-pencil-alt"  onClick={handleOpen}></i></button>
+     <button className="btn-action edit"><i className="fas fa-pencil-alt"  onClick={handleOpen} style={{color:"#28a745"}}></i></button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}  size="2xl" className="max-h-[650px] 2xl:max-h-[920px] overflow-y-auto">
         <ModalContent >

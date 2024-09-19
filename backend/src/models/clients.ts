@@ -2,6 +2,7 @@ import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Def
 import FollowUpModel from "./projectPlanification"
 import ProjectModel from "./projects"
 import UserClientAccesModel from "./UserClientAcces"
+import FollowUpClientsModel from "./followUpClients"
 
 @Table({ 
     tableName: "clients",
@@ -56,6 +57,9 @@ class ClientModel extends Model {
     
     @HasMany(() => UserClientAccesModel, { foreignKey: 'clientId' }) 
     userAcces: UserClientAccesModel[]; 
+
+    @HasMany(() => FollowUpClientsModel, { foreignKey: 'client' }) 
+    followUpsClientsData: FollowUpModel[]; 
 }
 
 export default ClientModel

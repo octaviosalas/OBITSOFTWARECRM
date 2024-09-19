@@ -200,6 +200,24 @@ export const updateMyCustomerClientTracking = async (req: Request, res: Response
    }
 }
 
+export const updateFollowUpMessage = async (req: Request, res: Response): Promise <void> => { 
+   
+   const {userId, clientId, trackingId} = req.params
+   const {note} = req.body
+
+   try {
+       const dataTracking = await FollowUpClientsModel.findByPk(trackingId)
+       dataTracking.userId = Number(userId)
+       dataTracking.clientId = Number(clientId)
+       dataTracking.note = note
+       await dataTracking.save()
+       res.status(200).send("El mensaje del seguimiento fue correctamente actualizado")
+
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}
+
 export const deleteMyCustomerClientTracking = async (req: Request, res: Response): Promise <void> => { 
    
    const {trackingId} = req.params

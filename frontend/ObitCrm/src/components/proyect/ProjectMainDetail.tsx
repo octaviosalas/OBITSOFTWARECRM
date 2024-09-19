@@ -108,7 +108,9 @@ const ProjectMainDetail = () => {
              <ProjectInfoDetail 
               projectInformation={projectInformation} 
               projectServices={projectServices}
-              usersWithAcces={usersWithAcces}/>
+              usersWithAcces={usersWithAcces}
+              getProjectData={getProjectData}
+              />
            </div> : null
           }
 

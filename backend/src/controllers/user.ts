@@ -349,7 +349,6 @@ export const userCommunicationsForToday = async (req: Request, res: Response) =>
       
     const {userId} = req.params
     const actualDate = new Date()
-    console.log("actualDate", actualDate)
 
     const startOfDay = new Date(actualDate.setHours(0, 0, 0, 0));
     const endOfDay = new Date(actualDate.setHours(23, 59, 59, 999));
@@ -361,7 +360,11 @@ export const userCommunicationsForToday = async (req: Request, res: Response) =>
             nextContactDate: {
                 [Op.between]: [startOfDay, endOfDay]
             }
-        }
+        },
+        include: [{ 
+            model: ClientModel,
+            as: "clientData"
+        }]
      })
      res.status(200).send(comunications)
     } catch (error) {
@@ -504,4 +507,27 @@ export const createAcces = async (req: Request, res: Response) => {
     } catch (error) {
        res.status(500).send(error)
     }
+ }
+
+
+ export const createUserAcces = async (req: Request, res: Response): Promise <void> => { 
+    
+    const {userId, projectId} = req.params
+
+    const userData = await UserModel.findByPk(userId)
+    const userName = userData.name
+
+    const projectData = await ProjectModel.findByPk(projectId)
+    const projectName = projectData.name
+
+     try {
+        const newAcces = new UserAccesModel({ 
+            userId: userId,
+            projectId: projectId
+        })
+        await newAcces.save()
+        res.status(200).send(`El usuario ${userName} ahora es miembro del proyecto ${projectName} `)
+     } catch (error) {
+        res.status(500).send(error)
+     }
  }

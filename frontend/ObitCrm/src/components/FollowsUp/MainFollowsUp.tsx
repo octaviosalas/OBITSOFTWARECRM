@@ -8,17 +8,21 @@ import { useEffect, useState } from "react"
 import { userFollowsUpType } from "../../types/FollowsUp"
 import handleError from "../../utils/axiosErrorHanlder"
 import SpinnerComponent from "../Spinner/Spinner"
+import TodayCalls from "./TodayCalls"
 
 const MainfollowsUp = () => { 
     
     const {user} = userStore()
     const [userFollowsUpData, setUserFollowsUpData] = useState<userFollowsUpType[] | []>([])
+    const [todayRemembers, setTodayRemembers] = useState<userFollowsUpType [] | []>([])
     const [load, setLoad] = useState<boolean>(false)
+    const [hasCallsToday, setHasCallsToday] = useState<boolean>(false)
+
 
     const getUserFollowsUp = async () => { 
         setLoad(true)
         try {
-            const {data, status} = await apiBackendUrl.get(`/client/myHistoricFollowsUp/1`)
+            const {data, status} = await apiBackendUrl.get(`/client/myHistoricFollowsUp/${user?.id}`)
             if(status === 200) { 
                 console.log(data)
                 setUserFollowsUpData(data)
@@ -29,9 +33,29 @@ const MainfollowsUp = () => {
         }
     }
 
+    const getTodayNoticies = async () => { 
+        try {
+            const {data, status} = await apiBackendUrl.get(`/user/userComunicationsForToday/${user?.id}`)
+            if(status === 200) { 
+                console.log(data)
+                if(data.length > 0) { 
+                    setTodayRemembers(data)
+                    setHasCallsToday(true)
+                } else { 
+                    setTodayRemembers(data)
+                    setHasCallsToday(false)
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => { 
       getUserFollowsUp()
+      getTodayNoticies()
     }, [])
+
 
     return ( 
         <div>
@@ -40,10 +64,11 @@ const MainfollowsUp = () => {
            <>
            <div className="custom-header">
                 <div className="header-container">
-                <div id="modals-container">
-                        <AddNewFollowUp updateTable={getUserFollowsUp}/>
-                        <SendEmail/>
-                </div>
+                    <div id="modals-container">
+                            <AddNewFollowUp updateTable={getUserFollowsUp}/>
+                            <SendEmail/>
+                            {hasCallsToday ? <TodayCalls todayRemembers={todayRemembers}/> : null}
+                    </div>
                 </div>
             </div>
     
@@ -52,7 +77,7 @@ const MainfollowsUp = () => {
             </div>
         
             <div id="table-container">
-                <FollowsUpTable userFollowsUpData={userFollowsUpData}/>
+                <FollowsUpTable userFollowsUpData={userFollowsUpData} updateTable={getUserFollowsUp}/>
             </div>
            </>  : 
            <div className="mt-36">

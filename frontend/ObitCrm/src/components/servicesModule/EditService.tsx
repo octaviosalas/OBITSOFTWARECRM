@@ -114,7 +114,7 @@ const EditService = ({servicesData, service, updateTable}: Props) => {
 
   return ( 
     <>
-      <button className="btn-action edit"  onClick={handleOpen}><i className="fas fa-pencil-alt"></i></button>
+      <button className="btn-action edit"  onClick={handleOpen}><i className="fas fa-pencil-alt" style={{color:"#28a745"}}></i></button> 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
