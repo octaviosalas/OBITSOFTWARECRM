@@ -64,7 +64,7 @@ const ViewClientHistoricFollowUp = ({clientId, clientName}: Props) => {
                       </table>
                   </div>
                     ) : !load && clientFollowsUpData.length === 0 ? ( 
-                        <p>No hay seguimientos cargados en relacion a este cliente</p>
+                        <p>No hay seguimientos cargados sobre este cliente</p>
                     ) : load ? ( 
                       <SpinnerComponent/>
                     ) : null 
