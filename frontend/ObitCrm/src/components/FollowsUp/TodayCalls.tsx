@@ -21,11 +21,13 @@ const TodayCalls = ({todayRemembers}: Props) => {
                     <DropdownItem className="flex flex-col items-start justify-start">
                         <div className="flex flex-col justify-start items-start">
                             <p><b style={{color: "#003366"}}>Cliente:</b> {t.clientData.name}</p>
-                            <p className="break-words" style={{ wordWrap: 'break-word', whiteSpace: 'normal', maxWidth: '100%' }}><b style={{color: "#003366"}}>Mensaje:</b> {t.note} </p>
+                            <p className="break-words" style={{ wordWrap: 'break-word', whiteSpace: 'normal', maxWidth: '100%' }}>
+                            <b style={{color: "#003366"}}>Ultima nota: </b> 
+                            {t.note} 
+                            </p>
                         </div>
                     </DropdownItem>
-                ))}              
-
+                ))}           
             </DropdownMenu>
         </Dropdown>
     </div>
