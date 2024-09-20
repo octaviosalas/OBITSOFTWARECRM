@@ -11,6 +11,8 @@ import ProjectMainDetail from './components/proyect/ProjectMainDetail';
 import ProjectMain from './components/proyect/MainProject/ProjectMain';
 import MainServices from './components/servicesModule/MainServices';
 import MainfollowsUp from './components/FollowsUp/MainFollowsUp';
+import ForgotPassword from './components/forgotPassword/ForgotPassword';
+import Token from './components/forgotPassword/Token';
 import { userStore } from './store/UserAccount';
 import { Navigate } from 'react-router-dom';
 
@@ -35,6 +37,8 @@ function App() {
           <Route path="/projectDetail/:projectId" element={<ProjectMainDetail />} />   
           <Route path="/services" element={<MainServices />} />   
           <Route path="/followsUp" element={<MainfollowsUp />} />   
+          <Route path="/token" element={<Token />} />   
+          <Route path="/forgot-password" element={<ForgotPassword />} />   
 
         </Routes>
     <ToastContainer />

@@ -13,6 +13,8 @@ import ServicesModel from "../models/services";
 import UserClientAccesModel from "../models/UserClientAcces";
 import AlertsModel from "../models/alerts";
 import { currentDate } from "../utils/transformDate";
+import TokenModel from "../models/token";
+import { createSixDigitsToken } from "../utils/createRandomToken";
 
 //CREAR UN NUEVO USUARIO
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
@@ -469,10 +471,10 @@ export const createAcces = async (req: Request, res: Response) => {
     } catch (error) {
       res.status(500).send(error);
     }
-  };
+};
 
 
-  export const getProjectsAndClientsUser = async (req: Request, res: Response): Promise <void> => { 
+export const getProjectsAndClientsUser = async (req: Request, res: Response): Promise <void> => { 
  
     const {userId} = req.params
 
@@ -507,10 +509,10 @@ export const createAcces = async (req: Request, res: Response) => {
     } catch (error) {
        res.status(500).send(error)
     }
- }
+}
 
 
- export const createUserAcces = async (req: Request, res: Response): Promise <void> => { 
+export const createUserAcces = async (req: Request, res: Response): Promise <void> => { 
     
     const {userId, projectId} = req.params
 
@@ -530,4 +532,43 @@ export const createAcces = async (req: Request, res: Response) => {
      } catch (error) {
         res.status(500).send(error)
      }
- }
+}
+
+export const createNewTokenToGetPasswordAgain = async (req: Request, res: Response): Promise <void> => { 
+
+    try {
+        const newTokenNumber = createSixDigitsToken()
+        const newToken = new TokenModel({ 
+            token: newTokenNumber
+         })
+        await newToken.save()
+        res.status(200).send("creado")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const validateTokenNumber = async (req: Request, res: Response) => { 
+
+    const {tokenNumber} = req.body
+    console.log(tokenNumber)
+
+    try {
+        const token = await TokenModel.findAll({ 
+            where: { 
+                token: tokenNumber
+            }
+        })
+        console.log(token)
+
+        if(token.length === 0) { 
+            return res.status(404).send("El token que ingresaste no existe o ha expirado")
+        }
+
+        res.status(200).send("Has validado correctamente tu token, ya podes cambiar tu contraseña")
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}

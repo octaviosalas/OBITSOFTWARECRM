@@ -12,6 +12,7 @@ import AlertsRoutes from "./routes/alertsRoutes"
 import logger from "morgan"
 import { Server } from "socket.io"
 import {createServer} from "node:http"
+import tokenCleanupJob from "./cron/tokenCleanupJob"
 
 const port = process.env.PORT || 4000
 dotenv.config()
@@ -24,6 +25,7 @@ const io = new Server(server, {
        methods: ["GET", "POST", "PUT", "DELETE"]
      }
 });
+
 
 io.on("connection", (socket) => { 
      console.log("A user has been conected")
@@ -51,6 +53,7 @@ app.use("/api/project", ProjectRoutes);
 app.use("/api/message", MessagesRoutes);
 app.use("/api/alert", AlertsRoutes);
 
+tokenCleanupJob()
 
 server.listen(port, () => { 
      console.log(`REST API CRM OBIT SOFTWARE RUNNING ON PORT ${port}`)

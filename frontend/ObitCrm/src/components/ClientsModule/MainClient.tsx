@@ -2,7 +2,7 @@ import ClientDetailModal from "./ClientDetailModal";
 import ClientProjectsModal from "./ClientProjectsModal";
 import CreateNewClientModal from "./CreateNewClientModal";
 import "./styles/clientModule.css"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { clientPersonalDataType } from "../../types/Clients";
 import apiBackendUrl from "../../lib/axiosData";
 import ClientFollowUpModal from "./ClientFollowUpModal";
@@ -46,18 +46,19 @@ const MainClient = () => {
     }, [])
     
 
-    const handleChangeTableData =  (e: React.ChangeEvent<HTMLInputElement>) => { 
+    const handleChangeTableData = useCallback((e: React.ChangeEvent<HTMLInputElement>) => { 
         const item = e.target.value.toLowerCase();
-        const searched = everyClientsData.filter(client => 
-            Object.values(client).some(value =>
-                value.toString().toLowerCase().includes(item)
-            )
-        )
-        setEveryClientsData(searched)
         if(item === "") { 
-            setEveryClientsData(originalClientsData)
+            setEveryClientsData(originalClientsData);
+        } else {
+            const searched = everyClientsData.filter(client => 
+                Object.values(client).some(value =>
+                    value.toString().toLowerCase().includes(item)
+                )
+            );
+            setEveryClientsData(searched);
         }
-    }
+    }, [everyClientsData, originalClientsData]);
 
     return (
         <div className="main-client">

@@ -3,14 +3,28 @@ import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { createUser, userData, everyUsers, 
          updateUserData, deleteUserAccount, createMyReminder, 
-         getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday, getProjectsAndClientsUser,
-         deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces, userClientsAcces,
+         getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday, getProjectsAndClientsUser, validateTokenNumber,
+         deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces, userClientsAcces, createNewTokenToGetPasswordAgain,
          updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator, createAcces, createUserAcces } from "../controllers/user"
-import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist } from "../middlewares/userValidations"
+import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist, validateUserExist } from "../middlewares/userValidations"
 import { validateClientExistense } from "../middlewares/clientsValidations"
 import { validateProjectExistenceWithId } from "../middlewares/projectValidations"
 
 const router = Router()
+
+router.post("/missedPassword", 
+    body("email").notEmpty().withMessage("Es obligatorio indicar el email para recuperar tu contraseña"),
+    errorsHanlder,
+    validateUserExist,
+    createNewTokenToGetPasswordAgain
+)
+
+router.post("/validateToken", 
+    body("tokenNumber").notEmpty().withMessage("Es obligatorio enviar un token de 6 digitos"),
+    body("tokenNumber").isLength({min: 6}).withMessage("El token ingresado tiene menos de 6 digitos"),
+    errorsHanlder,
+    validateTokenNumber
+)
 
 //OBTENER DATOS DE UN SOLO USUARIO
 router.get("/userData/:userId", 
@@ -19,12 +33,10 @@ router.get("/userData/:userId",
     userData
 )
 
-
 //OBTENER A TODOS LOS USUARIOS DEL SISTEMA
 router.get("/everyUsersData", 
     everyUsers
 )
-
 
 //CREAR UN NUEVO USUARIO
 router.post("/createUser", 
