@@ -41,7 +41,9 @@ export const validateServicesExistenceInProjectCreation = async (req: Request, r
 export const validateProjectExistenceWithId = async (req: Request, res: Response, next: NextFunction) => { 
     
     const {projectId} = req.params
-    console.log(projectId)
+    if(projectId === "undefined") {
+      return res.status(404).send("Debes seleccionar un proyecto")
+    }
     
     try {
         const project = await ProjectModel.findByPk(projectId)

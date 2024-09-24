@@ -9,6 +9,7 @@ import { ProjectUserClientsData } from "../../types/Projects";
 import { servicesDataType } from "../../types/Services";
 import { shootSuccesToast } from "../../utils/succesToastFunction";
 import SpinnerComponent from "../Spinner/Spinner";
+import WithOutProjects from "../reusableComponents/WithOutProjects";
 
 interface Props { 
   update: () => void
@@ -35,7 +36,7 @@ const AddNewService = ({update}: Props) => {
     const [clientName, setClientName] = useState<string>("")
     const [filteredClientsNames, setFilteredClientsName] = useState<clientDataType[] | []>([])
     const [filteredProjectsNames, setFilteredProjectsNames] = useState<ProjectUserClientsData[] | []>([])
-
+    const [noProjects, setNoProjects] = useState<boolean>(false)
 
     const handleOpen = async () => { 
       onOpen()
@@ -50,6 +51,11 @@ const AddNewService = ({update}: Props) => {
             console.log("data", data)
             console.log("dataclients", data.clients)
             console.log("dataprojects", data.projects)
+            if(data.projects.length === 0) {
+              setNoProjects(true)
+            } else { 
+              setNoProjects(false)
+            }
          }
       } catch (error) {
          handleError(error, setLoad)
@@ -131,12 +137,13 @@ const AddNewService = ({update}: Props) => {
   return ( 
     <>
       <button className="btn-new-service" onClick={handleOpen}>Agregar Servicio a un Proyecto</button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"2xl"}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalBody>
-              <form id="serviceForm">
+              {!noProjects ? 
+                <form id="serviceForm">
                      <h2>Agregar Servicios</h2>
                           <div className="form-group mt-4">
                               <label >Referencia del Cliente:</label>
@@ -194,7 +201,11 @@ const AddNewService = ({update}: Props) => {
                           <div className="flex items-center justify-center mt-4 mb-2">
                              <SpinnerComponent/>
                           </div>}
-                </form>
+                </form> : 
+                <div>
+                  <WithOutProjects close={onClose}/>
+                </div>
+                }
               </ModalBody>
             </>
           )}

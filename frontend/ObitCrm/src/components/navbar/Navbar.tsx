@@ -3,7 +3,7 @@ import "./navbar.css"
 import obitLogo from "../../images/obitLogo.png"
 import alert from "../../images/alert.png"
 import bellNoti from "../../images/bellNoti.png"
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, user} from "@nextui-org/react";
 import { userStore } from '../../store/UserAccount';
 import { notificationsType } from '../../types/User';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const PROJECT_URL = import.meta.env.VITE_PROJECT_URL;
     const navigate = useNavigate()
-    const {userNotifications, markNotificationAsRead, userAlerts} = userStore()
+    const {userNotifications, markNotificationAsRead, userAlerts, user} = userStore()
 
     console.log("alerts", userAlerts)
 
@@ -46,6 +46,7 @@ const Navbar: React.FC = () => {
             <div className="navbar-container">
                 <div className="flex navbar-logo">
                     <img className="h-6 w-24" src={obitLogo}/>
+            
                 </div>
                 <nav className="navbar-menu">
                     <button className="menu-toggle" aria-label="Open menu" onClick={toggleMenu}>

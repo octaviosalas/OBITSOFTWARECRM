@@ -11,7 +11,7 @@ import SpinnerComponent from "../../Spinner/Spinner"
 
 const ProjectMain =  () => { 
 
-   const {user} = userStore()
+   const {user, userNotifications} = userStore()
    const [load, setLoad] = useState<boolean>(false)
    const [projects, setProjects] = useState<userPersonalProjectsType[] | []>([]) 
 
@@ -35,11 +35,14 @@ const ProjectMain =  () => {
 
   useEffect(() => { 
    getUserProjectsAvailables()
+   console.log(user)
+   console.log(userNotifications)
   }, [])
 
    return ( 
     <div>
        <NavbarProjectMain updateTable={getUserProjectsAvailables}/>
+
       {!load ? 
         <MainProjectTableData projects={projects} updateTable={getUserProjectsAvailables}/> : 
         <div className="flex items-center justify-center mt-36"> 

@@ -1,6 +1,6 @@
 import {Modal, ModalContent, useDisclosure} from "@nextui-org/react";
 import "./styles.css"
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { newFollowUpType } from "../../types/FollowsUp";
 import apiBackendUrl from "../../lib/axiosData";
 import { userStore } from "../../store/UserAccount";
@@ -9,12 +9,15 @@ import { clientPersonalDataType } from "../../types/Clients";
 import { getCurrentDateWithoutTime } from "../../utils/actualDate";
 import SpinnerComponent from "../Spinner/Spinner";
 import { shootSuccesToast } from "../../utils/succesToastFunction";
+import WithOutClients from "../reusableComponents/withOutClients";
+
 
 interface Props { 
-    updateTable: () => void
+    updateTable: () => void,
+    getTodayNoticies: () => void
 }
 
-const AddNewFollowUp = ({updateTable}: Props) => {
+const AddNewFollowUp = ({updateTable, getTodayNoticies}: Props) => {
 
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
   const [everyClientsData, setEveryClientsData] = useState<clientPersonalDataType[] | []>([])
@@ -23,7 +26,7 @@ const AddNewFollowUp = ({updateTable}: Props) => {
   const [contactDate, setContactDate] = useState<string>(getCurrentDateWithoutTime())
   const [nextContactDate, setNextContactDate] = useState<string>("")
   const [clientId, setClientId] = useState<number>()
-  const [clientName, setClientName] = useState<string>("")
+  const [withOutClientsData, setWithOutClientsData] = useState<boolean>(false)
 
   const {user} = userStore()
 
@@ -37,12 +40,19 @@ const AddNewFollowUp = ({updateTable}: Props) => {
         try {
             const {data, status} = await apiBackendUrl.get(`/user/userClientAcces/${user?.id}`)
             if(status === 200) { 
-                const clientsOnlyData = data.map((c : any) => { 
-                    const onlyClientsData = c.clientData
-                    return onlyClientsData
-                })
-                setLoad(false)
-                setEveryClientsData(clientsOnlyData)
+                 if(data.length > 0) { 
+                    setWithOutClientsData(false)
+                    const clientsOnlyData = data.map((c : any) => { 
+                        const onlyClientsData = c.clientData
+                        return onlyClientsData
+                    })
+                    setLoad(false)
+                    setEveryClientsData(clientsOnlyData)
+                    setClientId(clientsOnlyData[0].id)
+                 } else { 
+                    setWithOutClientsData(true)
+                 }
+
             }
         } catch (error) {
             console.log(error)
@@ -64,14 +74,13 @@ const AddNewFollowUp = ({updateTable}: Props) => {
             contactDate,
             nextContactDate
         })
-        console.log(followUpData)
-        console.log("id cliente", clientId)
-        console.log("id usuario", user?.id)
+       
        try {
             const {data, status} = await apiBackendUrl.post(`/client/createClientFollowUp/${clientId}/${user?.id}`, followUpData)
             if(status === 200) { 
                 setLoad(false)
                 updateTable()
+                getTodayNoticies()
                 console.log(data)
                 onClose()
                 shootSuccesToast(data)
@@ -90,6 +99,7 @@ const AddNewFollowUp = ({updateTable}: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
+             {!withOutClientsData ? 
               <div className="full-screen-section" id="trackingSection">
                     <div className="form-section">
                         <button className="btn-close" id="closeTrackingSection" onClick={() => onClose()}>&times;</button>
@@ -154,7 +164,11 @@ const AddNewFollowUp = ({updateTable}: Props) => {
                             }
                         </div>
                     </div>
-               </div>
+              </div> : 
+              <div className="flex items-center justify-center p-4">
+                <WithOutClients close={onClose}/>
+              </div> 
+               } 
             </>
           )}
         </ModalContent>

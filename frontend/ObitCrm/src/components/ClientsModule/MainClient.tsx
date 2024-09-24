@@ -66,6 +66,7 @@ const MainClient = () => {
                 <>
                  <div className="top-bar">
                 <CreateNewClientModal resetTableData={getClientsAccesUserData}/>
+ 
                 <div className="bottom-bar">
                     <input
                         type="text"

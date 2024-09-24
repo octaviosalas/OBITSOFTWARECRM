@@ -65,7 +65,7 @@ const MainfollowsUp = () => {
            <div className="custom-header">
                 <div className="header-container">
                     <div id="modals-container">
-                            <AddNewFollowUp updateTable={getUserFollowsUp}/>
+                            <AddNewFollowUp updateTable={getUserFollowsUp} getTodayNoticies={getTodayNoticies}/>
                             <SendEmail/>
                             {hasCallsToday ? <TodayCalls todayRemembers={todayRemembers}/> : null}
                     </div>

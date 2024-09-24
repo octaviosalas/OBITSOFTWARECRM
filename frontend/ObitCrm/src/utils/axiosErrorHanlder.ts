@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { errorType } from '../types/Errors';
 import { shootErrorToast } from './succesToastFunction';
 
