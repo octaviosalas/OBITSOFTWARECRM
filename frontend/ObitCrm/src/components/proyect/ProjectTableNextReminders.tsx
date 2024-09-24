@@ -13,10 +13,11 @@ import SpinnerComponent from "../Spinner/Spinner"
 interface Props { 
     nextProjectReminders: projectRemindersType[] | [],
     projectId: number,
-    updateReminders: () => void
+    updateReminders: (ejecuteLoad: boolean) => void,
+    title: string
 }
 
-const ProjectTableNextReminders = ({nextProjectReminders, projectId, updateReminders} : Props) => { 
+const ProjectTableReminders = ({nextProjectReminders, projectId, updateReminders, title} : Props) => { 
 
       const {user} = userStore()
       const [editReminderId, setEditReminderId] = useState<number | null>(null);
@@ -53,7 +54,7 @@ const ProjectTableNextReminders = ({nextProjectReminders, projectId, updateRemin
             const {data, status} = await apiBackendUrl.put(`/project/updateProjectReminder/${editReminderId}/${projectId}/${user?.id}`, reminderNewData)
             if(status === 200) { 
                 console.log("updateReminderData STATUS - ProjectTableNextReminders", status)
-                updateReminders()
+                updateReminders(false)
                 shootSuccesToast(data)
                 setLoad(false)
             }
@@ -64,12 +65,12 @@ const ProjectTableNextReminders = ({nextProjectReminders, projectId, updateRemin
 
     return ( 
         <div className="mt-6">
-            <h3>Próximos Recordatorios</h3>
+            <h2>{title}</h2>
                 <table className="table" id="upcomingReminders">
                   <thead>
                     <tr>
                       <th>Fecha</th>
-                      <th>Creador</th>
+                      <th>Usuario</th>
                       <th>Mensaje</th>
                       <th>Editar</th>
                       <th>Eliminar</th>
@@ -127,7 +128,7 @@ const ProjectTableNextReminders = ({nextProjectReminders, projectId, updateRemin
                             updateReminders={updateReminders}
                           />
                       </td>
-                      ) : null}
+                      ) :  <td> - </td>}
                     </tr>
                   ))
                 }
@@ -147,4 +148,4 @@ const ProjectTableNextReminders = ({nextProjectReminders, projectId, updateRemin
     )
 }
 
-export default ProjectTableNextReminders
+export default ProjectTableReminders

@@ -19,8 +19,6 @@ const MainClient = () => {
 
     const {user} = userStore()
 
-   
-
     const getClientsAccesUserData = async () => { 
         setLoad(true)
         try {
@@ -45,7 +43,6 @@ const MainClient = () => {
         getClientsAccesUserData()
     }, [])
     
-
     const handleChangeTableData = useCallback((e: React.ChangeEvent<HTMLInputElement>) => { 
         const item = e.target.value.toLowerCase();
         if(item === "") { 

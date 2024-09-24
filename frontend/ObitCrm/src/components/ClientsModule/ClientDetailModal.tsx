@@ -8,6 +8,7 @@ import handleError from "../../utils/axiosErrorHanlder";
 import { getClientData } from "../../utils/getClientData";
 import ClientEditDataModal from "./ClientEditDataModal";
 import { formateDate } from "../../utils/transformDate";
+import { useNavigate } from "react-router-dom";
 
 interface Props { 
   clientId: number,
@@ -19,6 +20,7 @@ const ClientDetailModal = ({clientId, resetTable}: Props) => {
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
   const [clientPersonalData, setClientPersonalData] = useState<clientPersonalDataType>()
   const [load, setLoad] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const handleOpen = async () => { 
          onOpen()
@@ -71,7 +73,7 @@ const ClientDetailModal = ({clientId, resetTable}: Props) => {
                          
                                     <div className="flex items-center gap-2 mt-4">
                                       <button className="mt-2">Ir a Proyectos</button>
-                                      <button className="mt-2">Ir a Seguimientos</button>
+                                      <button className="mt-2" onClick={() => navigate("/followsUp")}>Ir a Seguimientos</button>
                                     </div>
                             </form>
                         </div>

@@ -1,11 +1,12 @@
 import apiBackendUrl from "../../lib/axiosData"
 import "./styles/clientModule.css"
 import { useEffect, useState } from "react"
-import { shootErrorToast } from "../../utils/succesToastFunction"
+import { shootErrorToast, shootSuccesToast } from "../../utils/succesToastFunction"
 import handleError from "../../utils/axiosErrorHanlder"
 import { UserTypeData } from "../../types/User"
 import { usersDataProjectType } from "../../types/User"
 import { userStore } from "../../store/UserAccount"
+import SpinnerComponent from "../Spinner/Spinner"
 
 interface Props { 
     clientId: number | undefined,
@@ -73,6 +74,7 @@ const QuestionAfterCreationClient = ({clientId, updateTable, closeModal}: Props)
     }
 
     const createClientAcces = async () => {
+        setLoad(true)
         const newAccesData = ({ 
             usersData: usersNames
         }) 
@@ -81,6 +83,8 @@ const QuestionAfterCreationClient = ({clientId, updateTable, closeModal}: Props)
             if(status === 200) { 
                 console.log(data)
                 updateTable()
+                setLoad(false)
+                shootSuccesToast(data)
                 closeModal()
             }
         } catch (error) {
@@ -99,31 +103,35 @@ const QuestionAfterCreationClient = ({clientId, updateTable, closeModal}: Props)
     return ( 
         <div>
             <h3 className="text-blue-800 font-medium text-lg">¿Deseas dar acceso a otro usuario?</h3>
-            <div className="flex flex-col">
-                 <input type="text" className="w-full border border-2 border-blue-600 mt-4" onChange={handleSearchUser}/>
+            <div className="modal">
+                    <form id="client-form">
+                        <input type="text" onChange={handleSearchUser}/>                          
 
-                {filteredUserNames.length > 0 ?
-                    <div className="flex flex-col mt-2 bg-gray-100 rounded-sm shadow-xl">
-                        {filteredUserNames.map((us: UserTypeData) => (  
-                            <p key={us.id} className="mt-1 cursor-pointer bg-gray-200" onClick={() => chooseUser(us.id, us.name)}>{us.name}</p>
-                        ))}
-                    </div> : null}
+                        {filteredUserNames.length > 0 ?
+                            <div className="flex flex-col mt-2 bg-gray-100 rounded-sm shadow-xl">
+                                {filteredUserNames.map((us: UserTypeData) => (  
+                                    <p key={us.id} className="cursor-pointer bg-gray-200" onClick={() => chooseUser(us.id, us.name)}>{us.name}</p>
+                                ))}
+                            </div> : null}
 
-                {usersNames.length > 0 ? 
-                    usersNames.map((us : usersDataProjectType) => ( 
-                     <div className="flex w-full items-center justify-between max-h-[25px] overflow-y-auto mt-1 bg-gray-100">
-                        <p>{us.name}</p>
-                        <p onClick={() => removeUser(us.id)} className="cursor-pointer text-sm mr-2">X</p>
-                    </div>
-                ))
-                : null}
+                        {usersNames.length > 0 ? 
+                            usersNames.map((us : usersDataProjectType) => ( 
+                            <div className="flex w-full items-center justify-between max-h-[25px] overflow-y-auto mt-1 bg-gray-100">
+                                <p>{us.name}</p>
+                                <p onClick={() => removeUser(us.id)} className="cursor-pointer text-sm mr-2">X</p>
+                            </div>
+                        ))
+                        : null}
 
-                {usersNames.length > 0 ?                   
-                     <div className="flex w-full mt-2 gap-6 items-center justify-center">
-                        <button onClick={() => createClientAcces()} className="bg-red-600 text-white rounded-lg h-8">Dar Acceso</button>
-                        <button onClick={() => cancelOperation()}  className="bg-blue-600 text-white rounded-lg h-8">Cancelar</button>
-                    </div>              
-                : null}
+                        {usersNames.length > 0 ?                  
+                            <div className="flex w-full mt-5 gap-6 items-center justify-center">
+                                <button onClick={() => createClientAcces()}>Dar Acceso</button>
+                                <button onClick={() => cancelOperation()} >Cancelar</button>
+                            </div>              
+                        : null}
+                   </form>  
+
+                  {!load ? null : <div className="p-4"> <SpinnerComponent/> </div>}
 
               
             </div>

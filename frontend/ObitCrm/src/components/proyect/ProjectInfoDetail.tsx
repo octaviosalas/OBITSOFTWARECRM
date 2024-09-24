@@ -8,7 +8,7 @@ interface Props {
     projectInformation: projectDataType | undefined,
     usersWithAcces: userAccesProjectType[] | undefined,
     projectServices: serviceUserProjectType[] | [],
-    getProjectData: () => void
+    getProjectData: (ejecuteLoad: boolean) => void
 }
 
 const ProjectInfoDetail = ({projectInformation, usersWithAcces, projectServices, getProjectData}: Props) => { 

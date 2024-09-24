@@ -19,6 +19,7 @@ const ViewClientHistoricFollowUp = ({clientId, clientName, type}: Props) => {
   const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
   const [load, setLoad] = useState<boolean>(false)
   const [clientFollowsUpData, setClientFollowUpData] = useState<clientHistoricFollowUpType [] | []>([])
+  const [filteredFollowsUp, setFilteredFollowsUp] = useState<clientHistoricFollowUpType [] | []>([])
   const {user} = userStore()
 
   const handleOpen = async () => { 
@@ -30,10 +31,17 @@ const ViewClientHistoricFollowUp = ({clientId, clientName, type}: Props) => {
             console.log(data) 
             setLoad(false)
             setClientFollowUpData(data)
+            setFilteredFollowsUp(data)
         }
     } catch (error) {
         handleError(error, setLoad)
     }
+  }
+
+  const handleChangeWord = (e: React.ChangeEvent<HTMLInputElement>) => { 
+    const word = e.target.value
+    const filteredFollowUp = clientFollowsUpData.filter((note) => note.note.includes(word))
+    setFilteredFollowsUp(filteredFollowUp)
   }
 
   return (
@@ -47,11 +55,16 @@ const ViewClientHistoricFollowUp = ({clientId, clientName, type}: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Seguimientos de {clientName}</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Seguimientos de {clientName}
+                       <form id="client-form">
+                           <input type="text" placeholder="Filtrar por palabra clave" className="text-xs font-medium text-black" onChange={handleChangeWord}/>
+                        </form>
+                </ModalHeader>
               <ModalBody>
                  {!load && clientFollowsUpData.length > 0 ? ( 
                       <div className="modal-content">
-                      <table id="clientes-table" className="mt-4 max-h-[100px] overflow-y-auto">
+                      <table id="clientes-table" className="max-h-[100px] overflow-y-auto">
                         <thead>
                             <tr>
                                 <th>Fecha</th>
@@ -59,7 +72,7 @@ const ViewClientHistoricFollowUp = ({clientId, clientName, type}: Props) => {
                             </tr>
                         </thead>
                           <tbody>                         
-                            {clientFollowsUpData.map((c : clientHistoricFollowUpType) => ( 
+                            {filteredFollowsUp.map((c : clientHistoricFollowUpType) => ( 
                               <tr key={c.id}>
                                 <td>{formateDate(c.contactDate)}</td>
                                 <td>{c.note}</td>

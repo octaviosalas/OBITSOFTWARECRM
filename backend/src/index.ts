@@ -28,14 +28,14 @@ const io = new Server(server, {
 
 
 io.on("connection", (socket) => { 
-     console.log("A user has been conected")
+     console.log("USUARIO CONECTADO!")
 
      socket.on("disconnect", () => { 
-          console.log("A User haas beeen desconected")
+          console.log("USUARIO DESCONECTADO")
      })
 
      socket.on("chat message", (msg : string) => { 
-          console.log("New  message detected", msg)
+          console.log("NUEVO MENSAJE RECIBIDO POR SOCKET", msg)
           io.emit("chat message", msg)
      })
 

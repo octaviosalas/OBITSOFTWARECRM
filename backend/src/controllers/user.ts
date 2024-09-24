@@ -467,7 +467,7 @@ export const createAcces = async (req: Request, res: Response) => {
         })
       );
   
-      res.status(200).send("Se añadieron correctamente a los usuarios");
+      res.status(200).send("Acceso generado correctamente");
     } catch (error) {
       res.status(500).send(error);
     }

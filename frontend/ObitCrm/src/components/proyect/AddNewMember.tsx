@@ -13,7 +13,7 @@ import SpinnerComponent from "../Spinner/Spinner";
 interface Props { 
     usersWithAcces: userAccesProjectType[] | undefined,
     projectId: number | undefined,
-    getProjectData: () => void
+    getProjectData: (ejecuteLoad: boolean) => void
 }
 
 const AddNewMember = ({usersWithAcces, projectId, getProjectData}: Props) => {
@@ -64,7 +64,7 @@ const AddNewMember = ({usersWithAcces, projectId, getProjectData}: Props) => {
             if(status === 200) { 
                 shootSuccesToast(data)
                 onClose()
-                getProjectData()
+                getProjectData(false)
                 setLoad(false)
             }
         } catch (error) {

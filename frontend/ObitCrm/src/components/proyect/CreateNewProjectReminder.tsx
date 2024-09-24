@@ -11,7 +11,7 @@ import SpinnerComponent from "../Spinner/Spinner"
 interface Props { 
     hideForm: () => void,
     projectId: number,
-    updateReminders: () => void,
+    updateReminders: (ejecuteLoad: boolean) => void,
 
 }
 
@@ -32,6 +32,12 @@ const CreateNewProjectReminder = ({hideForm, projectId, updateReminders}: Props)
         setDate(e.target.value)
     }
 
+    const resetInputValues = () => { 
+        setReminderData("")
+        setDate("")
+        hideForm()
+    }
+
     const createReminder = async () => { 
         if(user === null) { 
            return shootSuccesWithOutLoginFunction("Debes iniciar sesion para crear un recordatorio")
@@ -46,9 +52,11 @@ const CreateNewProjectReminder = ({hideForm, projectId, updateReminders}: Props)
             const {data, status} = await apiBackendUrl.post(`/project/createProjectReminder/${projectId}/${user?.id}`, remindetData)
             console.log(data, status)
             if(status === 200) { 
+                resetInputValues()
+                setDate("")
                 shootSuccesToast(data)
                 setLoad(false)
-                updateReminders()
+                updateReminders(false)
             }
         } catch (error) {
             handleError(error, setLoad)

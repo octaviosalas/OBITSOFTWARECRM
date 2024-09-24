@@ -10,7 +10,7 @@ import SpinnerComponent from "../../Spinner/Spinner";
 interface Props { 
     reminderId: number,
     projectId: number,
-    updateReminders: () => void
+    updateReminders: (ejecuteLoad: boolean) => void
 
 }
 
@@ -26,7 +26,7 @@ const DeleteProjectReminder = ({reminderId, projectId, updateReminders}: Props) 
       try {
         const {data, status} = await apiBackendUrl.delete(`/project/deleteProjectReminder/${reminderId}/${projectId}/${user?.id}`)
         if(status === 200) { 
-            updateReminders()
+            updateReminders(false)
             onClose()
             shootSuccesToast(data)
             setLoad(false)

@@ -21,7 +21,7 @@ const ProjectMainDetail = () => {
     const [projectInformation, setProjectInformation] = useState<projectDataType>();
     const [projectServices, setProjectServices] = useState<serviceUserProjectType[] | []>([]);
     const [usersWithAcces, setUserWithAcces] = useState<userAccesProjectType[] | []>([]);
-    const [projectsReminders, setProjectsReminders] = useState<projectRemindersType>();
+    const [projectsReminders, setProjectsReminders] = useState<projectRemindersType[] | []>([]);
     const [actualDateProjectsReminders, setActualDateProjectsReminders] = useState<projectRemindersType[] | []>([]);
     const [nextProjectsReminders, setNextProjectsReminders] = useState<projectRemindersType[] | []>([]);
     const [projectsMessages, setProjectsMessages] = useState<projectMessagesType[] | []>([]);
@@ -31,13 +31,17 @@ const ProjectMainDetail = () => {
     const {user} = userStore()
 
 
-    const getProjectData = async () => {
+    const getProjectData = async (ejecuteLoad: boolean) => {
       if(user === null) { 
         navigate(`/`)
         return shootSuccesWithOutLoginFunction("Debes iniciar sesion para poder utilizar el CRM")
       } 
       const actualDate = getCurrentDateWithoutTime()
-      setLoad(true)
+      if(ejecuteLoad) { 
+        setLoad(true)
+      } else { 
+        console.log("ejecuteload es false")
+      }
       try {
          const {data, status} = await apiBackendUrl.get(`/project/projectData/${projectId}/${user?.id}`) 
          console.log(status, data)
@@ -70,7 +74,7 @@ const ProjectMainDetail = () => {
     }
 
     useEffect(() => { 
-      getProjectData()
+      getProjectData(true)
     }, [])
 
     const showSection = (item: string) => { 

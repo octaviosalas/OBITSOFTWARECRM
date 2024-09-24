@@ -59,7 +59,7 @@ const SendProjectMessage = ({updateMessages, projectId, ocultSendMessage}: Props
            {! load ?
             <div className="flex items-center gap-6">
                 <button className="btn" onClick={() => createMessage()}>Enviar Mensaje</button>
-                <button className="btn btn-danger">Cancelar</button>
+                <button className="btn btn-danger" onClick={() => ocultSendMessage()}>Cancelar</button>
             </div> : <SpinnerComponent/>}
 
     </div>

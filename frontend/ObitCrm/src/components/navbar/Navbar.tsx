@@ -16,9 +16,8 @@ const Navbar: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const PROJECT_URL = import.meta.env.VITE_PROJECT_URL;
     const navigate = useNavigate()
-    const {userNotifications, markNotificationAsRead, userAlerts, user} = userStore()
+    const {userNotifications, markNotificationAsRead, userAlerts} = userStore()
 
-    console.log("alerts", userAlerts)
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -66,14 +65,15 @@ const Navbar: React.FC = () => {
                         <DropdownTrigger>
                             <img className="h-6 w-6" src={bellNoti}/>
                         </DropdownTrigger>                  
-                        <DropdownMenu aria-label="Static Actions" className="w-72">
+                        <DropdownMenu aria-label="Static Actions" className="w-80">
                                 {userNotifications.map((not: notificationsType) => (
-                                    <DropdownItem key={not.id} className="w-72 break-words" onClick={() => redirectProjectNotification(not.projectId, not.id)}>
-                                       {not.message}
-                                    </DropdownItem>
+                                    <DropdownItem key={not.id} className="w-80 break-words" title={not.message} onClick={() => redirectProjectNotification(not.projectId, not.id)}>
+                                      {not.message}
+                                    </DropdownItem>                                 
                                 ))}
                         </DropdownMenu>
                     </Dropdown>
+                    
                     {userAlerts.length > 0 ?
                         <Dropdown>
                             <DropdownTrigger>
