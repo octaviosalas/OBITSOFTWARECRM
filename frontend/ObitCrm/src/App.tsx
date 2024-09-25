@@ -16,6 +16,8 @@ import Token from './components/forgotPassword/Token';
 import ChatComponent from './components/Chat';
 import { userStore } from './store/UserAccount';
 import { Navigate } from 'react-router-dom';
+import MainChat from './components/MainChat';
+import MainUsers from './components/users/MainUsers';
 
 function App() {
 
@@ -40,7 +42,9 @@ function App() {
           <Route path="/followsUp" element={<MainfollowsUp />} />   
           <Route path="/token" element={<Token />} />   
           <Route path="/forgot-password" element={<ForgotPassword />} />   
-          <Route path="/chat" element={<ChatComponent />} />   
+          <Route path="/chat" element={<MainChat />} />   
+          <Route path="/chat/:userAccountId/:userId" element={<ChatComponent />} />   
+          <Route path="users" element={<MainUsers />} />   
 
         </Routes>
     <ToastContainer />

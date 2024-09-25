@@ -34,10 +34,21 @@ io.on("connection", (socket) => {
           console.log("USUARIO DESCONECTADO")
      })
 
-     socket.on("chat message", (msg : string) => { 
+     socket.on('join-room', ({ userAccountId, userId }) => {     
+          const roomId = [userAccountId, userId].sort().join('-');
+          socket.join(roomId);
+          console.log(`Usuario con ID ${userAccountId} se ha unido a la sala ${roomId}`);
+        });
+
+    /* socket.on("chat message", (msg : string) => { 
           console.log("NUEVO MENSAJE RECIBIDO POR SOCKET", msg)
-          io.emit("chat message", msg)
-     })
+          io.emit("chat message", msg) //de esta manera el mensaje se emite a todos los usuarios, no se diferencia por salas.
+     }) */
+
+     socket.on("chat message", ({ msg, roomId }) => { 
+          console.log(`Mensaje recibido en la sala ${roomId}: ${msg}`);
+          io.to(roomId).emit("chat message", msg);
+      });
 
 })
 
