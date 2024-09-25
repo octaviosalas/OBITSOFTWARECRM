@@ -45,9 +45,9 @@ io.on("connection", (socket) => {
           io.emit("chat message", msg) //de esta manera el mensaje se emite a todos los usuarios, no se diferencia por salas.
      }) */
 
-     socket.on("chat message", ({ msg, roomId }) => { 
-          console.log(`Mensaje recibido en la sala ${roomId}: ${msg}`);
-          io.to(roomId).emit("chat message", msg);
+     socket.on("chat message", ({ msg, roomId, writtenBy }) => { 
+          console.log(`Mensaje recibido en la sala ${roomId}: ${msg}, escrito por ${writtenBy}`);
+          io.to(roomId).emit("chat message", {msg, roomId, writtenBy});
       });
 
 })

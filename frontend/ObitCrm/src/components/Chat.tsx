@@ -4,14 +4,23 @@ import { useParams } from "react-router-dom";
 import apiBackendUrl from "../lib/axiosData";
 import { userStore } from "../store/UserAccount";
 
+export type messageType = { 
+  msg: string,
+  userName: string
+}
+
 const ChatComponent: React.FC = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [message, setMessage] = useState<string>("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<messageType[] | []>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [userName, setUserName] = useState<string>("");
   const { userAccountId, userId } = useParams();
   const {user} = userStore()
+
+  useEffect(() => { 
+    console.log(messages)
+  }, [messages])
 
     const getUserData = async () => { 
       try {
@@ -37,9 +46,10 @@ const ChatComponent: React.FC = () => {
 
       socketIo.emit('join-room', { userAccountId, userId })
 
-      socketIo.on('chat message', (msg: string) => {
-        console.log("Nuevo mensaje recibido:", msg);
-        setMessages((prevMessages) => [...prevMessages, msg]);
+      
+      socketIo.on("chat message", ({ msg, roomId, writtenBy }) => {
+        console.log("Nuevo mensaje recibido:", msg, writtenBy, roomId);
+        setMessages((prevMessages) => [...prevMessages, { msg: msg, userName: writtenBy }]);
       });
 
       socketIo.on('disconnect', () => {
@@ -78,23 +88,26 @@ const ChatComponent: React.FC = () => {
       setMessage(e.target.value);
     };
 
-    const sendMessage = async () => {
-      if (!message.trim()) return;
-      if (socket) {
-        const roomId = [userAccountId, userId].sort().join('-');
-        // Emitir el mensaje junto con el roomId
-        socket.emit("chat message", { msg: message, roomId });
-        setMessage("");
-      }
-    };
-
     const handleSendMessage = async () => {
       try {
-        await sendMessage();
+        await sendMessage(user?.name);
       } catch (error) {
         console.error("Error al enviar mensaje:", error);
       }
     };
+
+    const sendMessage = async (userName: string | undefined) => {
+      if (!message.trim()) return;
+      if (socket) {
+        const roomId = [userAccountId, userId].sort().join('-');
+        const writtenBy = userName
+        console.log("Enviando mensaje", { msg: message, roomId, writtenBy });
+        socket.emit("chat message", { msg: message, roomId, writtenBy });
+        setMessage("");
+      }
+    };
+
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -102,17 +115,34 @@ const ChatComponent: React.FC = () => {
       {!isConnected && <p>Conectando...</p>}
       {isConnected && (
         <>
-          <div className="bg-gray-100 p-4 rounded-lg shadow-md overflow-y-auto max-h-64">
-            {messages.length === 0 ? (
-              <p>No hay mensajes</p>
-            ) : (
-              messages.map((msg, index) => (
-                <div key={index} className="mb-2 p-2 bg-blue-100 rounded">
-                  {msg}
+         <div className="max-h-[400px] 2xl:max-h-[700px] overflow-y-auto w-full p-4">
+                {messages.map((message) => (
+                <div
+                    key={message.msg}
+                    className={`flex ${
+                    message.userName === user?.name ? 'justify-end' : 'justify-start'
+                    } mb-4`}
+                >
+                    <div
+                    className={`flex ${
+                      message.userName === user?.name ?  'flex-row-reverse' : 'flex-row'
+                    } items-start max-w-[80%]`}
+                    >            
+                  
+                    <div
+                        className={`mx-2 p-3 rounded-lg ${
+                          message.userName === user?.name 
+                            ? 'bg-black text-white'
+                            : 'bg-blue-600 text-white' 
+                        }`}
+                    >
+                        <p className="font-semibold text-sm">{message.userName}</p>
+                        <p className="mt-1">{message.msg}</p>
+                    </div>
+                    </div>
                 </div>
-              ))
-            )}
-          </div>
+                ))}
+         </div>
           <input type="text" value={message} onChange={handleChangeMessageData} placeholder="Escribe un mensaje..." className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           <button type="button" onClick={handleSendMessage} disabled={!socket || !isConnected} className={`ml-2 px-4 py-2 ${   !socket || !isConnected ? "bg-gray-300 cursor-not-allowed": "bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300"} rounded`}>
             Enviar
@@ -124,5 +154,9 @@ const ChatComponent: React.FC = () => {
 };
 
 export default ChatComponent;
+
+
+
+
 
 
