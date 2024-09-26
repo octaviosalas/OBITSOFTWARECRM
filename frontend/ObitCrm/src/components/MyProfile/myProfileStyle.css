@@ -1,0 +1,137 @@
+.mi-perfil-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Esto asegura que el contenido esté centrado verticalmente */
+  width: 100vw;  /* Asegura que ocupe todo el ancho de la vista */
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.mi-perfil-container {
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black
+}
+
+.mi-perfil-title {
+  margin-bottom: 30px;
+  color: #4682b4;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mi-perfil-form-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.mi-perfil-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.mi-perfil-input {
+  width: 100%;
+  padding: 14px 20px;
+  border: 1px solid #87cefa;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.mi-perfil-input:focus {
+  outline: none;
+  border-color: #4682b4;
+  background-color: white;
+}
+
+.mi-perfil-input::placeholder {
+  color: #aaa;
+}
+
+.mi-perfil-button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.mi-perfil-submit-button {
+  background-color: #4682b4;
+  color: white;
+  border: none;
+}
+
+.mi-perfil-submit-button:hover {
+  background-color: #4169e1;
+}
+
+.mi-perfil-back-button {
+  background-color: #87cefa;
+  color: #ffffff;
+  margin-top: 20px;
+  border: none;
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+  .mi-perfil-container {
+    padding: 20px;
+  }
+
+  .mi-perfil-title {
+    font-size: 24px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  .mi-perfil-input {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mi-perfil-container {
+    padding: 15px;
+  }
+
+  .mi-perfil-title {
+    font-size: 22px;
+  }
+
+  .mi-perfil-button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .mi-perfil-input {
+    padding: 10px;
+    font-size: 12px;
+  }
+}

@@ -2,7 +2,7 @@
 import './App.css'
 import MainClient from './components/ClientsModule/MainClient'
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';  // Importa los estilos CSS aquí
+import 'react-toastify/dist/ReactToastify.css';
 import { Routes, Route, useLocation  } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
@@ -14,10 +14,12 @@ import MainfollowsUp from './components/FollowsUp/MainFollowsUp';
 import ForgotPassword from './components/forgotPassword/ForgotPassword';
 import Token from './components/forgotPassword/Token';
 import ChatComponent from './components/Chat';
+import ChatPrueba from './components/ChatPrueba';
 import { userStore } from './store/UserAccount';
 import { Navigate } from 'react-router-dom';
 import MainChat from './components/MainChat';
 import MainUsers from './components/users/MainUsers';
+import MainMyProfile from './components/MyProfile/MainMyProfile';
 
 function App() {
 
@@ -45,6 +47,8 @@ function App() {
           <Route path="/chat" element={<MainChat />} />   
           <Route path="/chat/:userAccountId/:userId" element={<ChatComponent />} />   
           <Route path="users" element={<MainUsers />} />   
+          <Route path="chatprueba" element={<ChatPrueba />} />   
+          <Route path="miperfil" element={<MainMyProfile />} />   
 
         </Routes>
     <ToastContainer />

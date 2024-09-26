@@ -1,4 +1,4 @@
-import { projectMessagesType } from '../../types/Projects'
+import { projectDataType, projectMessagesType } from '../../types/Projects'
 import "./proyectDetail.css"
 import { userStore } from '../../store/UserAccount'
 import { formateDate } from '../../utils/transformDate';
@@ -14,16 +14,18 @@ import { newMessageProjectType } from "../../types/Projects"
 interface Props { 
     projectsMessages: projectMessagesType[] | [],
     projectId: string | undefined,
-    updateMessages: (ejecuteLoad: boolean) => void
+    updateMessages: (ejecuteLoad: boolean) => void,
+    projectInformation: projectDataType | undefined
 }
 
-const ProjectMessagesData = ({projectsMessages, projectId, updateMessages}: Props) => {
+const ProjectMessagesData = ({projectsMessages, projectId, updateMessages, projectInformation}: Props) => {
 
     const {user} = userStore()
     const [message, setMessage] = useState<string>("")
     const [load, setLoad] = useState<boolean>(false)
 
     const actualDate = getCurrentDateWithoutTime()
+   
 
     const handleChangeMessage = (e: React.ChangeEvent<HTMLInputElement>) => { 
         setMessage(e.target.value)
@@ -57,7 +59,7 @@ const ProjectMessagesData = ({projectsMessages, projectId, updateMessages}: Prop
    <div className='w-full mt-2'>
         <div className=" w-full bg-background  rounded-lg shadow-lg">
         <div className="p-2 border-b">
-             <h2>Historial de Mensajes</h2>
+             <h2>Historial de Mensajes - {projectInformation?.name}</h2>
         </div>
         <div className="max-h-[500px] overflow-y-auto w-full p-4">
 

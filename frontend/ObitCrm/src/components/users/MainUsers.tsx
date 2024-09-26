@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import apiBackendUrl from '../../lib/axiosData'
 import { UserTypeData } from '../../types/User'
@@ -29,7 +28,6 @@ const MainUsers = () => {
     }, [])
 
     const redirectToUserChat = (id: number) => { 
-        console.log("id recibido", id)
         const userAccountId = user?.id
         const userId = id
         navigate(`/chat/${userAccountId}/${userId}`)

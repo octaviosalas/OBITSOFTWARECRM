@@ -3,6 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import apiBackendUrl from "../lib/axiosData";
 import { userStore } from "../store/UserAccount";
+import "./chatpruebacss.css"
 
 export type messageType = { 
   msg: string,
@@ -110,46 +111,58 @@ const ChatComponent: React.FC = () => {
   
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Chat entre {user?.name} - {userName}</h1>
-      {!isConnected && <p>Conectando...</p>}
-      {isConnected && (
-        <>
-         <div className="max-h-[400px] 2xl:max-h-[700px] overflow-y-auto w-full p-4">
-                {messages.map((message) => (
+    <div className="mi-chat-container mx-auto p-4">
+    <h1 className="mi-chat-title">Chat entre {user?.name} - {userName}</h1>
+    {!isConnected && <p className="mi-chat-status">Conectando...</p>}
+    {isConnected && (
+      <>
+        <div className="mi-chat-messages max-h-[400px] 2xl:max-h-[700px] overflow-y-auto w-full p-4">
+          {messages.map((msg) => (
+            <div
+              key={msg.msg}
+              className={`mi-chat-message flex ${
+                msg.userName === user?.name ? 'justify-end' : 'justify-start'
+              } mb-4`}
+            >
+              <div
+                className={`flex ${
+                  msg.userName === user?.name ? 'flex-row-reverse' : 'flex-row'
+                } items-start max-w-[80%]`}
+              >
                 <div
-                    key={message.msg}
-                    className={`flex ${
-                    message.userName === user?.name ? 'justify-end' : 'justify-start'
-                    } mb-4`}
+                  className={`mi-chat-bubble mx-2 p-3 rounded-lg ${
+                    msg.userName === user?.name ? 'bg-blue-600 text-white' : 'bg-black text-white'
+                  }`}
                 >
-                    <div
-                    className={`flex ${
-                      message.userName === user?.name ?  'flex-row-reverse' : 'flex-row'
-                    } items-start max-w-[80%]`}
-                    >            
-                  
-                    <div
-                        className={`mx-2 p-3 rounded-lg ${
-                          message.userName === user?.name 
-                            ? 'bg-black text-white'
-                            : 'bg-blue-600 text-white' 
-                        }`}
-                    >
-                        <p className="font-semibold text-sm">{message.userName}</p>
-                        <p className="mt-1">{message.msg}</p>
-                    </div>
-                    </div>
+                  <p className="mi-chat-username font-semibold text-sm">{msg.userName}</p>
+                  <p className="mi-chat-text mt-1">{msg.msg}</p>
                 </div>
-                ))}
-         </div>
-          <input type="text" value={message} onChange={handleChangeMessageData} placeholder="Escribe un mensaje..." className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-          <button type="button" onClick={handleSendMessage} disabled={!socket || !isConnected} className={`ml-2 px-4 py-2 ${   !socket || !isConnected ? "bg-gray-300 cursor-not-allowed": "bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300"} rounded`}>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mi-chat-input-container flex items-center mt-4">
+          <input
+            type="text"
+            value={message}
+            onChange={handleChangeMessageData}
+            placeholder="Escribe un mensaje..."
+            className="mi-chat-input w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="button"
+            onClick={handleSendMessage}
+            disabled={!socket || !isConnected}
+            className={`mi-chat-send-button ml-2 px-4 py-2 rounded ${
+              !socket || !isConnected ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300'
+            }`}
+          >
             Enviar
           </button>
-        </>
-      )}
-    </div>
+        </div>
+      </>
+    )}
+  </div>
   );
 };
 

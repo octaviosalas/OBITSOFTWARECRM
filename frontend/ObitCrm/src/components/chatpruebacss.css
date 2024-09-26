@@ -1,0 +1,88 @@
+.mi-chat-container {
+    background-color: #f0f4ff; 
+    border-radius: 12px; 
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .mi-chat-title {
+    font-size: 24px; 
+    font-weight: bold; 
+    color: #2c3e50; 
+    margin-bottom: 16px; 
+    text-align: center; 
+  }
+  
+  .mi-chat-status {
+    font-size: 16px; /* Tamaño de fuente para el estado */
+    color: #e74c3c; /* Color rojo para estado de conexión */
+    text-align: center; /* Centrado */
+  }
+  
+  .mi-chat-messages {
+    background-color: #ffffff; /* Fondo blanco para mensajes */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 10px; /* Padding interior */
+    overflow-y: auto; /* Desplazamiento vertical */
+  }
+  
+  .mi-chat-message {
+    display: flex; /* Flexbox para mensajes */
+  }
+  
+  .mi-chat-bubble {
+    border-radius: 8px; /* Bordes redondeados */
+    max-width: 100%; /* Ancho máximo */
+  }
+  
+  .mi-chat-username {
+    font-weight: bold; /* Negrita para nombre de usuario */
+  }
+  
+  .mi-chat-text {
+    margin-top: 5px; /* Margen superior para texto */
+  }
+  
+  .mi-chat-input-container {
+    display: flex; /* Flexbox para contenedor de input y botón */
+  }
+  
+  .mi-chat-input {
+    background-color: #f9f9f9; /* Fondo del input */
+    border: 1px solid #87cefa; /* Borde del input */
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    transition: all 0.3s ease; /* Transición suave */
+  }
+  
+  .mi-chat-input:focus {
+    outline: none; /* Sin borde de enfoque */
+    border-color: #4682b4; /* Color de borde al enfocar */
+  }
+  
+  .mi-chat-send-button {
+    background-color: #4682b4; /* Color de fondo */
+    color: white; /* Color de texto */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor pointer para botón */
+    transition: background-color 0.3s ease; /* Transición de color */
+  }
+  
+  .mi-chat-send-button:hover {
+    background-color: #4169e1; /* Color de fondo al pasar el mouse */
+  }
+  
+  /* Estilos Responsivos */
+  @media (max-width: 768px) {
+    .mi-chat-title {
+      font-size: 20px; /* Tamaño de fuente más pequeño en móviles */
+    }
+  
+    .mi-chat-input {
+      font-size: 14px; /* Tamaño de fuente más pequeño para input */
+    }
+  
+    .mi-chat-send-button {
+      padding: 8px; /* Padding más pequeño para botón */
+    }
+  }

@@ -48,6 +48,7 @@ const ProjectMainDetail = () => {
          if(status === 200) { 
           setLoad(false)
           setProjectInformation(data.projectData)
+          console.log("data.porjectData", data.projectData)
           setProjectServices(data.serviceData)
           setUserWithAcces(data.userWithAcces)
           setProjectsReminders(data.reminders)
@@ -134,6 +135,7 @@ const ProjectMainDetail = () => {
          {activeSection === "messages" ? 
            <div className="section"  id="messages">
                <ProjectMessagesDetail 
+                projectInformation={projectInformation}
                 projectsMessages={projectsMessages}
                 projectId={projectId}
                 updateMessages={getProjectData}

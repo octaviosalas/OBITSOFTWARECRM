@@ -42,6 +42,7 @@ const Login = () => {
                  navigate(`/projects`)
                  setUserAccountData(data.data)
                  updateNotifications(data.notifications)
+                 console.log(data.dateAlerts)
                  setUserAlertsData(data.dateAlerts)
                  if(data.notifications.length > 0 ) { 
                   const quantityNotifications = data.notifications.length
