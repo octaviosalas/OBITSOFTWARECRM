@@ -34,7 +34,7 @@ const MainUsers = () => {
     }
 
   return (
-    <div className='flex flex-col items-center jsutify-center mt-36'>
+    <div className='flex flex-col items-center justify-center mt-36'>
           {usersData.map((us : UserTypeData) => ( 
             <div className='flex flex-col justify-start text-start border items-start' key={us.id}>
                   <p onClick={() => redirectToUserChat(us.id)} className='cursor-pointer mt-1 underline'>{us.name}</p>

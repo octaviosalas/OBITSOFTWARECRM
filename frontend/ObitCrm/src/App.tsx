@@ -13,11 +13,10 @@ import MainServices from './components/servicesModule/MainServices';
 import MainfollowsUp from './components/FollowsUp/MainFollowsUp';
 import ForgotPassword from './components/forgotPassword/ForgotPassword';
 import Token from './components/forgotPassword/Token';
-import ChatComponent from './components/Chat';
-import ChatPrueba from './components/ChatPrueba';
+import ChatComponent from './components/Chat/Chat';
+import MainTeam from './components/Chat/Team';
 import { userStore } from './store/UserAccount';
 import { Navigate } from 'react-router-dom';
-import MainChat from './components/MainChat';
 import MainUsers from './components/users/MainUsers';
 import MainMyProfile from './components/MyProfile/MainMyProfile';
 
@@ -44,11 +43,10 @@ function App() {
           <Route path="/followsUp" element={<MainfollowsUp />} />   
           <Route path="/token" element={<Token />} />   
           <Route path="/forgot-password" element={<ForgotPassword />} />   
-          <Route path="/chat" element={<MainChat />} />   
           <Route path="/chat/:userAccountId/:userId" element={<ChatComponent />} />   
           <Route path="users" element={<MainUsers />} />   
-          <Route path="chatprueba" element={<ChatPrueba />} />   
-          <Route path="miperfil" element={<MainMyProfile />} />   
+          <Route path="obitUsersTeam" element={<MainTeam />} />   
+          <Route path="myProfile" element={<MainMyProfile />} />   
 
         </Routes>
     <ToastContainer />

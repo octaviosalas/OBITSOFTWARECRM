@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useParams } from "react-router-dom";
-import apiBackendUrl from "../lib/axiosData";
-import { userStore } from "../store/UserAccount";
-import "./chatpruebacss.css"
+import apiBackendUrl from "../../lib/axiosData";
+import { userStore } from "../../store/UserAccount";
+import "./chatCssStyles.css"
 
 export type messageType = { 
   msg: string,
-  userName: string
+  userName: string,
+  userProfileImage: string
 }
 
 const ChatComponent: React.FC = () => {
@@ -48,9 +49,9 @@ const ChatComponent: React.FC = () => {
       socketIo.emit('join-room', { userAccountId, userId })
 
       
-      socketIo.on("chat message", ({ msg, roomId, writtenBy }) => {
-        console.log("Nuevo mensaje recibido:", msg, writtenBy, roomId);
-        setMessages((prevMessages) => [...prevMessages, { msg: msg, userName: writtenBy }]);
+      socketIo.on("chat message", ({ msg, roomId, writtenBy, userProfileImage }) => {
+        console.log("Nuevo mensaje recibido:", msg, writtenBy, roomId, userProfileImage);
+        setMessages((prevMessages) => [...prevMessages, { msg: msg, userName: writtenBy, userProfileImage: userProfileImage }]);
       });
 
       socketIo.on('disconnect', () => {
@@ -79,7 +80,7 @@ const ChatComponent: React.FC = () => {
           console.log("?")
           socket.emit("ping", Date.now());
         }
-      }, 5000); // Envía ping cada 5 segundos
+      }, 5000);
 
       return () => clearInterval(timer);
     }, [socket, isConnected]);
@@ -91,19 +92,20 @@ const ChatComponent: React.FC = () => {
 
     const handleSendMessage = async () => {
       try {
-        await sendMessage(user?.name);
+        await sendMessage(user?.name, user?.profileImage)
       } catch (error) {
         console.error("Error al enviar mensaje:", error);
       }
     };
 
-    const sendMessage = async (userName: string | undefined) => {
+    const sendMessage = async (userName: string | undefined, userProfileImage: string | null) => {
+      console.log("SEND MESSAGE", userProfileImage)
       if (!message.trim()) return;
       if (socket) {
         const roomId = [userAccountId, userId].sort().join('-');
         const writtenBy = userName
-        console.log("Enviando mensaje", { msg: message, roomId, writtenBy });
-        socket.emit("chat message", { msg: message, roomId, writtenBy });
+        console.log("Enviando mensaje", { msg: message, roomId, writtenBy, userProfileImage });
+        socket.emit("chat message", { msg: message, roomId, writtenBy, userProfileImage });
         setMessage("");
       }
     };
@@ -136,6 +138,7 @@ const ChatComponent: React.FC = () => {
                 >
                   <p className="mi-chat-username font-semibold text-sm">{msg.userName}</p>
                   <p className="mi-chat-text mt-1">{msg.msg}</p>
+                  <img src={msg.userProfileImage} className="h-4 w-4"/>
                 </div>
               </div>
             </div>

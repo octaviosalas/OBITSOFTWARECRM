@@ -40,6 +40,12 @@ class UserModel extends Model {
     })
     declare password: string
 
+    @Column({ 
+        type: DataType.STRING,
+        allowNull: true, 
+    })
+    declare profileImage: string | null;
+
     @HasMany(() => UserRemindersModel, {foreignKey: 'userId' })
     reminders: UserRemindersModel[]
 

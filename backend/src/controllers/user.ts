@@ -19,14 +19,15 @@ import { createSixDigitsToken } from "../utils/createRandomToken";
 //CREAR UN NUEVO USUARIO
 export const createUser = async (req: Request, res: Response): Promise <void> => { 
 
-    const {name, email, password, rol} = req.body
+    const {name, email, password, rol, profileImage} = req.body
 
    try {
        const userData = new UserModel({ 
          email,
          name,
          password,
-         rol
+         rol,
+         profileImage: profileImage
        })
        await userData.save()
        res.status(200).send("Usuario creado exitosamente")
@@ -138,7 +139,7 @@ export const everyUsers = async (req: Request, res: Response) => {
 export const updateUserData = async (req: Request, res: Response) => { 
 
     const {userId} = req.params
-    const {name, email, password} = req.body
+    const {name, email, profileImage, password} = req.body
 
     try {
         const userSelected = await UserModel.findByPk(userId)
@@ -147,6 +148,8 @@ export const updateUserData = async (req: Request, res: Response) => {
         } else { 
             userSelected.name = name;
             userSelected.email = email;
+            userSelected.profileImage = profileImage;
+            userSelected.password = password;
             await userSelected.save()
             res.status(200).send("Datos actualizados correctamente")
         } 

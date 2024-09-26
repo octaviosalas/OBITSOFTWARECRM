@@ -70,6 +70,28 @@ router.put("/updateUsertData/:userId",
     param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
     body("name").notEmpty().withMessage("Es obligatorio indicar el nombre"),
     body("email").notEmpty().withMessage("Es obligatorio indicar el nombre"),
+    body("password").notEmpty().withMessage("Es obligatorio indicar la contraseña"),
+    body("password").isLength({min: 6}).withMessage("La contraseña debe tener al menos 6 caracteres"),
+    errorsHanlder,
+    validateUserExistWithId,
+    updateUserData,
+)
+
+
+//ACTUALIZAR DATOS DE MI CUENTA DE USUARIO CON CONTRASEÑA
+router.put("/updateUsertDataWithPassword/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    body("name").notEmpty().withMessage("Es obligatorio indicar el nombre"),
+    body("email").notEmpty().withMessage("Es obligatorio indicar el nombre"),
+    body("password").notEmpty().withMessage("Es obligatorio indicar la contraseña"),
+    body("password").isLength({min: 6}).withMessage("La contraseña debe tener al menos 6 caracteres"),
+    body("passwordConfirmation").notEmpty().withMessage("Es obligatorio indicar dos veces la nueva contraseña"),
+    body("passwordConfirmation").custom((value, {req}) => { 
+        if(value !== req.body.password) {
+            throw new Error("Las contraseñas deben ser iguales")
+        }
+        return true
+    }),
     errorsHanlder,
     validateUserExistWithId,
     updateUserData,

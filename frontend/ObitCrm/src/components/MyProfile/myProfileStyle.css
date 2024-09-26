@@ -18,7 +18,7 @@ body {
 
 .mi-perfil-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 700px;
   padding: 30px;
   border-radius: 12px;
   background-color: white;
@@ -26,7 +26,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid black
+  box-shadow: 0 4px 12px rgba(1, 1, 1, 1); /* Ajusta el spread para simular el borde */
 }
 
 .mi-perfil-title {
@@ -50,7 +50,7 @@ body {
 }
 
 .mi-perfil-input {
-  width: 100%;
+  width: 300px;
   padding: 14px 20px;
   border: 1px solid #87cefa;
   border-radius: 8px;
@@ -69,31 +69,25 @@ body {
   color: #aaa;
 }
 
-.mi-perfil-button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
 .mi-perfil-submit-button {
   background-color: #4682b4;
   color: white;
   border: none;
-}
-
-.mi-perfil-submit-button:hover {
-  background-color: #4169e1;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
 }
 
 .mi-perfil-back-button {
-  background-color: #87cefa;
-  color: #ffffff;
-  margin-top: 20px;
+  background-color: gray;
+  color: white;
+  margin-top: 8px;
   border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
 }
 
 /* Estilos Responsivos */

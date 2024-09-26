@@ -6,8 +6,26 @@ export type newUserTypeData = {
     email: string,
     password: string,
     password_confirmation: string,
-    rol: string
+    rol: string,
+    profileImage: string
 }
+
+
+export type userDataUpdatedType = { 
+    name: string | undefined,
+    email: string | undefined,
+    profileImage: string | null,
+    password: string | undefined
+}
+
+export type userDataUpdatedWithPassType = { 
+    name: string | undefined,
+    email: string | undefined,
+    profileImage: string | null,
+    password: string | undefined,
+    passwordConfirmation: string | undefined
+}
+
 
 export type UserTypeData = { 
     id: number,
@@ -16,10 +34,11 @@ export type UserTypeData = {
     password: string,
     createdAt: string,
     updatedAt: string,
-    rol: string | null
+    rol: string | null,
+    profileImage: string | null
 }
 
-export type userLoginType = Omit<UserTypeData, 'id' | 'name' | 'createdAt' | 'updatedAt'  | 'rol'>;
+export type userLoginType = Omit<UserTypeData, 'id' | 'name' | 'createdAt' | 'updatedAt'  | 'rol' | "profileImage">;
 
 export type usersDataProjectType = { 
     id: number,
@@ -63,3 +82,5 @@ export type notificationsType = {
     updatedAt: string,
     userId: number
 }
+
+

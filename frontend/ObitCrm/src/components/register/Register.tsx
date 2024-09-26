@@ -6,6 +6,9 @@ import { shootSuccesToast } from '../../utils/succesToastFunction'
 import { useNavigate } from 'react-router-dom'
 import handleError from '../../utils/axiosErrorHanlder'
 import SpinnerComponent from '../Spinner/Spinner'
+import Dropzone from 'react-dropzone';
+import UseUserProfileImage from "../../hooks/UseUserProfileImage";
+import { PhotoIcon } from '@heroicons/react/24/solid'
 
 const Register = () => {
 
@@ -15,6 +18,7 @@ const Register = () => {
   const [password, setPassword] = useState<string>("")
   const [password_confirmation, setPassword_confirmation] = useState<string>("")
   const [rol, setRol] = useState<string>("")
+  const {sendImage, image, loadImage} = UseUserProfileImage()
 
   const navigate = useNavigate()
 
@@ -46,7 +50,8 @@ const Register = () => {
        email,
        password,
        password_confirmation,
-       rol
+       rol,
+       profileImage: image
     })
     try {
       const {data, status} = await apiBackendUrl.post("/user/createUser", userData)
@@ -62,11 +67,36 @@ const Register = () => {
 
 
   return (
-    <body>
-      <main className="main-content">
+      <main className="main-contentt">
         <div className="form-container">
           <h2>Registro de Cuenta</h2>
           <form className="registration-form" onSubmit={createUser}>
+
+          <div className="flex w-full items-center justify-center ">
+              <Dropzone onDrop={(acceptedFiles) => {
+                            sendImage(acceptedFiles);  
+                           }}>
+                            {({ getRootProps, getInputProps }) => (
+                                <div {...getRootProps({ className: 'dropzone' })}>
+                                    <input {...getInputProps()} />
+                                        <div className="mt-2 flex justify-center rounded-xl border border-gray-900/25 px-2 py-2" style={{ backgroundImage: `url(${image})`, backgroundSize: 'cover' }}>
+                                          <div className="text-center">
+                                            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                                          <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                                <label
+                                                    htmlFor="file-upload"
+                                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-green-800 focus-within:outline-none  "
+                                                    >
+                                                    <span>Sube una foto</span>
+                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                            </label>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div> )}
+                  </Dropzone>
+            </div>
+
             <div className="form-group">
               <label htmlFor="first-name">Nombre</label>
               <input
@@ -132,7 +162,7 @@ const Register = () => {
           </form>
         </div>
       </main>
-    </body>
+    
   )
 }
 

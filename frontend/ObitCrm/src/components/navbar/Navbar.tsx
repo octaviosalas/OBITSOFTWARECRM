@@ -58,9 +58,9 @@ const Navbar: React.FC = () => {
                             <li><a  href={`${PROJECT_URL}/followsUp`}>Seguimientos</a></li> 
                             <li><a href={`${PROJECT_URL}/projects`}>Proyectos</a></li>
                             <li><a href={`${PROJECT_URL}/services`}>Servicios</a></li>
-                            <li><a  href={`${PROJECT_URL}/users`}>Mi equipo</a></li>
+                            <li><a  href={`${PROJECT_URL}/obitUsersTeam`}>Mi equipo</a></li>
                         </ul>
-                    <button className="profile-button"><a href={`${PROJECT_URL}/`}>Mi perfil</a></button>
+                    <button className="profile-button"><a href={`${PROJECT_URL}/myProfile`}>Mi perfil</a></button>
                     <Dropdown>
                         <DropdownTrigger>
                             <img className="h-6 w-6" src={bellNoti}/>
