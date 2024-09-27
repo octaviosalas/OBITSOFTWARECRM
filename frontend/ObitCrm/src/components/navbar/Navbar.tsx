@@ -62,30 +62,35 @@ const Navbar: React.FC = () => {
                         </ul>
                     <button className="profile-button"><a href={`${PROJECT_URL}/myProfile`}>Mi perfil</a></button>
                     <Dropdown>
-                        <DropdownTrigger>
-                            <img className="h-6 w-6" src={bellNoti}/>
-                        </DropdownTrigger>                  
-                        <DropdownMenu aria-label="Static Actions" className="w-80">
+                            <DropdownTrigger>
+                            <i className="fas fa-bell" /> 
+                            </DropdownTrigger>
+                            <DropdownMenu aria-label="Static Actions" className="w-80">
                                 {userNotifications.map((not: notificationsType) => (
-                                    <DropdownItem key={not.id} className="w-80 break-words" title={not.message} onClick={() => redirectProjectNotification(not.projectId, not.id)}>
-                                      {not.message}
-                                    </DropdownItem>                                 
+                                        <DropdownItem
+                                            key={not.id}
+                                            className="w-80 break-words"
+                                            title={not.message}
+                                            onClick={() => redirectProjectNotification(not.projectId, not.id)}
+                                            >
+                                        {not.message}
+                                        </DropdownItem>
                                 ))}
-                        </DropdownMenu>
-                    </Dropdown>
+                            </DropdownMenu>
+                        </Dropdown>
                     
                     {userAlerts.length > 0 ?
                         <Dropdown>
                             <DropdownTrigger>
-                            <img className="h-6 w-6" src={alert}/>
-                            </DropdownTrigger>                  
+                              <i className="fas fa-exclamation-circle" />
+                            </DropdownTrigger>
                                 <DropdownMenu aria-label="Static Actions" className="w-72">
-                                        {userAlerts.map((alert: userAlertsType) => (
-                                            <DropdownItem key={alert.id} className="w-72 break-words">
-                                                {alert.message}
-                                            </DropdownItem>
-                                        ))}
-                                </DropdownMenu>
+                                {userAlerts.map((alert: userAlertsType) => (
+                                    <DropdownItem key={alert.id} className="w-72 break-words">
+                                        {alert.message}
+                                    </DropdownItem>
+                                ))}
+                            </DropdownMenu>
                         </Dropdown>
                      : null}
                 </nav>
@@ -95,3 +100,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+

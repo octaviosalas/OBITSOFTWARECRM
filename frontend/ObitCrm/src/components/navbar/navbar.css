@@ -1,95 +1,157 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
 .icon-notifications { 
-    color: white;
-    background-color: red;
+  color: white;
+  background-color: red;
 }
 
 .navbar {
-    background-color: #003366; /* Azul oscuro */
-    padding: 20px;
+  background-color: #003366; /* Azul oscuro */
+  padding: 20px;
+  width: 100%;
 }
 
 .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 25px;
-    border-radius: 100px;
-    background-color: #003366; /* Azul oscuro */
-    color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 25px;
+  border-radius: 100px;
+  background-color: #003366; /* Azul oscuro */
+  color: #fff;
 }
 
 .navbar-logo h1 {
-    margin: 0;
-    font-weight: 600;
-    font-size: 1.5em;
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.5em;
 }
 
-.navbar-logo a {
-    color: #fff;
-    text-decoration: none;
+.navbar-logo img {
+  height: 1.5rem;
+  width: auto;
 }
 
 .navbar-menu {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-}
-
-.menu-toggle svg {
-    fill: #fff;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .menu {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .menu li {
-    margin: 0;
+  margin: 0;
 }
 
 .menu a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 700;
-    padding: 10px 15px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 10px 15px;
 }
 
 .menu a:hover {
-    background-color: #004080; /* Azul más oscuro para hover */
-    border-radius: 5px;
+  background-color: #004080; /* Azul más oscuro para hover */
+  border-radius: 5px;
 }
 
 .profile-button {
-    background-color: #007bff; /* Azul */
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
+  background-color: #007bff; /* Azul */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
 }
 
 .profile-button a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
 }
 
 .profile-button a:hover {
-    background-color: #0056b3; /* Azul más oscuro para hover */
+  background-color: #0056b3; /* Azul más oscuro para hover */
+}
+
+/* Estilos para los iconos de FontAwesome */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.menu-toggle i {
+  font-size: 24px;
+}
+
+/* Iconos de notificaciones y alertas */
+.fas.fa-bell, .fas.fa-exclamation-circle {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  background-color: #fff;
+  color: #000;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.dropdown-menu a {
+  color: #000;
+  text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+  background-color: #eaeaea;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .navbar-menu {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 25px;
+    background-color: #003366;
+    padding: 15px;
+    border-radius: 10px;
+    width: 200px;
+  }
+
+  .menu.open li {
+    margin-bottom: 10px;
+  }
+
+  .menu.open li a {
+    display: block;
+    padding: 10px;
+    font-size: 1.2rem;
+  }
+
+  .menu a {
+    padding: 10px 0;
+  }
 }

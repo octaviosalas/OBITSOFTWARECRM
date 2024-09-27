@@ -25,6 +25,7 @@ export const validateIfClientEmailNotExist = async (req: Request, res: Response,
 export const validateClientExistense = async (req: Request, res: Response, next: NextFunction) => { 
 
     const {clientId} = req.params
+    console.log(clientId)
 
     if (clientId === "undefined") { 
         return res.status(404).send("Debes seleccionar un cliente");

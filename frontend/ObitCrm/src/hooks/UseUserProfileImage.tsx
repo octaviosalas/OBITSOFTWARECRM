@@ -3,7 +3,7 @@ import axios from "axios"
 
 const UseUserProfileImage = () => { 
 
-    const [image, setImage] = useState(null)
+    const [image, setImage] = useState("")
     const [loadImage, setLoadImage] = useState<boolean>(false)
 
     const sendImage = (files : any) => {

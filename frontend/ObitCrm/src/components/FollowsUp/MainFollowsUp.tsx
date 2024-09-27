@@ -59,33 +59,31 @@ const MainfollowsUp = () => {
 
     return ( 
         <div>
-
-           {!load ? 
-           <>
-           <div className="custom-header">
-                <div className="header-container">
-                    <div id="modals-container">
-                            <AddNewFollowUp updateTable={getUserFollowsUp} getTodayNoticies={getTodayNoticies}/>
-                            <SendEmail/>
-                            {hasCallsToday ? <TodayCalls todayRemembers={todayRemembers}/> : null}
-                    </div>
-                </div>
+      {!load ? 
+      <>
+        <div className="custom-header">
+          <div className="header-container">
+            <div id="modals-container">
+              <AddNewFollowUp updateTable={getUserFollowsUp} getTodayNoticies={getTodayNoticies} />
+              <SendEmail />
+              {hasCallsToday ? <TodayCalls todayRemembers={todayRemembers} /> : null}
             </div>
-    
-            <div className="search-bar">
-                <input type="text" placeholder="Buscar seguimientos..." />
-            </div>
-        
-            <div id="table-container">
-                <FollowsUpTable userFollowsUpData={userFollowsUpData} updateTable={getUserFollowsUp}/>
-            </div>
-           </>  : 
-           <div className="mt-36">
-             <SpinnerComponent/>
-           </div>
-           }
-
+          </div>
         </div>
+
+        <div className="search-bar">
+          <input type="text" placeholder="Buscar seguimientos..." />
+        </div>
+
+        <div id="table-container">
+          <FollowsUpTable userFollowsUpData={userFollowsUpData} updateTable={getUserFollowsUp} />
+        </div>
+      </> : 
+      <div className="mt-36">
+        <SpinnerComponent />
+      </div>
+      }
+    </div>
     )
 }
 

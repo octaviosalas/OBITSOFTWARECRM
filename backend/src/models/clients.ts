@@ -3,6 +3,7 @@ import FollowUpModel from "./projectPlanification"
 import ProjectModel from "./projects"
 import UserClientAccesModel from "./UserClientAcces"
 import FollowUpClientsModel from "./followUpClients"
+import EmailModel from "./email"
 
 @Table({ 
     tableName: "clients",
@@ -60,6 +61,9 @@ class ClientModel extends Model {
 
     @HasMany(() => FollowUpClientsModel, { foreignKey: 'client' }) 
     followUpsClientsData: FollowUpModel[]; 
+
+    @HasMany(() => EmailModel, {foreignKey: 'userId' })
+    userEmailsData: EmailModel[]
 }
 
 export default ClientModel

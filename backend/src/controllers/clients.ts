@@ -3,6 +3,8 @@ import ClientModel from "../models/clients";
 import FollowUpClientsModel from "../models/followUpClients";
 import ProjectModel from "../models/projects";
 import UserClientAccesModel from "../models/UserClientAcces";
+import sendEmailToClient from "../utils/emailAttachts";
+import { emailTypeData } from "../types/emailTypes";
 
 export const createClient = async (req: Request, res: Response): Promise <void> => { 
 
@@ -140,7 +142,6 @@ export const createNewClientFlowUp = async (req: Request, res: Response): Promis
    }
 }
 
-
 export const myHistoricFollowsUp = async (req: Request, res: Response): Promise <void> => { 
    
    const {userId} = req.params
@@ -160,8 +161,6 @@ export const myHistoricFollowsUp = async (req: Request, res: Response): Promise 
       res.status(500).send(error)
    }
 }
-
-
 
 export const getMyCustomerClientHistoricTracking = async (req: Request, res: Response): Promise <void> => { 
    
@@ -230,4 +229,27 @@ export const deleteMyCustomerClientTracking = async (req: Request, res: Response
    } catch (error) {
       res.status(500).send(error)
    }
+}
+
+export const sendOneEmailToClient = async (req: Request, res: Response): Promise <void> => { 
+
+   const { emailMessage, emailTitle, emailDate, destinationEmail} = req.body
+   const {userId, clientId} = req.params
+
+      try {
+         const data : emailTypeData = {
+            clientId: Number(clientId),
+            emailTitle: emailTitle,
+            emailMessage: emailMessage,
+            destinationEmail: destinationEmail,
+            emailDate: emailDate,
+            userId: Number(userId)
+        };
+
+        await sendEmailToClient({data})
+        res.status(200).send("Se envio correctamente el correo electronico al cliente")
+
+      } catch (error) {
+         res.status(500).send(error)
+      }
 }

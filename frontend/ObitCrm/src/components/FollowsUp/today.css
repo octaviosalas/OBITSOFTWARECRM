@@ -1,0 +1,15 @@
+.dropdown-menu {
+    background-color: #fff; /* Color de fondo */
+    border: 1px solid #ccc; /* Borde */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Sombra */
+}
+
+.dropdown-item {
+    padding: 10px 15px; /* Espaciado interno */
+    color: #333; /* Color del texto */
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0; /* Color de fondo en hover */
+}

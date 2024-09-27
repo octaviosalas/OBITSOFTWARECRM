@@ -2,12 +2,13 @@ import {Router} from "express"
 import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { createClient, clientData, everyClients, deleteClient, updateMyCustomerClientTracking, updateFollowUpMessage,
-         updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking, myHistoricFollowsUp,
-         deleteMyCustomerClientTracking } from "../controllers/clients"
+         updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking, myHistoricFollowsUp, 
+         deleteMyCustomerClientTracking, sendOneEmailToClient } from "../controllers/clients"
 import { 
     validateIfClientEmailNotExist, validateClientExistense, 
     validateTrackingToClientExist, validateTrackingToClientWasCreatedByUser } from "../middlewares/clientsValidations"
 import { validateUserExistWithId } from "../middlewares/userValidations"
+import sendEmailToClient from "../utils/emailAttachts"
 
 const router = Router()
 
@@ -126,5 +127,18 @@ router.delete("/deleteMyTrackingData/:trackingId/:clientId/:userId",
     deleteMyCustomerClientTracking
 )
 
+
+router.post("/sendEmailToClient/:clientId/:userId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    body("emailTitle").notEmpty().withMessage("No es posible enviar un correo electronico sin titulo"),
+    body("emailMessage").notEmpty().withMessage("No es posible enviar un correo electronico vacio"),
+    body("emailDate").notEmpty().withMessage("Debes indicar la fecha de registro del correo electronico"),
+    body("destinationEmail").notEmpty().withMessage("Debes indicar el correo electronico destino para enviar"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    sendOneEmailToClient
+)
 
 export default router
