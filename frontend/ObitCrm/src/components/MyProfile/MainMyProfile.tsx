@@ -23,6 +23,7 @@ const MainMyProfile = () => {
   const [waitingUserData, setWaitingUserData] = useState<boolean>(false)
   const [passwordChanged, setPasswordChanged] = useState<boolean>(false)
   const [passwordRepeated, setPasswordRepeated] = useState<string | undefined>("")
+  const [wannaChangeImage, setWanaChangeImage] = useState<boolean>(false)
 
   const {sendImage, image, loadImage} = UseUserProfileImage()
   const navigate = useNavigate()
@@ -65,10 +66,8 @@ const MainMyProfile = () => {
   useEffect(() => { 
       if(userPassword !== lastUserPassword) { 
         setPasswordChanged(true)
-        console.log("no es igual")
       } else { 
         setPasswordChanged(false)
-        console.log("es igual")
       }
   }, [userPassword])
 
@@ -130,13 +129,11 @@ const MainMyProfile = () => {
 
 
   return (
-    <div className='flex items-center justify-center mt-12'>
+    <div className='flex items-center justify-center mt-6'>
         <div className="mi-perfil-container">
             <h2 className="mi-perfil-title">Mi Perfil</h2>
-
-          <form id="profile-form" className="mi-perfil-form">
-             <div className="flex items-center justify-center pb-2">
-
+           <form id="profile-form" className="mi-perfil-form">
+             <div className="flex items-center justify-center">
               {!loadImage ? 
                     <Dropzone onDrop={(acceptedFiles) => {
                             sendImage(acceptedFiles);  
@@ -144,19 +141,27 @@ const MainMyProfile = () => {
                             {({ getRootProps, getInputProps }) => (
                                 <div {...getRootProps({ className: 'dropzone' })}>
                                     <input {...getInputProps()} />
-                                        <div className="mt-2 flex justify-center rounded-xl border border-gray-900/25 px-2 py-2" style={{ backgroundImage: `url(${image ? image : userProfileImage})`, backgroundSize: 'cover' }}>
+                                        <div className=" flex justify-center rounded-2xl border w-40 h-40 border-gray-900/25 px-2 py-2" style={{ backgroundImage: `url(${image ? image : userProfileImage})`, backgroundSize: 'cover' }}>
                                           <div className="text-center">
-                                            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                          <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                              {wannaChangeImage && userProfileImage === null ? 
+                                              <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" /> : 
+                                              null}
+                                              <div className="mt-4 flex text-sm leading-6 text-gray-600">
                                                 <label
                                                     htmlFor="file-upload"
                                                     className="relative cursor-pointer rounded-md bg-white font-semibold text-green-800 focus-within:outline-none  "
                                                     >
-                                                    <span>Sube una foto</span>
+                                    
+                                                    {wannaChangeImage && userProfileImage === null ? 
+                                                                      <span>Sube una foto</span> : 
+                                                    null}
                                                 <input id="file-upload" name="file-upload" type="file" className="sr-only" />
                                             </label>
                                               </div>
                                           </div>
+                                      </div>
+                                      <div className="flex items-center justify-center">
+                                         <p className="cursor-pointer underline" style={{color: "#4682b4"}}>Cambiar imagen</p>
                                       </div>
                                   </div> )}
                   </Dropzone> : <SpinnerComponent/>}

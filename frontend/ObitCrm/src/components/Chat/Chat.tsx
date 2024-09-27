@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import apiBackendUrl from "../../lib/axiosData";
 import { userStore } from "../../store/UserAccount";
 import "./chatCssStyles.css"
+import {Avatar} from "@nextui-org/react";
 
 export type messageType = { 
   msg: string,
@@ -20,11 +21,7 @@ const ChatComponent: React.FC = () => {
   const { userAccountId, userId } = useParams();
   const {user} = userStore()
 
-  useEffect(() => { 
-    console.log(messages)
-  }, [messages])
-
-    const getUserData = async () => { 
+  const getUserData = async () => { 
       try {
         const {data, status} = await apiBackendUrl.get(`/user/userData/${userId}`)
         if(status === 200) { 
@@ -34,17 +31,14 @@ const ChatComponent: React.FC = () => {
       } catch (error) {
         console.log(error)
       }
-    }
+  }
   
-    useEffect(() => {
+  useEffect(() => {
       console.log("ejecuto useffect")
       const socketIo = io("http://localhost:4000");
       setSocket(socketIo);
       setIsConnected(true);
 
-      socketIo.on('connect', () => {
-        console.log('Conectado al servidor');
-      });
 
       socketIo.emit('join-room', { userAccountId, userId })
 
@@ -67,14 +61,13 @@ const ChatComponent: React.FC = () => {
       return () => {
         socketIo.disconnect();
       };
-    }, []);
+  }, []);
 
-    useEffect(() => {
+  useEffect(() => {
       getUserData()
-    }, [userAccountId, userId]);
+  }, [userAccountId, userId]);
 
-
-    useEffect(() => {
+  useEffect(() => {
       const timer = setInterval(() => {
         if (socket && isConnected) {
           console.log("?")
@@ -83,23 +76,21 @@ const ChatComponent: React.FC = () => {
       }, 5000);
 
       return () => clearInterval(timer);
-    }, [socket, isConnected]);
+  }, [socket, isConnected]);
 
-
-    const handleChangeMessageData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeMessageData = (e: React.ChangeEvent<HTMLInputElement>) => {
       setMessage(e.target.value);
-    };
+  };
 
-    const handleSendMessage = async () => {
+  const handleSendMessage = async () => {
       try {
         await sendMessage(user?.name, user?.profileImage)
       } catch (error) {
         console.error("Error al enviar mensaje:", error);
       }
-    };
+  };
 
-    const sendMessage = async (userName: string | undefined, userProfileImage: string | null) => {
-      console.log("SEND MESSAGE", userProfileImage)
+  const sendMessage = async (userName: string | undefined, userProfileImage: string | null | undefined) => {
       if (!message.trim()) return;
       if (socket) {
         const roomId = [userAccountId, userId].sort().join('-');
@@ -108,7 +99,7 @@ const ChatComponent: React.FC = () => {
         socket.emit("chat message", { msg: message, roomId, writtenBy, userProfileImage });
         setMessage("");
       }
-    };
+  };
 
   
 
@@ -136,9 +127,15 @@ const ChatComponent: React.FC = () => {
                     msg.userName === user?.name ? 'bg-blue-600 text-white' : 'bg-black text-white'
                   }`}
                 >
-                  <p className="mi-chat-username font-semibold text-sm">{msg.userName}</p>
-                  <p className="mi-chat-text mt-1">{msg.msg}</p>
-                  <img src={msg.userProfileImage} className="h-4 w-4"/>
+                  <div className="flex gap-2 items-center justify-center">
+                       <div className="h-full">
+                          <Avatar src={msg.userProfileImage} />
+                       </div>
+                       <div className="flex flex-col">
+                          <p className="mi-chat-username font-semibold text-sm">{msg.userName}</p>
+                          <p className="mi-chat-text mt-1">{msg.msg}</p>
+                       </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -153,7 +150,7 @@ const ChatComponent: React.FC = () => {
             className="mi-chat-input w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
-            type="button"
+            type="submit"
             onClick={handleSendMessage}
             disabled={!socket || !isConnected}
             className={`mi-chat-send-button ml-2 px-4 py-2 rounded ${

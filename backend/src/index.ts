@@ -28,6 +28,7 @@ const io = new Server(server, {
 
 
 io.on("connection", (socket) => { 
+     
      console.log("USUARIO CONECTADO!")
 
      socket.on("disconnect", () => { 
@@ -47,7 +48,7 @@ io.on("connection", (socket) => {
 
      socket.on("chat message", ({ msg, roomId, writtenBy, userProfileImage }) => { 
           console.log(`Mensaje recibido en la sala ${roomId}: ${msg}, escrito por ${writtenBy}, foto: ${userProfileImage}`);
-          io.to(roomId).emit("chat message", {msg, roomId, writtenBy});
+          io.to(roomId).emit("chat message", {msg, roomId, writtenBy, userProfileImage});
       });
 
 })
