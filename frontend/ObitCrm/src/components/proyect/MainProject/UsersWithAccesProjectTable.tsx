@@ -1,9 +1,10 @@
 import  { useState } from 'react'
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar} from "@nextui-org/react";
 import handleError from '../../../utils/axiosErrorHanlder';
 import apiBackendUrl from '../../../lib/axiosData';
 import { usersWithAccesData } from '../../../types/User';
 import SpinnerComponent from '../../Spinner/Spinner';
+import userIcon from "../../../images/user.png"
 
 interface Props { 
     projectId: number
@@ -23,7 +24,7 @@ const UsersWithAccesProjectTable = ({projectId}: Props) => {
             if(status === 200) { 
                 setData(data)
                 setLoad(false)
-                console.log(data)
+                console.log("userWithAccesData", data)
             }
         } catch (error) {
             handleError(error, setLoad)
@@ -45,7 +46,10 @@ const UsersWithAccesProjectTable = ({projectId}: Props) => {
                             <div className='flex flex-col justify-center items-start'>
                                 {data.map((member : usersWithAccesData) => ( 
                                     <ul className='flex flex-col' key={member.userData.name}>
-                                    <li>{member.userData.name}</li>
+                                     <div className='flex items-center p-1 gap-3'>
+                                        <Avatar className='h-9 w-9' src={member.userData.profileImage !== null ? member.userData.profileImage : userIcon}/>
+                                        <li>{member.userData.name}</li>
+                                     </div>
                                     </ul>                        
                                 ))}
                             </div> : null

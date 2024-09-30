@@ -16,7 +16,7 @@ const Login = () => {
     const [load, setLoad] = useState<boolean>(false)
     const navigate = useNavigate()
 
-    const {setUserAccountData, updateNotifications, setUserAlertsData} = userStore()
+    const {setUserAccountData, updateNotifications, setUserAlertsData, connectSocket} = userStore()
 
 
     const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => { 
@@ -37,12 +37,11 @@ const Login = () => {
         try {
             const {data, status} = await apiBackendUrl.post("/user/loginUserAccount", userData)
             if(status === 200) { 
-                 console.log(data.notifications)
                  setLoad(false)
                  navigate(`/projects`)
                  setUserAccountData(data.data)
                  updateNotifications(data.notifications)
-                 console.log(data.dateAlerts)
+                 connectSocket(data.data.id)
                  setUserAlertsData(data.dateAlerts)
                  if(data.notifications.length > 0 ) { 
                   const quantityNotifications = data.notifications.length

@@ -48,9 +48,9 @@ const ProjectMainDetail = () => {
          if(status === 200) { 
           setLoad(false)
           setProjectInformation(data.projectData)
-          console.log("data.porjectData", data.projectData)
           setProjectServices(data.serviceData)
           setUserWithAcces(data.userWithAcces)
+          console.log(data)
           setProjectsReminders(data.reminders)
           setProjectsMessages(data.messages)
 

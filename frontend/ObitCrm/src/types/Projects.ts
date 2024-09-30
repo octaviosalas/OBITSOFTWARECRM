@@ -20,7 +20,8 @@ export type userAccesProjectType = {
     projectId: number
     updatedAt: string,
     userData: UserTypeData,
-    userId: number
+    userId: number,
+    profileImage: string
 }
 
 export type projectRemindersType = { 

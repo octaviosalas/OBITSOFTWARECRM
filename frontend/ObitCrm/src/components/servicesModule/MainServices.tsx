@@ -16,6 +16,7 @@ const MainServices =  () => {
   const [menu, setMenu] = useState<string>("services")
   const {user} = userStore()
   const [servicesData, setServicesData] = useState<ServiceWithProjectType[] | []>([])
+  const [servicesEndDateOrdered, setServicesEndDateOrdered] = useState<ServiceWithProjectType[] | []>([])
   const [load, setLoad] = useState<boolean>(false)
 
     const getUserServices = async () => {
@@ -23,7 +24,6 @@ const MainServices =  () => {
         try {
           const {data, status} = await apiBackendUrl.get(`/service/servicesWorking/${user?.id}`)
           if(status === 200) { 
-            setLoad(false) 
             const createObject : ServiceWithProjectType[] = data.flatMap((project: UnifiedProjectType) => {
               return project.projectData.services.map((service) => {
                 return {
@@ -40,9 +40,14 @@ const MainServices =  () => {
               });
             });
       
-            console.log("createObject", createObject); 
+            const sortedByEndDate = createObject.sort((a, b) => {
+              const dateA = new Date(a.endDate).getTime(); 
+              const dateB = new Date(b.endDate).getTime(); 
+              return dateA - dateB; 
+            });
+            setServicesEndDateOrdered(sortedByEndDate)
             setServicesData(createObject)
-      
+            setLoad(false) 
         }
         } catch (error) {
           handleError(error, setLoad)
@@ -91,7 +96,7 @@ const MainServices =  () => {
           <div className="table-section" id="expirationsTable">
               <h2>Próximos Vencimientos</h2>
               <div id="expirationsTableContent">
-                  <ExpirationsTable/>
+                  <ExpirationsTable servicesEndDateOrdered={servicesEndDateOrdered}/>
               </div>
           </div> : null
         }

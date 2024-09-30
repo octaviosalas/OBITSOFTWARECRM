@@ -3,7 +3,7 @@ import {body, param} from "express-validator"
 import { errorsHanlder } from "../utils/errorsHanlder"
 import { createClient, clientData, everyClients, deleteClient, updateMyCustomerClientTracking, updateFollowUpMessage,
          updateClientData, createNewClientFlowUp, getMyCustomerClientHistoricTracking, myHistoricFollowsUp, 
-         deleteMyCustomerClientTracking, sendOneEmailToClient } from "../controllers/clients"
+         deleteMyCustomerClientTracking, sendOneEmailToClient, getClientHistoricEmails, usersWithClientAcces } from "../controllers/clients"
 import { 
     validateIfClientEmailNotExist, validateClientExistense, 
     validateTrackingToClientExist, validateTrackingToClientWasCreatedByUser } from "../middlewares/clientsValidations"
@@ -50,6 +50,14 @@ router.put("/updateClientData/:clientId",
     validateClientExistense,
     updateClientData
 )
+
+router.get("/userWithClientAcces/:clientId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    errorsHanlder,
+    validateClientExistense,
+    usersWithClientAcces
+)
+
 
 router.delete("/deleteClient/:clientId", 
     param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
@@ -127,7 +135,6 @@ router.delete("/deleteMyTrackingData/:trackingId/:clientId/:userId",
     deleteMyCustomerClientTracking
 )
 
-
 router.post("/sendEmailToClient/:clientId/:userId",
     param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
     param("userId").notEmpty().withMessage("Debes iniciar sesion"),
@@ -139,6 +146,15 @@ router.post("/sendEmailToClient/:clientId/:userId",
     validateClientExistense,
     validateUserExistWithId,
     sendOneEmailToClient
+)
+
+router.get("/historicEmails/:clientId/:userId",
+    param("clientId").notEmpty().withMessage("Esta faltando el id del cliente"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    getClientHistoricEmails
 )
 
 export default router

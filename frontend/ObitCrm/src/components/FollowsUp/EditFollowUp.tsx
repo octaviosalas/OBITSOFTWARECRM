@@ -59,7 +59,6 @@ const EditFollowUp = ({updateTable, followUpData}: Props) => {
         }
     }
 
-//router.put("/updateMyTrackingData/:trackingId/:clientId/:userId",
 
 
   return (
@@ -102,7 +101,7 @@ const EditFollowUp = ({updateTable, followUpData}: Props) => {
                             <div className="form-row">
                                 <div className="form-col">
                                     <div className="form-group">
-                                        <label >Emails:</label>
+                                        <label>Emails:</label>
                                         <a href="#" className="open-email-modal">Ver Emails</a>
                                     </div>
                                 </div>

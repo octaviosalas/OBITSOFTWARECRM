@@ -105,7 +105,8 @@ const QuestionAfterCreationClient = ({clientId, updateTable, closeModal}: Props)
             <h3 className="text-blue-800 font-medium text-lg">¿Deseas dar acceso a otro usuario?</h3>
             <div className="modal">
                     <form id="client-form">
-                        <input type="text" onChange={handleSearchUser}/>                          
+                        <input type="text" onChange={handleSearchUser}/>          
+                        {filteredUserNames.length === 0 && usersNames.length === 0 ? <button className="btn-cancel-btn" onClick={() => closeModal()}>Cancelar</button> : null}                
 
                         {filteredUserNames.length > 0 ?
                             <div className="flex flex-col mt-2 bg-gray-100 rounded-sm shadow-xl">

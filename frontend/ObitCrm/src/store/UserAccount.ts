@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { UserTypeData } from "../types/User";
 import { notificationsType } from "../types/User";
 import { userAlertsType } from "../types/Alerts";
+import { io, Socket } from "socket.io-client";
 
 type UserAccountStore = { 
     user: UserTypeData | null;
@@ -12,6 +13,9 @@ type UserAccountStore = {
     markNotificationAsRead: (id: number) => void; 
     userAlerts: userAlertsType[] | [];
     setUserAlertsData: (data: userAlertsType[] | []) => void;
+    socket: Socket | null;
+    connectSocket: (userId: string) => void;
+    disconnectSocket: () => void;
 };
 
 export const userStore = create<UserAccountStore>((set) => {
@@ -24,6 +28,7 @@ export const userStore = create<UserAccountStore>((set) => {
         user: initialUser,
         userNotifications: initialNotifications,
         userAlerts: initialAlerts,
+        socket: null,
 
         setUserAccountData: (data: UserTypeData | null) => {
             set({ user: data });
@@ -51,7 +56,23 @@ export const userStore = create<UserAccountStore>((set) => {
 
                 return { userNotifications: updatedNotifications };
             });
+        },
+    
+        connectSocket: (userId: string) => {
+            const socket = io("http://localhost:4000");
+            socket.emit("connection", { userId });
+            set({ socket });
+        },
+        
+        disconnectSocket: () => {
+            set((state) => {
+              if (state.socket) {
+                state.socket.emit("disconnect");
+                state.socket.disconnect();
+              }
+              return { socket: null };
+            });
         }
+    
     };
-
 });

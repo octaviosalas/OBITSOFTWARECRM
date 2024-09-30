@@ -29,7 +29,9 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => { 
      
-     console.log("USUARIO CONECTADO!")
+     socket.on("connection", (userId: number) => { 
+          console.log("USUARIO CONECTADO!!!!!!", userId)
+     })
 
      socket.on("disconnect", () => { 
           console.log("USUARIO DESCONECTADO")
@@ -39,17 +41,12 @@ io.on("connection", (socket) => {
           const roomId = [userAccountId, userId].sort().join('-');
           socket.join(roomId);
           console.log(`Usuario con ID ${userAccountId} se ha unido a la sala ${roomId}`);
-        });
-
-    /* socket.on("chat message", (msg : string) => { 
-          console.log("NUEVO MENSAJE RECIBIDO POR SOCKET", msg)
-          io.emit("chat message", msg) //de esta manera el mensaje se emite a todos los usuarios, no se diferencia por salas.
-     }) */
+     });
 
      socket.on("chat message", ({ msg, roomId, writtenBy, userProfileImage }) => { 
           console.log(`Mensaje recibido en la sala ${roomId}: ${msg}, escrito por ${writtenBy}, foto: ${userProfileImage}`);
           io.to(roomId).emit("chat message", {msg, roomId, writtenBy, userProfileImage});
-      });
+     });
 
 })
 

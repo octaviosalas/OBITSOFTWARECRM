@@ -1,6 +1,6 @@
 import {Modal, ModalContent, useDisclosure} from "@nextui-org/react";
 import "./styles.css"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { newFollowUpType } from "../../types/FollowsUp";
 import apiBackendUrl from "../../lib/axiosData";
 import { userStore } from "../../store/UserAccount";
@@ -10,7 +10,7 @@ import { getCurrentDateWithoutTime } from "../../utils/actualDate";
 import SpinnerComponent from "../Spinner/Spinner";
 import { shootSuccesToast } from "../../utils/succesToastFunction";
 import WithOutClients from "../reusableComponents/withOutClients";
-
+import ClientHistoricEmails from "../ClientsModule/ClientHistoricEmail";
 
 interface Props { 
     updateTable: () => void,
@@ -27,8 +27,9 @@ const AddNewFollowUp = ({updateTable, getTodayNoticies}: Props) => {
   const [nextContactDate, setNextContactDate] = useState<string>("")
   const [clientId, setClientId] = useState<number>()
   const [withOutClientsData, setWithOutClientsData] = useState<boolean>(false)
+  const [showEmails, setShowEmails] = useState<boolean>(false);
 
-  const {user} = userStore()
+    const {user} = userStore()
 
     const handleOpen = () => { 
         getClientsAccesUserData()
@@ -60,6 +61,7 @@ const AddNewFollowUp = ({updateTable, getTodayNoticies}: Props) => {
     }
 
     const chooseClient = (id: number) => { 
+        setShowEmails(false)
         setClientId(id)
     }
 
@@ -90,6 +92,10 @@ const AddNewFollowUp = ({updateTable, getTodayNoticies}: Props) => {
         }
     }
 
+    useEffect(() => { 
+    console.log(showEmails)
+    }, [showEmails])
+
 
 
   return (
@@ -104,6 +110,7 @@ const AddNewFollowUp = ({updateTable, getTodayNoticies}: Props) => {
                     <div className="form-section">
                         <button className="btn-close" id="closeTrackingSection" onClick={() => onClose()}>&times;</button>
                         <h2>Agregar/Editar Seguimiento</h2>
+                        {!showEmails ?
                         <div id="trackingForm">
                             <div className="form-row">
                                 <div className="form-col">
@@ -143,15 +150,11 @@ const AddNewFollowUp = ({updateTable, getTodayNoticies}: Props) => {
                                 <div className="form-col">
                                     <div className="form-group">
                                         <label >Emails:</label>
-                                        <a href="#" className="open-email-modal">Ver Emails</a>
+                                        <a href="#" className="open-email-modal" onClick={() => setShowEmails(prevState => !prevState) }>Ver Emails</a> 
+
                                     </div>
                                 </div>
-                                <div className="form-col">
-                                    <div className="form-group">
-                                        <label >Histórico de Comunicaciones:</label>
-                                        <a href="#" className="open-history-modal">Ver Histórico</a>
-                                    </div>
-                                </div>
+                                
                             </div>
                             {!load ? 
                             <div className="form-buttons">
@@ -162,7 +165,12 @@ const AddNewFollowUp = ({updateTable, getTodayNoticies}: Props) => {
                                <SpinnerComponent/>
                             </div>
                             }
-                        </div>
+                        </div> : 
+                            <div className="flex flex-col justify-center items-center p-6">
+                                <ClientHistoricEmails clientId={clientId}/> 
+                                <button className="bg-red-600 text-white font-medium w-24 h-12 rounded-xl mt-4" onClick={() => setShowEmails(false)}>Volver</button>
+                            </div>
+                        }
                     </div>
               </div> : 
               <div className="flex items-center justify-center p-4">

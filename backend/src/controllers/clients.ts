@@ -5,6 +5,8 @@ import ProjectModel from "../models/projects";
 import UserClientAccesModel from "../models/UserClientAcces";
 import sendEmailToClient from "../utils/emailAttachts";
 import { emailTypeData } from "../types/emailTypes";
+import EmailModel from "../models/email";
+import UserModel from "../models/user";
 
 export const createClient = async (req: Request, res: Response): Promise <void> => { 
 
@@ -107,6 +109,27 @@ export const updateClientData = async (req: Request, res: Response): Promise <vo
        res.status(500).send(error)
     }
 }
+
+export const usersWithClientAcces = async (req: Request, res: Response): Promise <void> => { 
+
+   const {clientId} = req.params
+   
+   try {
+       const usersWithAccesToClientData = await UserClientAccesModel.findAll({
+         where: { 
+            clientId: clientId
+         },
+         include: [{ 
+            model: UserModel,
+            as: "userData"
+         }]
+       })
+       res.status(200).send(usersWithAccesToClientData)
+   } catch (error) {
+      res.status(500).send(error)
+   }
+}
+
 
 export const deleteClient = async (req: Request, res: Response): Promise <void> => { 
    const {clientId} = req.params
@@ -248,6 +271,40 @@ export const sendOneEmailToClient = async (req: Request, res: Response): Promise
 
         await sendEmailToClient({data})
         res.status(200).send("Se envio correctamente el correo electronico al cliente")
+
+      } catch (error) {
+         res.status(500).send(error)
+      }
+}
+
+
+export const getClientHistoricEmails = async (req: Request, res: Response): Promise <void> => { 
+
+   const {clientId, userId} = req.params
+
+      try {
+         const everyEmails = await EmailModel.findAll({ 
+            where: { 
+               clientId: clientId
+            },
+            include: [{ 
+               model: UserModel,
+               as: "userData"
+            }]
+         })
+
+         const justUserEmails = await EmailModel.findAll({ 
+            where: { 
+               clientId: clientId,
+               userId: userId
+            },
+            include: [{ 
+               model: UserModel,
+               as: "userData"
+            }]
+         })
+       
+        res.status(200).json({userEmails: justUserEmails, everyEmails: everyEmails})
 
       } catch (error) {
          res.status(500).send(error)

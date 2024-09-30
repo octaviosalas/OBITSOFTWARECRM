@@ -71,6 +71,16 @@ body {
     background-color: #e0f0ff;
 }
 
+.btn-cancel-btn { 
+    background-color: #b43030;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 .btn-btn {
     background-color: #4682b4;
     color: white;

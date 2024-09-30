@@ -10,6 +10,7 @@ import ClientDeleteModal from "./ClientDeleteModal";
 import { userStore } from "../../store/UserAccount";
 import SpinnerComponent from "../Spinner/Spinner";
 import WithOutAcces from "../reusableComponents/withOutAcces";
+import CreateClientAcces from "./CreateClientAcces";
 
 const MainClient = () => { 
 
@@ -97,6 +98,7 @@ const MainClient = () => {
                                     <ClientDetailModal clientId={client.id}  resetTable={getClientsAccesUserData}/>
                                     <ClientProjectsModal clientId={client.id}/>
                                     <ClientFollowUpModal clientId={client.id}/>
+                                    <CreateClientAcces clientId={client.id}  resetTable={getClientsAccesUserData}/>
                                     <ClientDeleteModal clientId={client.id} resetTableData={getClientsAccesUserData}/>
                                 </td>
                             </tr>
