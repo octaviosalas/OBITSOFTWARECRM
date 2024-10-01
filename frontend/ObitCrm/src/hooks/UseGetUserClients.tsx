@@ -1,6 +1,4 @@
-
-
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import apiBackendUrl from "../lib/axiosData"
 import { clientPersonalDataType } from "../types/Clients"
 
@@ -11,7 +9,6 @@ const UseGetUserClients = () => {
     const [load, setLoad] = useState<boolean>(false)
     const [withOutClientsData, setWithOutClientsData] = useState<boolean>(false)
 
-    
     const getClientsAccesUserData = async (userId: number) => { 
         setLoad(true)
         try {
@@ -29,7 +26,6 @@ const UseGetUserClients = () => {
                  } else { 
                     setWithOutClientsData(true)
                  }
-
             }
         } catch (error) {
             console.log(error)

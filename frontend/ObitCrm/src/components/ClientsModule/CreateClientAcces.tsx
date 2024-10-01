@@ -1,20 +1,26 @@
 import { useState, useEffect } from "react"
 import apiBackendUrl from "../../lib/axiosData"
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Spinner} from "@nextui-org/react";
 import "./styles/clientModule.css"
 import { UserTypeData } from "../../types/User";
 import handleError from "../../utils/axiosErrorHanlder";
+import userIcon from "../../images/user.png"
+import {userWithAccesType} from "../../types/User"
+import SpinnerComponent from "../Spinner/Spinner";
+import { getEveryUsers } from "../../utils/everyUsersData";
 
 interface Props { 
     clientId: number,
-    resetTable: () => void
+    resetTable: () => void,
+    clientName: string
 }
 
-const CreateClientAcces = ({clientId, resetTable} : Props) => { 
+const CreateClientAcces = ({clientId, resetTable, clientName} : Props) => { 
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const [usersData, setUsersData] = useState<UserTypeData[] | []>([])
+    const [usersData, setUsersData] = useState<userWithAccesType[] | []>([])
     const [load, setLoad] = useState<boolean>(false)
+    const [everyUsers, setEveryUsers] = useState<[]>(getEveryUsers())
 
     const handleOpen = async () => { 
         onOpen()
@@ -37,33 +43,45 @@ const CreateClientAcces = ({clientId, resetTable} : Props) => {
         }
     }
 
+    
+
 
     return ( 
         <div>
-         <Button className="btn-btn" onPress={handleOpen}>Crear Acceso</Button>
+         <button className="btn-btn" onClick={handleOpen}>Crear Acceso</button>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                 {(onClose) => (
                     <>
-                    <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                    <ModalHeader className="flex flex-col gap-1">Usuarios con acceso al cliente: {clientName}</ModalHeader>
                     <ModalBody>
-                        <p> 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nullam pulvinar risus non risus hendrerit venenatis.
-                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                        </p>
-                        <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nullam pulvinar risus non risus hendrerit venenatis.
-                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                        </p>
-                        <p>
-                        Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                        dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                        Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                        Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                        proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                        </p>
+                       <div>
+                            {!load && usersData.length > 0 ? ( 
+                                usersData.map((us: userWithAccesType) => (
+                                 <div key={us.userData.id} className="flex items-center gap-2">
+                                    <div className="h-full">
+                                        {us.userData.profileImage !== null ? (
+                                            <Avatar src={us.userData.profileImage} className="h-full" />
+                                        ) : (
+                                            <Avatar src={userIcon} />
+                                        )}
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p>{us.userData.name}</p>
+                                        <p>{us.userData.rol}</p>
+                                    </div>
+                                 </div>
+                              ))
+                              ) : load ? ( 
+                                <Spinner />
+                             ) : (
+                                <p>No users available.</p> 
+                            )
+                            }
+                       </div>
+                       <div>
+
+                       </div>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="danger" variant="light" onPress={onClose}>

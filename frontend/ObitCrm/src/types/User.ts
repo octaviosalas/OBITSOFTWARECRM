@@ -84,3 +84,11 @@ export type notificationsType = {
 }
 
 
+export type userWithAccesType = { 
+   userData: UserTypeData,
+   clientId:number
+    createdAt:string
+    id:number
+    updatedAt:string
+    userId:number
+}

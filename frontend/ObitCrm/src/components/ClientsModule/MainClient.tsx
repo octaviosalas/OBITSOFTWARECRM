@@ -98,7 +98,7 @@ const MainClient = () => {
                                     <ClientDetailModal clientId={client.id}  resetTable={getClientsAccesUserData}/>
                                     <ClientProjectsModal clientId={client.id}/>
                                     <ClientFollowUpModal clientId={client.id}/>
-                                    <CreateClientAcces clientId={client.id}  resetTable={getClientsAccesUserData}/>
+                                    <CreateClientAcces clientId={client.id} clientName={client.name} resetTable={getClientsAccesUserData}/>
                                     <ClientDeleteModal clientId={client.id} resetTableData={getClientsAccesUserData}/>
                                 </td>
                             </tr>
