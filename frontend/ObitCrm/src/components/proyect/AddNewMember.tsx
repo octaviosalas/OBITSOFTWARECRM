@@ -99,7 +99,7 @@ const AddNewMember = ({usersWithAcces, projectId, getProjectData}: Props) => {
                             : 
                             null
                         }
-                  <button className="btn-cancel">Confirmar</button> 
+                  <button className="btn-cancel" onClick={() => onClose()}>Cancelar</button> 
               </div> : 
               <div className="mb-4">
                 <SpinnerComponent/>

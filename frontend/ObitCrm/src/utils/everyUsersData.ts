@@ -5,6 +5,7 @@ export const getEveryUsers = async () => {
     try {
         const {data, status} = await apiBackendUrl.get("/user/everyUsersData")
         if(status === 200) { 
+            console.log("everyusers", data)
             return data
         }
     } catch (error) {

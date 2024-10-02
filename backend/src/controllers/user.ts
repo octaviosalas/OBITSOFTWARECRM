@@ -575,3 +575,28 @@ export const validateTokenNumber = async (req: Request, res: Response) => {
         res.status(500).send(error)
     }
 }
+
+export const createAccesToUserToClientById = async (req: Request, res: Response) => { 
+
+    const {clientId, userId} = req.params
+    console.log("me llegaron en los params", clientId, userId)
+
+    const client = await ClientModel.findByPk(clientId)
+    const user = await UserModel.findByPk(userId)
+    const clientName = client.name
+    const userName = user.name
+
+
+    try {
+        const accesData = new UserClientAccesModel({ 
+            userId: userId,
+            clientId: clientId
+        })
+        await accesData.save()
+        res.status(200).send(`Has habilitado a ${userName} al acceso del cliente ${clientName}`)
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}

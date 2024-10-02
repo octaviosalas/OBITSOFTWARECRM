@@ -85,10 +85,20 @@ export type notificationsType = {
 
 
 export type userWithAccesType = { 
-   userData: UserTypeData,
-   clientId:number
+    userData: UserTypeData,
+    clientId:number
     createdAt:string
     id:number
     updatedAt:string
     userId:number
+}
+
+export type userAccesProjectType = { 
+    createdAt: string
+    id: number
+    projectId: number
+    updatedAt: string,
+    userData: UserTypeData,
+    userId: number,
+    profileImage: string
 }

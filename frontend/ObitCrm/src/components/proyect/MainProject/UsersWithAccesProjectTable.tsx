@@ -2,9 +2,10 @@ import  { useState } from 'react'
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar} from "@nextui-org/react";
 import handleError from '../../../utils/axiosErrorHanlder';
 import apiBackendUrl from '../../../lib/axiosData';
-import { usersWithAccesData } from '../../../types/User';
+import { userWithAccesType } from '../../../types/User';
 import SpinnerComponent from '../../Spinner/Spinner';
 import userIcon from "../../../images/user.png"
+import UsersList from '../../reusableComponents/UsersList';
 
 interface Props { 
     projectId: number
@@ -14,7 +15,7 @@ const UsersWithAccesProjectTable = ({projectId}: Props) => {
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [load, setLoad] = useState<boolean>(false)
-    const [data, setData] = useState<usersWithAccesData[] | []>([])
+    const [data, setData] = useState<userWithAccesType[] | []>([])
 
     const handleOpen = async () => { 
         onOpen()
@@ -44,14 +45,9 @@ const UsersWithAccesProjectTable = ({projectId}: Props) => {
                         <div> 
                             {data.length > 0 ? 
                             <div className='flex flex-col justify-center items-start'>
-                                {data.map((member : usersWithAccesData) => ( 
-                                    <ul className='flex flex-col' key={member.userData.name}>
-                                     <div className='flex items-center p-1 gap-3'>
-                                        <Avatar className='h-9 w-9' src={member.userData.profileImage !== null ? member.userData.profileImage : userIcon}/>
-                                        <li>{member.userData.name}</li>
-                                     </div>
-                                    </ul>                        
-                                ))}
+                                
+                                    <UsersList usersData={data}/>                      
+                               
                             </div> : null
                             }
                          </div> : 

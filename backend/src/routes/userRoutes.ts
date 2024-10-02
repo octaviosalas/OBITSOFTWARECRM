@@ -5,7 +5,7 @@ import { createUser, userData, everyUsers,
          updateUserData, deleteUserAccount, createMyReminder, 
          getMyReminders, getOneReminderData, updateReminderData, userCommunicationsForToday, getProjectsAndClientsUser, validateTokenNumber,
          deleteUserReminder, userNextReminders, nextCommunicationsToClientsOnFollowUp, userProjectsAcces, userClientsAcces, createNewTokenToGetPasswordAgain,
-         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator, createAcces, createUserAcces } from "../controllers/user"
+         updateNotificationAsRead, unreadUserNotification, userHistoricNotifications, loginValidator, createAcces, createUserAcces, createAccesToUserToClientById } from "../controllers/user"
 import {validateUserExistWithId, validateUserNotExist, validateReminderExistenceAndIfIsUserReminder, validateUserNotificationExist, validateUserExist } from "../middlewares/userValidations"
 import { validateClientExistense } from "../middlewares/clientsValidations"
 import { validateProjectExistenceWithId } from "../middlewares/projectValidations"
@@ -254,6 +254,15 @@ router.post("/createNewUserAcces/:projectId/:userId",
     createUserAcces
 )
 
+//DAR ACCESO A UN USUARIO A UN CLIENTE X ID
+router.post("/newUserClientAccess/:clientId/:userId", 
+    param("clientId").notEmpty().withMessage("Debes indicar a que notificacion deseas marcar como leida"),
+    param("userId").notEmpty().withMessage("Debes iniciar sesion"),
+    errorsHanlder,
+    validateClientExistense,
+    validateUserExistWithId,
+    createAccesToUserToClientById
+)
 
 
 export default router
