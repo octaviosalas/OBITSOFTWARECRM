@@ -1,11 +1,11 @@
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody, useDisclosure} from "@nextui-org/react";
 import addMember from "../../images/addMember.png"
 import { userAccesProjectType } from "../../types/Projects"
 import "./proyectDetail.css"
 import apiBackendUrl from "../../lib/axiosData";
 import { UserTypeData } from "../../types/User";
 import { userStore } from "../../store/UserAccount";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { shootErrorToast, shootSuccesToast } from "../../utils/succesToastFunction";
 import handleError from "../../utils/axiosErrorHanlder";
 import SpinnerComponent from "../Spinner/Spinner";

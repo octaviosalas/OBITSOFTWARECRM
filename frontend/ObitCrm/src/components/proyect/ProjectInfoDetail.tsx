@@ -35,7 +35,7 @@ const ProjectInfoDetail = ({projectInformation, usersWithAcces, projectServices,
                     {projectServices.length > 0 ?
                         <div className="flex  items-start">
                             {projectServices.map((pr: serviceUserProjectType) => ( 
-                                <p> {pr.service.name} - </p>
+                                <p key={pr.id}> {pr.service.name} - </p>
                             ))}
                         </div> 
                     : null}
@@ -46,7 +46,9 @@ const ProjectInfoDetail = ({projectInformation, usersWithAcces, projectServices,
 
                   <div className="flex items-center w-full justify-between">                
 
-                       {!wannaDelete ? <UsersProjectList usersData={usersWithAcces}/> : <DeleteProjectMember usersData={usersWithAcces}/>}
+                       {!wannaDelete ? 
+                       <UsersProjectList usersData={usersWithAcces}/> : 
+                       <DeleteProjectMember usersData={usersWithAcces} projectInformation={projectInformation} resetData={getProjectData}/>}
 
                        <img src={editMembers} className="w-8 h-8 cursor-pointer" onClick={() => setWannaDelete(prevState =>  !prevState)}/>
 

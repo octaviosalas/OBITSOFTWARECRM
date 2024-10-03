@@ -40,21 +40,19 @@ const UsersWithAccesProjectTable = ({projectId}: Props) => {
                 {(onClose) => (
                     <>
                     <ModalHeader className="flex flex-col gap-1">Usuarios con Acceso</ModalHeader>
-                    <ModalBody>
-                        {!load ? 
-                        <div> 
-                            {data.length > 0 ? 
-                            <div className='flex flex-col justify-center items-start'>
-                                
-                                    <UsersList usersData={data}/>                      
-                               
-                            </div> : null
-                            }
-                         </div> : 
-                         <div className='flex items-center justify-center'>
-                          <SpinnerComponent/>
-                        </div>}
-                    </ModalBody>                  
+                        <ModalBody>
+                            {!load ? 
+                            <div> 
+                                {data.length > 0 ? 
+                                <div className='flex flex-col justify-center items-start'>
+                                    <UsersList usersData={data}/>                                         
+                                </div> : null
+                                }
+                            </div> : 
+                            <div className='flex items-center justify-center'>
+                            <SpinnerComponent/>
+                            </div>}
+                        </ModalBody>                  
                     </>
                 )}
                 </ModalContent>

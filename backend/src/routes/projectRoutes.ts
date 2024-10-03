@@ -5,7 +5,7 @@ import { validateClientExistense } from "../middlewares/clientsValidations"
 import { validateUserExist, validateUserExistWithId } from "../middlewares/userValidations"
 import { createNewProject, projectData, establishNewProjectPlanification, projectsUserWithAcces, 
          getProjectAllPlanifications, getProjectReminder, createProjectReminder, deleteProject,
-         getOneProjectReminderData, projectNextReminders, updateProjectReminderData, updateProjectData,
+         getOneProjectReminderData, projectNextReminders, updateProjectReminderData, updateProjectData, deleteProjectMember,
          deleteProjectReminderData, updateTrackingData, deleteProjectPlanification, getSystemDataToCreateNewProject
        } from "../controllers/projects"
 import { validateServicesExistenceInProjectCreation, validateProjectExistenceWithId, 
@@ -211,5 +211,15 @@ router.get("/dataToCreateProjects/:userId",
     validateUserExistWithId,
     getSystemDataToCreateNewProject
 )
+
+router.delete("/deleteMember/:projectId/:userId", 
+    param("userId").notEmpty().withMessage("Es obligatorio indicar el ID del usuario"),
+    param("projectId").notEmpty().withMessage("Es obligatorio indicar el proyecto"),
+    errorsHanlder,
+    validateUserExistWithId,
+    validateProjectExistenceWithId,
+    deleteProjectMember
+)
+
 
 export default router

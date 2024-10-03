@@ -444,6 +444,33 @@ export const getSystemDataToCreateNewProject = async (req: Request, res: Respons
     }
 }
 
+export const deleteProjectMember = async (req: Request, res: Response) => { 
+
+    const {projectId, userId} = req.params
+
+    const userData = await UserModel.findByPk(userId)
+    const userName = userData.name
+    console.log(userName)
+    console.log(projectId, userId)
+
+    try {
+        const documentSelected = await UserAccesModel.findOne({ 
+            where: { 
+                userId: userId,
+                projectId: projectId 
+            }
+        });
+        
+        if (documentSelected) {
+            await documentSelected.destroy();
+            res.status(200).send(`Se ha eliminado al miembro ${userName} del proyecto`);
+        } else {
+            res.status(404).send(`El usuario no está asignado a este proyecto`);
+        }
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
 
 
 
